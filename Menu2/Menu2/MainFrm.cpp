@@ -67,7 +67,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockControlBar(&m_wndToolBar);
 
 
-	CMenu menu;
+	/*CMenu menu;
 	menu.CreateMenu();
 	//GetMenu()->AppendMenu(MF_POPUP, (UINT)menu.m_hMenu, "Test");
 	GetMenu()->InsertMenuA(2, MF_POPUP | MF_BYPOSITION, (UINT)menu.m_hMenu, "Test");
@@ -77,7 +77,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	menu.AppendMenuA(MF_STRING, 113, "Mybole");
 	
 
-	menu.Detach();
+	menu.Detach();*/
 
 	return 0;
 }

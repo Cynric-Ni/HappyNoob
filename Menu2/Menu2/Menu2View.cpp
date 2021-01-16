@@ -28,8 +28,10 @@ BEGIN_MESSAGE_MAP(CMenu2View, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_WM_CHAR()
-	ON_COMMAND(IDM_PHONE1, OnPhone1)
+	//ON_COMMAND(IDM_PHONE1, OnPhone1)
 
+//	ON_COMMAND(IDM_PHONE5, &CMenu2View::OnPhone5)
+ON_COMMAND(IDM_PHONE5, &CMenu2View::OnPhone5)
 END_MESSAGE_MAP()
 
 // CMenu2View 构造/析构
@@ -121,7 +123,8 @@ void CMenu2View::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 			GetParent()->GetMenu()->AppendMenuA(MF_POPUP, (UINT)m_menu.m_hMenu, "PhoneBook");
 			GetParent()->DrawMenuBar();
 		}
-		m_menu.AppendMenuA(MF_STRING, 111, m_strLine.Left(m_strLine.Find(' ')));
+		m_menu.AppendMenuA(MF_STRING, IDM_PHONE5, m_strLine.Left(m_strLine.Find(' ')));
+		m_strArray.Add(m_strLine);
 		m_strLine.Empty();
 		Invalidate();
 	}
@@ -132,3 +135,21 @@ void CMenu2View::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 	CView::OnChar(nChar, nRepCnt, nFlags);
 }
+/*void CMenu2View::OnPhone1()
+{
+	//TODO:在此添加消息处理程序代码
+
+	CClientDC dc(this);
+	dc.TextOutA(0, 0, m_strArray.GetAt(0));
+}*/
+
+
+void CMenu2View::OnPhone5()
+{
+	// TODO: 在此添加命令处理程序代码
+	CClientDC dc(this);
+	dc.TextOutA(0, 0, m_strArray.GetAt(0));
+}
+
+
+
