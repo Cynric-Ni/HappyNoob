@@ -7,6 +7,7 @@
 #include "Menu2.h"
 
 #include "MainFrm.h"
+#include "Menu2View.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -114,16 +115,18 @@ void CMainFrame::OnHello()
 	MessageBox("Hello");
 }
 
-//void CMainFrame::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
-//{
-//	// TODO: 在此添加消息处理程序代码和/或调用默认值
-//	if (0x0d == nChar)
-//	{
-//		if (0 == ++m_nIndex)
-//		{
-//			m_menu.CreatePopupMenu();
-//		}
-//
-//	}
-//	CFrameWnd::OnChar(nChar, nRepCnt, nFlags);
-//}
+
+
+
+BOOL CMainFrame::OnCommand(WPARAM wParam, LPARAM lParam)
+{
+	// TODO: 在此添加专用代码和/或调用基类
+	int MenuCmdID = LOWORD(wParam);
+	CMenu2View* p2View = (CMenu2View*)GetActiveView();
+	if (MenuCmdID >= IDM_PHONE1 && MenuCmdID <IDM_PHONE1 + p2View->m_strArray.GetSize())
+	{
+		MessageBox("MainFrm TEST");
+	}
+
+	return CFrameWnd::OnCommand(wParam, lParam);
+}

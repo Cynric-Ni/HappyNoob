@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+#include "Menu2Doc.h"
 
 class CMenu2View : public CView
 {
@@ -44,15 +44,13 @@ protected:
 	
 public:
 	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-	//afx_msg void OnPhone1();
 	CStringArray m_strArray;
 private:
 	int     m_nIndex;
 	CMenu   m_menu;
 	CString m_strLine;
 public:
-//	afx_msg void OnPhone5();
-	afx_msg void OnPhone5();
+	afx_msg void OnPhone1();
 };
 #ifndef _DEBUG  // Menu2View.cpp 中的调试版本
 inline CMenu2Doc* CMenu2View::GetDocument() const

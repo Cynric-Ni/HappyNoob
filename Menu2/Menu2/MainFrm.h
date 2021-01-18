@@ -44,6 +44,7 @@ protected:
 
 public:
 //	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 };
 
 

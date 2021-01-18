@@ -11,15 +11,7 @@
 #define IDM_PHONE2                      32772
 #define IDM_PHONE3                      32773
 #define IDM_PHONE4                      32774
-#define ID_ABC_1                        32779
-#define ID_ABC_2                        32780
-#define ID_ABC_3                        32781
-#define ID_ABC_4                        32782
-#define IDM_PHONE5                      32783
-#define IDM_PHONE6                      32784
-#define IDM_PHONE7                      32785
-#define IDM_PHONE8                      32786
-
+                
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
