@@ -126,6 +126,9 @@ BOOL CMainFrame::OnCommand(WPARAM wParam, LPARAM lParam)
 	if (MenuCmdID >= IDM_PHONE1 && MenuCmdID <IDM_PHONE1 + p2View->m_strArray.GetSize())
 	{
 		MessageBox("MainFrm TEST");
+		CClientDC dc(p2View);
+		dc.TextOutA(0, 0, p2View->m_strArray.GetAt(MenuCmdID - IDM_PHONE1));
+		return TRUE;
 	}
 
 	return CFrameWnd::OnCommand(wParam, lParam);
