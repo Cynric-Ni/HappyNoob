@@ -12,6 +12,7 @@
 
 #include "MyboleDoc.h"
 #include "MyboleView.h"
+#include "CTestDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -27,6 +28,7 @@ BEGIN_MESSAGE_MAP(CMyboleView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_COMMAND(IDM_DIALOG, &CMyboleView::OnDialog)
 END_MESSAGE_MAP()
 
 // CMyboleView 构造/析构
@@ -103,3 +105,15 @@ CMyboleDoc* CMyboleView::GetDocument() const // 非调试版本是内联的
 
 
 // CMyboleView 消息处理程序
+
+
+void CMyboleView::OnDialog()
+{
+	// TODO: 在此添加命令处理程序代码
+	CTestDlg dlg;
+	dlg.DoModal();
+
+	/*CTestDlg *pdlg = new CTestDlg;
+	pdlg->Create(IDD_DIALOG1, this);
+	pdlg->ShowWindow(SW_SHOW);*/
+}
