@@ -42,6 +42,7 @@ BEGIN_MESSAGE_MAP(CTestDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_ADD, &CTestDlg::OnClickedBtnAdd)
 	ON_STN_CLICKED(IDC_NUMBER1, &CTestDlg::OnClickedNumber1)
 	ON_BN_CLICKED(IDC_BUTTON1, &CTestDlg::OnClickedButton1)
+//	ON_WM_MBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 
@@ -101,7 +102,7 @@ void CTestDlg::OnOK()
 {
 	// TODO: 在此添加专用代码和/或调用基类
 
-	CDialogEx::OnOK();
+	//CDialogEx::OnOK();
 }
 
 
@@ -161,3 +162,44 @@ void CTestDlg::OnClickedButton1()
 	}
 }
 
+WNDPROC prevProc;
+static LRESULT CALLBACK NewEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	// TODO: 在此处添加实现代码.
+
+
+	{
+		if (uMsg == WM_CHAR && wParam == 0x0d)
+		{
+			::SetFocus(::GetNextWindow(hwnd, GW_HWNDNEXT));
+			return 1;
+		}
+		else
+		{
+			return prevProc(hwnd, uMsg, wParam, lParam);
+		}
+	}
+	return 1;
+}
+
+
+BOOL CTestDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	
+
+	// TODO:  在此添加额外的初始化
+	prevProc = (WNDPROC)SetWindowLongPtr(GetDlgItem(IDC_EDIT1)->m_hWnd, GWLP_WNDPROC,(LONG_PTR)NewEditProc);
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // 异常: OCX 属性页应返回 FALSE
+}
+
+
+
+//void CTestDlg::OnMButtonDblClk(UINT nFlags, CPoint point)
+//{
+//	// TODO: 在此添加消息处理程序代码和/或调用默认值
+//
+//	CDialogEx::OnMButtonDblClk(nFlags, point);
+//}
