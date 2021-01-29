@@ -195,7 +195,7 @@ BOOL CTestDlg::OnInitDialog()
 	
 
 	// TODO:  在此添加额外的初始化
-	prevProc = (WNDPROC)SetWindowLongPtr(GetDlgItem(IDC_EDIT1)->m_hWnd, GWLP_WNDPROC,(LONG_PTR)NewEditProc);
+	prevProc = (WNDPROC)SetWindowLongPtr(GetDlgItem(IDC_EDIT1)->m_hWnd, GWLP_WNDPROC,(LONG_PTR)NewEditProc); //这里赋值是返回的是修改之前的过程函数。
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
