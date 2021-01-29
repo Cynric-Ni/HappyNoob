@@ -163,15 +163,21 @@ void CTestDlg::OnClickedButton1()
 }
 
 WNDPROC prevProc;
+HWND m_hwnd;  //以下是静态函数 所以变量放在全局
 static LRESULT CALLBACK NewEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	// TODO: 在此处添加实现代码.
 
 
 	{
+		
 		if (uMsg == WM_CHAR && wParam == 0x0d)
 		{
-			::SetFocus(::GetNextWindow(hwnd, GW_HWNDNEXT));
+		    m_hwnd = ::GetNextWindow(hwnd, GW_HWNDNEXT);
+			 ::SetFocus(m_hwnd);
+			 CEdit* pEdit = (CEdit*)CWnd::FromHandle(m_hwnd);  //通过控件句柄找到控件指针
+			//CEdit*pEdit =(CEdit*) ::from(m_hwnd);
+			 pEdit->SetSel(0, -1);  //增加全选功能
 			return 1;
 		}
 		else

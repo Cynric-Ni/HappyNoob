@@ -18,7 +18,7 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-
+	
 	DECLARE_MESSAGE_MAP()
 //	virtual void OnOK();
 //	virtual void OnCancel();
@@ -28,7 +28,6 @@ public:
 	bool m_bIsCreated = FALSE;
 	virtual void OnOK();
 	afx_msg void OnClickedNumber1();
-
 	int m_num1;
 	int m_num2;
 	int m_num3;
