@@ -338,3 +338,7 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# 排除的文件
+mfcMyCallBack.rar
+Hello-World/
