@@ -32,7 +32,8 @@ public:
 	int m_num2;
 	int m_num3;
 	afx_msg void OnClickedButton1();
-	virtual BOOL OnInitDialog();
-	//LRESULT CALLBACK NewEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	//virtual BOOL OnInitDialog();
 //	afx_msg void OnMButtonDblClk(UINT nFlags, CPoint point);
+//	afx_msg void OnBnClickedOk();
+//	afx_msg void OnBnClickedButton2();
 };

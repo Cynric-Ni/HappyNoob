@@ -43,6 +43,8 @@ BEGIN_MESSAGE_MAP(CTestDlg, CDialogEx)
 	ON_STN_CLICKED(IDC_NUMBER1, &CTestDlg::OnClickedNumber1)
 	ON_BN_CLICKED(IDC_BUTTON1, &CTestDlg::OnClickedButton1)
 //	ON_WM_MBUTTONDBLCLK()
+
+//ON_BN_CLICKED(IDC_BUTTON2, &CTestDlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -101,7 +103,9 @@ void CTestDlg::OnClickedBtnAdd()
 void CTestDlg::OnOK()
 {
 	// TODO: 在此添加专用代码和/或调用基类
-
+	//GetDlgItem(IDC_EDIT1)->GetNextWindow()->SetFocus();
+	//GetFocus()->GetNextWindow()->SetFocus();
+	GetNextDlgTabItem(GetFocus())->SetFocus();
 	//CDialogEx::OnOK();
 }
 
@@ -162,7 +166,7 @@ void CTestDlg::OnClickedButton1()
 	}
 }
 
-WNDPROC prevProc;
+/*WNDPROC prevProc;
 HWND m_hwnd;  //以下是静态函数 所以变量放在全局
 static LRESULT CALLBACK NewEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -186,21 +190,20 @@ static LRESULT CALLBACK NewEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 		}
 	}
 	return 1;
-}
+}*/
 
 
-BOOL CTestDlg::OnInitDialog()
+/*BOOL CTestDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	
 
 	// TODO:  在此添加额外的初始化
-	prevProc = (WNDPROC)SetWindowLongPtr(GetDlgItem(IDC_EDIT1)->m_hWnd, GWLP_WNDPROC,(LONG_PTR)NewEditProc); //这里赋值是返回的是修改之前的过程函数。
+	//prevProc = (WNDPROC)SetWindowLongPtr(GetDlgItem(IDC_EDIT1)->m_hWnd, GWLP_WNDPROC,(LONG_PTR)NewEditProc); //这里赋值是返回的是修改之前的过程函数。
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
-}
-
+}*/
 
 
 //void CTestDlg::OnMButtonDblClk(UINT nFlags, CPoint point)
@@ -208,4 +211,18 @@ BOOL CTestDlg::OnInitDialog()
 //	// TODO: 在此添加消息处理程序代码和/或调用默认值
 //
 //	CDialogEx::OnMButtonDblClk(nFlags, point);
+//}
+
+
+//void CTestDlg::OnBnClickedOk()
+//{
+//	// TODO: 在此添加控件通知处理程序代码
+//	CDialogEx::OnOK();
+//}
+
+
+//void CTestDlg::OnBnClickedButton2()
+//{
+//	// TODO: 在此添加控件通知处理程序代码
+//	GetNextDlgTabItem(GetFocus())->SetFocus();
 //}
