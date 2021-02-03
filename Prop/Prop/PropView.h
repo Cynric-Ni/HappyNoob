@@ -39,6 +39,14 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnPropertysheet();
+private:
+	//第一页面处理变量
+	int m_iOccupation;
+	CString m_strWorkAddr;
+	//第二页面处理变量
+	BOOL m_bLike[4];
+		//第三页面处理变量
+	CString m_strSalary;
 };
 
 #ifndef _DEBUG  // PropView.cpp 中的调试版本

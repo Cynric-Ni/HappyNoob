@@ -20,4 +20,13 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual BOOL OnSetActive();
+	BOOL m_football;
+	BOOL m_basketball;
+	BOOL m_volleyball;
+	BOOL m_swim;
+	virtual LRESULT OnWizardNext();
+private:
+	BOOL m_bLike[4];
 };

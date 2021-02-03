@@ -20,4 +20,9 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual BOOL OnSetActive();
+	virtual BOOL OnInitDialog();
+	virtual BOOL OnWizardFinish();
+	CString m_strSalary;
 };

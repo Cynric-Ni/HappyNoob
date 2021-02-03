@@ -20,4 +20,13 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual BOOL OnSetActive();
+	int m_occupation;
+	virtual LRESULT OnWizardNext();
+	virtual BOOL OnInitDialog();
+	CString m_workAddr;
+private:
+	
+
 };
