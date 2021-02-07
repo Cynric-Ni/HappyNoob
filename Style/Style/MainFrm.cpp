@@ -64,7 +64,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockControlBar(&m_wndToolBar);
 
 	//SetWindowLong(m_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
-	SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX);
+	//SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX);
+	SetClassLong(m_hWnd, GCL_HICON, (LONG)LoadIcon(NULL, IDI_ERROR));
 	return 0;
 }
 
@@ -78,7 +79,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	cs.cy = 200;
 	cs.lpszName = "http://www.cynric.me";
 	cs.style = cs.style & ~FWS_ADDTOTITLE;*/
-	WNDCLASS  wndcls;
+	/*WNDCLASS  wndcls;
 	wndcls.cbClsExtra = 0;
 	wndcls.cbWndExtra = 0;
 	wndcls.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
@@ -86,12 +87,13 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	wndcls.hIcon = LoadIcon(NULL, IDI_ERROR);
 	wndcls.hInstance = AfxGetInstanceHandle();
 	wndcls.lpfnWndProc = ::DefWindowProc;
-	wndcls.lpszClassName = "cynric.me";
+	wndcls.lpszClassName = _T("cynric.me");
 	wndcls.lpszMenuName = NULL;
 	wndcls.style = CS_HREDRAW | CS_VREDRAW;
 
 	RegisterClass(&wndcls);
-	cs.lpszClass = "cynric.me";
+	cs.lpszClass = _T("cynric.me");*/
+	//cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW, 0, 0, LoadIcon(NULL, IDI_WARNING));
 	return TRUE;
 }
 

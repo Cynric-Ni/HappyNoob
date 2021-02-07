@@ -27,6 +27,7 @@ BEGIN_MESSAGE_MAP(CStyleView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
 // CStyleView 构造/析构
@@ -45,7 +46,8 @@ BOOL CStyleView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	// TODO: 在此处通过修改
 	//  CREATESTRUCT cs 来修改窗口类或样式
-
+	//cs.lpszClass = _T("cynric.me");
+	//cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW, LoadCursor(NULL, IDC_CROSS), (HBRUSH)GetStockObject(BLACK_BRUSH), 0);
 	return CView::PreCreateWindow(cs);
 }
 
@@ -103,3 +105,16 @@ CStyleDoc* CStyleView::GetDocument() const // 非调试版本是内联的
 
 
 // CStyleView 消息处理程序
+
+
+int CStyleView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CView::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	// TODO:  在此添加您专用的创建代码
+	SetClassLong(m_hWnd, GCL_HBRBACKGROUND, (LONG)GetStockObject(BLACK_BRUSH));
+	SetClassLong(m_hWnd, GCL_HCURSOR, (LONG)LoadCursor(NULL, IDC_HELP));
+
+	return 0;
+}
