@@ -211,9 +211,13 @@
     <None Include="res\Style.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\icon1.ico" />
+    <Image Include="res\News.ico" />
     <Image Include="res\Style.ico" />
     <Image Include="res\StyleDoc.ico" />
     <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\User.ico" />
+    <Image Include="res\Zip File.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

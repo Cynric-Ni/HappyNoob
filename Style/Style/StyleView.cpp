@@ -28,6 +28,7 @@ BEGIN_MESSAGE_MAP(CStyleView, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_WM_CREATE()
+	ON_COMMAND(IDM_TEST, &CStyleView::OnTest)
 END_MESSAGE_MAP()
 
 // CStyleView 构造/析构
@@ -113,8 +114,15 @@ int CStyleView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	// TODO:  在此添加您专用的创建代码
-	SetClassLongPtr(m_hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)GetStockObject(BLACK_BRUSH));
-	SetClassLongPtr(m_hWnd, GCLP_HCURSOR, (LONG_PTR)LoadCursor(NULL, IDC_HELP));
+	//SetClassLongPtr(m_hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)GetStockObject(BLACK_BRUSH));
+	//SetClassLongPtr(m_hWnd, GCLP_HCURSOR, (LONG_PTR)LoadCursor(NULL, IDC_HELP));
 
 	return 0;
+}
+
+
+void CStyleView::OnTest()
+{
+	// TODO: 在此添加命令处理程序代码
+	MessageBox(_T("test!"));
 }

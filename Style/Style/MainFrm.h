@@ -38,6 +38,11 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	DECLARE_MESSAGE_MAP()
 
+//ICON图标存储
+private:
+	HICON m_hIcons[3];
+public:
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 

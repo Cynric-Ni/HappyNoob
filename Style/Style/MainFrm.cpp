@@ -18,6 +18,7 @@ IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -33,12 +34,13 @@ static UINT indicators[] =
 CMainFrame::CMainFrame() noexcept
 {
 	// TODO: 在此添加成员初始化代码
+	m_hIcons[3] = { 0 };
 }
 
 CMainFrame::~CMainFrame()
 {
 }
-
+extern CStyleApp theApp;
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
@@ -66,6 +68,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//SetWindowLong(m_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
 	//SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX);
 	SetClassLongPtr(m_hWnd, GCLP_HICON, (LONG_PTR  )LoadIcon(NULL, IDI_ERROR));
+	m_hIcons[0] = LoadIconW(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON1));
+	m_hIcons[1] = LoadIconW(theApp.m_hInstance, MAKEINTRESOURCE(IDI_ICON2));
+	m_hIcons[2] = LoadIconW(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDI_ICON3));
+
+	SetClassLongPtr(m_hWnd, GCLP_HICON, (LONG_PTR)m_hIcons[0]);
+	SetTimer(1, 1000, NULL);
 	return 0;
 }
 
@@ -114,3 +122,14 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 // CMainFrame 消息处理程序
 
+
+
+void CMainFrame::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	static int index = 0;
+	SetClassLongPtr(m_hWnd, GCLP_HICON, (LONG_PTR)m_hIcons[index]);
+	index = ++index % 3;
+
+	CFrameWnd::OnTimer(nIDEvent);
+}
