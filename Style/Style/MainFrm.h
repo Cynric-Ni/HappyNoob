@@ -32,6 +32,7 @@ public:
 protected:  // 控件条嵌入成员
 	CToolBar          m_wndToolBar;
 	CStatusBar        m_wndStatusBar;
+	CToolBar          m_newToolBar;
 
 // 生成的消息映射函数
 protected:
@@ -43,6 +44,7 @@ private:
 	HICON m_hIcons[3];
 public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnViewNewtoolbar();
 };
 
 

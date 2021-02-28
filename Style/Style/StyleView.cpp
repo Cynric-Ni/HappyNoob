@@ -126,3 +126,5 @@ void CStyleView::OnTest()
 	// TODO: 在此添加命令处理程序代码
 	MessageBox(_T("test!"));
 }
+
+

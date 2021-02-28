@@ -216,6 +216,7 @@
     <Image Include="res\Style.ico" />
     <Image Include="res\StyleDoc.ico" />
     <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\toolbar1.bmp" />
     <Image Include="res\User.ico" />
     <Image Include="res\Zip File.ico" />
   </ItemGroup>

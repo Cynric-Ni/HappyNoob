@@ -19,6 +19,7 @@ IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
 	ON_WM_TIMER()
+	ON_COMMAND(IDM_VIEW_NEWTOOLBAR, &CMainFrame::OnViewNewtoolbar)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -34,7 +35,7 @@ static UINT indicators[] =
 CMainFrame::CMainFrame() noexcept
 {
 	// TODO: 在此添加成员初始化代码
-	m_hIcons[3] = { 0 };
+	//m_hIcons{};
 }
 
 CMainFrame::~CMainFrame()
@@ -45,9 +46,19 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
-
+	
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
 		!m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
+	{
+		TRACE0("未能创建工具栏\n");
+		return -1;      // 未能创建
+	}
+	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+	EnableDocking(CBRS_ALIGN_ANY);
+	DockControlBar(&m_wndToolBar);
+	//下面工具栏不是默认的 是自定义的对象newToolBar 加载的也是自定义IDR_MAINFRAME1   倪忻亮
+	if (!m_newToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_RIGHT | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+		!m_newToolBar.LoadToolBar(IDR_TOOLBAR1))
 	{
 		TRACE0("未能创建工具栏\n");
 		return -1;      // 未能创建
@@ -61,12 +72,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndStatusBar.SetIndicators(indicators, sizeof(indicators)/sizeof(UINT));
 
 	// TODO: 如果不需要可停靠工具栏，则删除这三行
-	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
-	EnableDocking(CBRS_ALIGN_ANY);
-	DockControlBar(&m_wndToolBar);
+	m_newToolBar.EnableDocking(CBRS_ALIGN_ANY);
+	//EnableDocking(CBRS_ALIGN_ANY);
+	DockControlBar(&m_newToolBar);
 
 	//SetWindowLong(m_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
 	//SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX);
+	//memset(m_hIcons, 0, sizeof(m_hIcons));
 	SetClassLongPtr(m_hWnd, GCLP_HICON, (LONG_PTR  )LoadIcon(NULL, IDI_ERROR));
 	m_hIcons[0] = LoadIconW(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON1));
 	m_hIcons[1] = LoadIconW(theApp.m_hInstance, MAKEINTRESOURCE(IDI_ICON2));
@@ -132,4 +144,16 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 	index = ++index % 3;
 
 	CFrameWnd::OnTimer(nIDEvent);
+}
+
+
+void CMainFrame::OnViewNewtoolbar()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (m_newToolBar.IsVisible()) {
+		m_newToolBar.ShowWindow(SW_HIDE);
+		}else{
+		m_newToolBar.ShowWindow(SW_SHOW);
+	}
+	
 }
