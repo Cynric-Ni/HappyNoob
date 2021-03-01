@@ -33,6 +33,7 @@ protected:  // 控件条嵌入成员
 	CToolBar          m_wndToolBar;
 	CStatusBar        m_wndStatusBar;
 	CToolBar          m_newToolBar;
+	CProgressCtrl	  m_progress;
 
 // 生成的消息映射函数
 protected:
@@ -45,6 +46,7 @@ private:
 public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnViewNewtoolbar();
+	afx_msg void OnUpdateViewNewtoolbar(CCmdUI* pCmdUI);
 };
 
 

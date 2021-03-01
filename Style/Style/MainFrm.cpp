@@ -20,11 +20,14 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
 	ON_WM_TIMER()
 	ON_COMMAND(IDM_VIEW_NEWTOOLBAR, &CMainFrame::OnViewNewtoolbar)
+	ON_UPDATE_COMMAND_UI(IDM_VIEW_NEWTOOLBAR, &CMainFrame::OnUpdateViewNewtoolbar)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
 {
 	ID_SEPARATOR,           // 状态行指示器
+	IDS_TIMER,
+	IDS_PROGRESS,
 	ID_INDICATOR_CAPS,
 	ID_INDICATOR_NUM,
 	ID_INDICATOR_SCRL,
@@ -86,6 +89,19 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	SetClassLongPtr(m_hWnd, GCLP_HICON, (LONG_PTR)m_hIcons[0]);
 	SetTimer(1, 1000, NULL);
+	
+	CTime t = CTime::GetCurrentTime();//新版本MFC 改成GetTickCount() 倪忻亮
+	CString str = t.Format("%H:%M:%S");
+	m_wndStatusBar.SetPaneText(1, str);
+	CClientDC dc(this);
+	CSize sz = dc.GetTextExtent(str);
+	int index = 0;
+	index = m_wndStatusBar.CommandToIndex(IDS_TIMER);
+	m_wndStatusBar.SetPaneInfo(index, IDS_TIMER, SBPS_NORMAL, sz.cx);
+	m_wndStatusBar.SetPaneText(index, str);
+    //进度条创建过程
+	m_progress.Create(WS_CHILD | WS_VISIBLE, CRect(100, 100, 200, 120),
+					  this, 123);
 	return 0;
 }
 
@@ -143,6 +159,12 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 	SetClassLongPtr(m_hWnd, GCLP_HICON, (LONG_PTR)m_hIcons[index]);
 	index = ++index % 3;
 
+	CTime t = CTime::GetCurrentTime();
+	CString str = t.Format("%H:%M:%S");
+	CClientDC dc(this);
+	CSize sz = dc.GetTextExtent(str);
+	m_wndStatusBar.SetPaneInfo(1, IDS_TIMER, SBPS_NORMAL, sz.cx);
+	m_wndStatusBar.SetPaneText(1, str);
 	CFrameWnd::OnTimer(nIDEvent);
 }
 
@@ -150,10 +172,20 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 void CMainFrame::OnViewNewtoolbar()
 {
 	// TODO: 在此添加命令处理程序代码
-	if (m_newToolBar.IsVisible()) {
+	/*if (m_newToolBar.IsVisible()) {
 		m_newToolBar.ShowWindow(SW_HIDE);
 		}else{
 		m_newToolBar.ShowWindow(SW_SHOW);
 	}
-	
+	RecalcLayout();
+	DockControlBar(&m_newToolBar);*/
+	//用以下代码代替以上代码 倪忻亮
+	ShowControlBar(&m_newToolBar, !m_newToolBar.IsWindowVisible(), FALSE);
+}
+
+
+void CMainFrame::OnUpdateViewNewtoolbar(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_newToolBar.IsWindowVisible());
 }

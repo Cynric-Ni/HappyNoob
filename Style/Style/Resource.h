@@ -4,6 +4,8 @@
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
+#define IDS_TIMER                       101
+#define IDS_PROGRESS                    102
 #define IDR_MAINFRAME                   128
 #define IDR_StyleTYPE                   130
 #define IDI_ICON1                       311
