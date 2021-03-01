@@ -21,6 +21,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_TIMER()
 	ON_COMMAND(IDM_VIEW_NEWTOOLBAR, &CMainFrame::OnViewNewtoolbar)
 	ON_UPDATE_COMMAND_UI(IDM_VIEW_NEWTOOLBAR, &CMainFrame::OnUpdateViewNewtoolbar)
+	ON_MESSAGE(UM_PROGRESS,&CMainFrame::OnProgress)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -100,8 +101,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndStatusBar.SetPaneInfo(index, IDS_TIMER, SBPS_NORMAL, sz.cx);
 	m_wndStatusBar.SetPaneText(index, str);
     //进度条创建过程
-	m_progress.Create(WS_CHILD | WS_VISIBLE, CRect(100, 100, 200, 120),
-					  this, 123);
+	CRect rect;
+	m_wndStatusBar.GetItemRect(2, &rect);
+	m_progress.Create(WS_CHILD | WS_VISIBLE, rect,
+					&m_wndStatusBar, 123);
+	m_progress.SetPos(50);
+
+
 	return 0;
 }
 
@@ -188,4 +194,10 @@ void CMainFrame::OnUpdateViewNewtoolbar(CCmdUI* pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(m_newToolBar.IsWindowVisible());
+}
+
+LRESULT CMainFrame::OnProgress(WPARAM wparam, LPARAM lparam)
+{
+	
+	return 0;
 }

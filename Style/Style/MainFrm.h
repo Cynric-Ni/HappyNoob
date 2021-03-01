@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#define UM_PROGRESS WM_USER+1
 
 class CMainFrame : public CFrameWnd
 {
@@ -47,6 +48,7 @@ public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnViewNewtoolbar();
 	afx_msg void OnUpdateViewNewtoolbar(CCmdUI* pCmdUI);
+	afx_msg LRESULT OnProgress(WPARAM wParam, LPARAM lParam);
 };
 
 
