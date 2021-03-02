@@ -22,6 +22,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(IDM_VIEW_NEWTOOLBAR, &CMainFrame::OnViewNewtoolbar)
 	ON_UPDATE_COMMAND_UI(IDM_VIEW_NEWTOOLBAR, &CMainFrame::OnUpdateViewNewtoolbar)
 	ON_MESSAGE(UM_PROGRESS,&CMainFrame::OnProgress)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -101,13 +102,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndStatusBar.SetPaneInfo(index, IDS_TIMER, SBPS_NORMAL, sz.cx);
 	m_wndStatusBar.SetPaneText(index, str);
     //进度条创建过程
-	CRect rect;
+	/*CRect rect;
 	m_wndStatusBar.GetItemRect(2, &rect);
 	m_progress.Create(WS_CHILD | WS_VISIBLE, rect,
 					&m_wndStatusBar, 123);
-	m_progress.SetPos(50);
+	m_progress.SetPos(50);*/
 
-
+	//SendMessageW(UM_PROGRESS);用下面的Post方式代替Send 可以在OnCreate()函数完毕之后在执行Post消息，因为Post是寄送形式
+	//PostMessage(UM_PROGRESS);它把消息放在队列里等待get获取执行，不过他目前已经被OnPaint代替因为程序执行的第一次启用了OnPaint
 	return 0;
 }
 
@@ -171,6 +173,9 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 	CSize sz = dc.GetTextExtent(str);
 	m_wndStatusBar.SetPaneInfo(1, IDS_TIMER, SBPS_NORMAL, sz.cx);
 	m_wndStatusBar.SetPaneText(1, str);
+	
+	m_progress.StepIt();
+
 	CFrameWnd::OnTimer(nIDEvent);
 }
 
@@ -198,6 +203,25 @@ void CMainFrame::OnUpdateViewNewtoolbar(CCmdUI* pCmdUI)
 
 LRESULT CMainFrame::OnProgress(WPARAM wparam, LPARAM lparam)
 {
-	
+	CRect rect;
+	m_wndStatusBar.GetItemRect(2, &rect);
+	m_progress.Create(WS_CHILD | WS_VISIBLE, rect, &m_wndStatusBar, 123);
+	m_progress.SetPos(50);
 	return 0;
+}
+
+void CMainFrame::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+					   // TODO: 在此处添加消息处理程序代码
+					   // 不为绘图消息调用 CFrameWnd::OnPaint()
+	CRect rect;
+	m_wndStatusBar.GetItemRect(2, &rect);
+	if (!m_progress.m_hWnd) {
+		m_progress.Create(WS_CHILD | WS_VISIBLE, rect, &m_wndStatusBar, 123);
+		
+	}else{
+		m_progress.MoveWindow(rect);
+	}
+	m_progress.SetPos(50);
 }

@@ -32,7 +32,7 @@ public:
 
 protected:  // 控件条嵌入成员
 	CToolBar          m_wndToolBar;
-	CStatusBar        m_wndStatusBar;
+	//CStatusBar        m_wndStatusBar;
 	CToolBar          m_newToolBar;
 	CProgressCtrl	  m_progress;
 
@@ -49,6 +49,8 @@ public:
 	afx_msg void OnViewNewtoolbar();
 	afx_msg void OnUpdateViewNewtoolbar(CCmdUI* pCmdUI);
 	afx_msg LRESULT OnProgress(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnPaint();
+	CStatusBar        m_wndStatusBar;
 };
 
 

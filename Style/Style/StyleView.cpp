@@ -8,6 +8,7 @@
 // ATL 项目中进行定义，并允许与该项目共享文档代码。
 #ifndef SHARED_HANDLERS
 #include "Style.h"
+#include "MainFrm.h"
 #endif
 
 #include "StyleDoc.h"
@@ -29,6 +30,7 @@ BEGIN_MESSAGE_MAP(CStyleView, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_WM_CREATE()
 	ON_COMMAND(IDM_TEST, &CStyleView::OnTest)
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CStyleView 构造/析构
@@ -128,3 +130,16 @@ void CStyleView::OnTest()
 }
 
 
+
+
+void CStyleView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CString str;
+	str.Format(_T("X=%d,Y=%d"), point.x, point.y);
+	//((CMainFrame*)GetParent())->m_wndStatusBar.SetWindowText(str);
+	//((CMainFrame*)GetParent())->SetMessageText(str);
+	//((CMainFrame*)GetParent())->GetMessageBar()->SetWindowTextW(str);
+	GetParent()->GetDescendantWindow(AFX_IDW_STATUS_BAR)->SetWindowTextW(str);
+	CView::OnMouseMove(nFlags, point);
+}
