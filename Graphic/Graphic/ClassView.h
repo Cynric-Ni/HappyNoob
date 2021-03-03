@@ -50,5 +50,12 @@ protected:
 	afx_msg void OnUpdateSort(CCmdUI* pCmdUI);
 
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnDot();
+	afx_msg void OnLine();
+	afx_msg void OnRectangle();
+	afx_msg void OnEllipse();
+private:
+	UINT m_nDrawType;
 };
 

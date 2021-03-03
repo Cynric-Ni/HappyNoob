@@ -59,6 +59,10 @@ BEGIN_MESSAGE_MAP(CClassView, CDockablePane)
 	ON_WM_SETFOCUS()
 	ON_COMMAND_RANGE(ID_SORTING_GROUPBYTYPE, ID_SORTING_SORTBYACCESS, OnSort)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_SORTING_GROUPBYTYPE, ID_SORTING_SORTBYACCESS, OnUpdateSort)
+	ON_COMMAND(IDM_DOT, &CClassView::OnDot)
+	ON_COMMAND(IDM_LINE, &CClassView::OnLine)
+	ON_COMMAND(IDM_RECTANGLE, &CClassView::OnRectangle)
+	ON_COMMAND(IDM_ELLIPSE, &CClassView::OnEllipse)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -320,4 +324,32 @@ void CClassView::OnChangeVisualStyle()
 
 	m_wndToolBar.CleanUpLockedImages();
 	m_wndToolBar.LoadBitmap(theApp.m_bHiColorIcons ? IDB_SORT_24 : IDR_SORT, 0, 0, TRUE /* 锁定*/);
+}
+
+
+void CClassView::OnDot()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_nDrawType = 1;
+}
+
+
+void CClassView::OnLine()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_nDrawType = 2;
+}
+
+
+void CClassView::OnRectangle()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_nDrawType = 3;
+}
+
+
+void CClassView::OnEllipse()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_nDrawType = 4;
 }

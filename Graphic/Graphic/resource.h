@@ -84,16 +84,23 @@
 #define IDS_FIND_TAB                    302
 #define IDS_EXPLORER                    305
 #define IDS_EDIT_MENU                   306
+#define IDR_MENU1                       310
+#define IDR_MENU2                       311
 #define IDM_DOT                         32771
 #define ID_32773                        32773
 #define IDM_LINE                        32774
+#define IDM_RECTANGLE                   32775
+#define ID_32776                        32776
+#define IDM_ELLIPSE                     32777
+#define ID_TEST_TEST1                   32778
+#define ID_TEST_TEST2                   32779
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        310
-#define _APS_NEXT_COMMAND_VALUE         32775
+#define _APS_NEXT_RESOURCE_VALUE        312
+#define _APS_NEXT_COMMAND_VALUE         32780
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
