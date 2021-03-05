@@ -22,7 +22,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnEnChangeEdit1();
-	afx_msg void OnClickedRadio1();
+//	afx_msg void OnClickedRadio1();
 public:
 	UINT m_nLineWidth;
 	int m_nLineStyle;

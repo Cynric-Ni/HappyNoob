@@ -184,7 +184,8 @@ void CGraphic2View::OnSetting()
 	// TODO: 在此添加命令处理程序代码
 	CSettingDlg dlg;
 	dlg.m_nLineWidth = m_nLineWidth;
-	dlg.m_nLineWidth = m_nLineStyle;
+	dlg.m_nLineStyle = m_nLineStyle;
+	//UpdateData();
 	if (IDOK == dlg.DoModal()) {
 		m_nLineWidth = dlg.m_nLineWidth;
 		m_nLineStyle = dlg.m_nLineStyle;
