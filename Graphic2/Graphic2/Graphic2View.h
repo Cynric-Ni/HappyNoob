@@ -38,8 +38,10 @@ public:
 protected:
 
 // 生成的消息映射函数
-protected:
+private:
 	DECLARE_MESSAGE_MAP()
+	UINT		m_nLineWidth;
+	int			m_nLineStyle;
 private:
 	UINT		m_nDrawType;
 	CPoint		m_ptOrigin;
@@ -50,6 +52,7 @@ public:
 	afx_msg void OnEllipse();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnSetting();
 };
 
 #ifndef _DEBUG  // Graphic2View.cpp 中的调试版本

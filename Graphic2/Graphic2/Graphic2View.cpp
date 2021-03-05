@@ -12,6 +12,7 @@
 
 #include "Graphic2Doc.h"
 #include "Graphic2View.h"
+#include "CSettingDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -33,6 +34,7 @@ BEGIN_MESSAGE_MAP(CGraphic2View, CView)
 	ON_COMMAND(IDM_ELLIPSE, &CGraphic2View::OnEllipse)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+	ON_COMMAND(IDM_SETTING, &CGraphic2View::OnSetting)
 END_MESSAGE_MAP()
 
 // CGraphic2View 构造/析构
@@ -41,7 +43,8 @@ CGraphic2View::CGraphic2View() noexcept
 {
 	// TODO: 在此处添加构造代码
 	m_nDrawType = 0;
-
+	m_nLineWidth = 0;
+	m_nLineStyle = 0;
 }
 
 CGraphic2View::~CGraphic2View()
@@ -152,7 +155,7 @@ void CGraphic2View::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CClientDC dc(this);
-	CPen pen(PS_SOLID, 1, RGB(255, 0, 0, 0));
+	CPen pen(m_nLineStyle, m_nLineWidth, RGB(255, 0, 0));
 	dc.SelectObject(&pen);
 	CBrush* pBrush = CBrush::FromHandle((HBRUSH)GetStockObject(NULL_BRUSH));
 	switch (m_nDrawType)
@@ -174,3 +177,16 @@ void CGraphic2View::OnLButtonUp(UINT nFlags, CPoint point)
 	CView::OnLButtonUp(nFlags, point);
 }
 
+
+
+void CGraphic2View::OnSetting()
+{
+	// TODO: 在此添加命令处理程序代码
+	CSettingDlg dlg;
+	dlg.m_nLineWidth = m_nLineWidth;
+	dlg.m_nLineWidth = m_nLineStyle;
+	if (IDOK == dlg.DoModal()) {
+		m_nLineWidth = dlg.m_nLineWidth;
+		m_nLineStyle = dlg.m_nLineStyle;
+	}
+}
