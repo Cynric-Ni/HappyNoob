@@ -46,6 +46,8 @@ private:
 	UINT		m_nDrawType;
 	CPoint		m_ptOrigin;
 	COLORREF    m_clr;
+	CFont       m_Font;
+	CString		m_strFontName;
 public:
 	afx_msg void OnDot();
 	afx_msg void OnLine();
@@ -55,6 +57,7 @@ public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnSetting();
 	afx_msg void OnColor();
+	afx_msg void OnFont();
 };
 
 #ifndef _DEBUG  // Graphic2View.cpp 中的调试版本

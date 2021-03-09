@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CGraphic2View, CView)
 	ON_WM_LBUTTONUP()
 	ON_COMMAND(IDM_SETTING, &CGraphic2View::OnSetting)
 	ON_COMMAND(IDM_Color, &CGraphic2View::OnColor)
+	ON_COMMAND(IDM_FONT, &CGraphic2View::OnFont)
 END_MESSAGE_MAP()
 
 // CGraphic2View 构造/析构
@@ -46,6 +47,8 @@ CGraphic2View::CGraphic2View() noexcept
 	m_nDrawType = 0;
 	m_nLineWidth = 0;
 	m_nLineStyle = 0;
+	m_clr = RGB(0, 0, 0);
+	m_strFontName = "";
 }
 
 CGraphic2View::~CGraphic2View()
@@ -70,6 +73,9 @@ void CGraphic2View::OnDraw(CDC* pDC)
 		return;
 
 	// TODO: 在此处为本机数据添加绘制代码
+	CFont* pOldFont = pDC->SelectObject(&m_Font);
+	pDC->TextOutW(0, 0, m_strFontName);
+	pDC->SelectObject(pOldFont);
 }
 
 
@@ -199,13 +205,28 @@ void CGraphic2View::OnColor()
 	// TODO: 在此添加命令处理程序代码
 	CColorDialog dlg;
 	CString test;
-	dlg.m_cc.Flags = CC_RGBINIT;
-	test.Format(_T("%x"), dlg.m_cc.Flags);
-	MessageBox(test);
+	dlg.m_cc.Flags |= CC_RGBINIT | CC_FULLOPEN;
+	//test.Format(L"%x", dlg.m_cc.Flags);
+	//MessageBox(test);
 	dlg.m_cc.rgbResult = m_clr;
 	if(IDOK == dlg.DoModal()) {
 		m_clr = dlg.m_cc.rgbResult;
 	}
 
 
+}
+
+
+void CGraphic2View::OnFont()
+{
+	// TODO: 在此添加命令处理程序代码
+	CFontDialog dlg;
+	if (IDOK == dlg.DoModal()) {
+		if (m_Font.m_hObject) {
+			m_Font.DeleteObject();
+		}
+		m_Font.CreateFontIndirectW(dlg.m_cf.lpLogFont);
+		m_strFontName = dlg.m_cf.lpLogFont->lfFaceName;
+		Invalidate();
+	}
 }
