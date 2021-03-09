@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(CGraphic2View, CView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_COMMAND(IDM_SETTING, &CGraphic2View::OnSetting)
+	ON_COMMAND(IDM_Color, &CGraphic2View::OnColor)
 END_MESSAGE_MAP()
 
 // CGraphic2View 构造/析构
@@ -155,13 +156,13 @@ void CGraphic2View::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CClientDC dc(this);
-	CPen pen(m_nLineStyle, m_nLineWidth, RGB(255, 0, 0));
+	CPen pen(m_nLineStyle, m_nLineWidth, m_clr);
 	dc.SelectObject(&pen);
 	CBrush* pBrush = CBrush::FromHandle((HBRUSH)GetStockObject(NULL_BRUSH));
 	switch (m_nDrawType)
 	{
 	case 1:
-		dc.SetPixel(point, RGB(255, 0, 0));
+		dc.SetPixel(point, m_clr);
 		break;
 	case 2:
 		dc.MoveTo(m_ptOrigin);
@@ -190,4 +191,21 @@ void CGraphic2View::OnSetting()
 		m_nLineWidth = dlg.m_nLineWidth;
 		m_nLineStyle = dlg.m_nLineStyle;
 	}
+}
+
+
+void CGraphic2View::OnColor()
+{
+	// TODO: 在此添加命令处理程序代码
+	CColorDialog dlg;
+	CString test;
+	dlg.m_cc.Flags = CC_RGBINIT;
+	test.Format(_T("%x"), dlg.m_cc.Flags);
+	MessageBox(test);
+	dlg.m_cc.rgbResult = m_clr;
+	if(IDOK == dlg.DoModal()) {
+		m_clr = dlg.m_cc.rgbResult;
+	}
+
+
 }
