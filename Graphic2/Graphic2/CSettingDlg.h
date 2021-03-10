@@ -27,4 +27,5 @@ public:
 	UINT m_nLineWidth;
 	int m_nLineStyle;
 
+	afx_msg void OnClickedRadio1();
 };

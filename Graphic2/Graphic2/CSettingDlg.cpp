@@ -34,6 +34,7 @@ void CSettingDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CSettingDlg, CDialogEx)
 	ON_EN_CHANGE(IDC_EDIT1, &CSettingDlg::OnEnChangeEdit1)
 //	ON_BN_CLICKED(IDC_RADIO1, &CSettingDlg::OnClickedRadio1)
+ON_BN_CLICKED(IDC_RADIO1, &CSettingDlg::OnClickedRadio1)
 END_MESSAGE_MAP()
 
 
@@ -48,10 +49,11 @@ void CSettingDlg::OnEnChangeEdit1()
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
 	// TODO:  在此添加控件通知处理程序代码
+	Invalidate();
 }
 
-
-//void CSettingDlg::OnClickedRadio1()
-//{
-//	// TODO: 在此添加控件通知处理程序代码
-//}
+void CSettingDlg::OnClickedRadio1()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	Invalidate();
+}
