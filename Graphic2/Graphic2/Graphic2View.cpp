@@ -193,6 +193,7 @@ void CGraphic2View::OnSetting()
 	dlg.m_nLineWidth = m_nLineWidth;
 	dlg.m_nLineStyle = m_nLineStyle;
 	//UpdateData();
+	dlg.m_clr = m_clr;
 	if (IDOK == dlg.DoModal()) {
 		m_nLineWidth = dlg.m_nLineWidth;
 		m_nLineStyle = dlg.m_nLineStyle;
@@ -230,3 +231,5 @@ void CGraphic2View::OnFont()
 		Invalidate();
 	}
 }
+
+

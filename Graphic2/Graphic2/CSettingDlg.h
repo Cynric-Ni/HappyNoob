@@ -28,4 +28,12 @@ public:
 	int m_nLineStyle;
 
 	afx_msg void OnClickedRadio1();
+	afx_msg void OnPaint();
+//	afx_msg void OnClickedRadio2();
+//	afx_msg void OnClickedRadio3();
+	afx_msg void OnRadio2();
+	afx_msg void OnRadio3();
+	COLORREF m_clr;
+	CBrush   m_brush;
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };
