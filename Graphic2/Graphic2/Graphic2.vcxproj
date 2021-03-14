@@ -192,6 +192,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TestBtn.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSettingDlg.cpp" />
@@ -205,6 +206,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TestBtn.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Graphic2.rc" />

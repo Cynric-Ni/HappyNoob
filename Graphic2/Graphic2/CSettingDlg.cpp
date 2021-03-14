@@ -18,6 +18,7 @@ CSettingDlg::CSettingDlg(CWnd* pParent /*=nullptr*/)
 	, m_clr(RGB(255,0,0))
 {
 	m_brush.CreateSolidBrush(RGB(0, 0, 255));
+	m_font.CreatePointFont(200, L"华文行楷");
 }
 
 CSettingDlg::~CSettingDlg()
@@ -29,6 +30,9 @@ void CSettingDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT1, m_nLineWidth);
 	DDX_Radio(pDX, IDC_RADIO1, m_nLineStyle);
+	DDX_Control(pDX, IDOK, m_TestBtn);
+	//  DDX_Control(pDX, IDCANCEL, m_testBtn2);
+	DDX_Control(pDX, IDCANCEL, m_cancel);
 }
 
 
@@ -85,18 +89,6 @@ void CSettingDlg::OnPaint()
 }
 
 
-//void CSettingDlg::OnClickedRadio2()
-//{
-//	// TODO: 在此添加控件通知处理程序代码
-//	Invalidate();
-//}
-
-
-//void CSettingDlg::OnClickedRadio3()
-//{
-//	// TODO: 在此添加控件通知处理程序代码
-//	Invalidate();
-//}
 
 
 void CSettingDlg::OnRadio2()
@@ -121,10 +113,23 @@ HBRUSH CSettingDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 	// TODO:  如果默认的不是所需画笔，则返回另一个画笔
 	//return hbr;
-	if (pWnd->GetDlgCtrlID() == IDC_LINE_STYLE) {
-		
-		
-		//return m_brush;
+	if(pWnd->GetDlgCtrlID() == IDC_LINE_STYLE) {
+		pDC->SetTextColor(RGB(255, 0, 0));
+		pDC->SetBkMode(TRANSPARENT);
+		return m_brush;
+	}
+	if(pWnd->GetDlgCtrlID() == IDC_STATIC) {
+		pDC->SetTextColor(RGB(255, 0, 0));
+		pDC->SetBkMode(TRANSPARENT);
+		return m_brush;
+	}
+	if(pWnd->GetDlgCtrlID() == IDC_LINE_WIDTH) {
+		pDC->SetTextColor(RGB(255, 0, 0));
+		pDC->SetBkMode(TRANSPARENT);
+		return m_brush;
+	}
+	if (pWnd->GetDlgCtrlID() == IDC_TEXT) {
+		pDC->SelectObject(&m_font);
 	}
 	return hbr;
 }

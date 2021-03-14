@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "TestBtn.h"
 
 // CSettingDlg 对话框
 
@@ -22,18 +22,22 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnEnChangeEdit1();
-//	afx_msg void OnClickedRadio1();
+
 public:
 	UINT m_nLineWidth;
 	int m_nLineStyle;
 
 	afx_msg void OnClickedRadio1();
 	afx_msg void OnPaint();
-//	afx_msg void OnClickedRadio2();
-//	afx_msg void OnClickedRadio3();
+
 	afx_msg void OnRadio2();
 	afx_msg void OnRadio3();
 	COLORREF m_clr;
 	CBrush   m_brush;
+	CFont	 m_font;
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+private:
+	CTestBtn m_TestBtn;
+public:
+	CButton m_cancel;
 };
