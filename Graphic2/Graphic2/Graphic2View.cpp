@@ -80,12 +80,13 @@ void CGraphic2View::OnDraw(CDC* pDC)
 	// TODO: 在此处为本机数据添加绘制代码
 	CBrush* pBrush = CBrush::FromHandle((HBRUSH)GetStockObject(NULL_BRUSH));
 	CBrush* pOldBrush = pDC->SelectObject(pBrush);
-
+	CPen pen(m_nLineStyle, m_nLineWidth, m_clr);
+	CPen* pOldPen = pDC->SelectObject(&pen);
 	for (int i = 0; i < m_ptrArray.GetSize(); i++) {
 		switch (((CGraph*)m_ptrArray.GetAt(i))->m_nDrawType)
 		{
 		case 1:
-			pDC->SetPixel(((CGraph*)m_ptrArray.GetAt(i))->m_ptEnd, RGB(0, 0, 0));
+			pDC->SetPixel(((CGraph*)m_ptrArray.GetAt(i))->m_ptEnd, m_clr);
 			break;
 		case 2:
 			pDC->MoveTo(((CGraph*)m_ptrArray.GetAt(i))->m_ptOrigin);
@@ -103,7 +104,8 @@ void CGraphic2View::OnDraw(CDC* pDC)
 			break;
 		}
 	}
-
+	pDC->SelectObject(pOldPen);
+	pDC->SelectObject(pOldBrush);
 	CFont* pOldFont = pDC->SelectObject(&m_Font);
 	pDC->TextOutW(0, 0, m_strFontName);
 	pDC->SelectObject(pOldFont);
