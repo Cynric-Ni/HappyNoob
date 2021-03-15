@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 class CGraphic2View : public CView
 {
 protected: // 仅从序列化创建
@@ -48,6 +47,7 @@ private:
 	COLORREF    m_clr;
 	CFont       m_Font;
 	CString		m_strFontName;
+	CPtrArray	m_ptrArray;
 public:
 	afx_msg void OnDot();
 	afx_msg void OnLine();
@@ -58,6 +58,7 @@ public:
 	afx_msg void OnSetting();
 	afx_msg void OnColor();
 	afx_msg void OnFont();
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 };
 
 #ifndef _DEBUG  // Graphic2View.cpp 中的调试版本

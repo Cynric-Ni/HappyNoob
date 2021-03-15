@@ -185,6 +185,7 @@
   <ItemGroup>
     <ClInclude Include="CSettingDlg.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="Graphic2.h" />
     <ClInclude Include="Graphic2Doc.h" />
     <ClInclude Include="Graphic2View.h" />
@@ -196,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSettingDlg.cpp" />
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="Graphic2.cpp" />
     <ClCompile Include="Graphic2Doc.cpp" />
     <ClCompile Include="Graphic2View.cpp" />
@@ -215,8 +217,11 @@
     <None Include="res\Graphic2.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\bitmap2.bmp" />
     <Image Include="res\Graphic2.ico" />
     <Image Include="res\Graphic2Doc.ico" />
+    <Image Include="res\mfc.bmp" />
     <Image Include="res\Toolbar.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

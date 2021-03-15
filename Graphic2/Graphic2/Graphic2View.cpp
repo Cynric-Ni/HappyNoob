@@ -13,6 +13,7 @@
 #include "Graphic2Doc.h"
 #include "Graphic2View.h"
 #include "CSettingDlg.h"
+#include "Graph.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,6 +38,7 @@ BEGIN_MESSAGE_MAP(CGraphic2View, CView)
 	ON_COMMAND(IDM_SETTING, &CGraphic2View::OnSetting)
 	ON_COMMAND(IDM_Color, &CGraphic2View::OnColor)
 	ON_COMMAND(IDM_FONT, &CGraphic2View::OnFont)
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 // CGraphic2View 构造/析构
@@ -53,6 +55,9 @@ CGraphic2View::CGraphic2View() noexcept
 
 CGraphic2View::~CGraphic2View()
 {
+	for (int i = 0; i < m_ptrArray.GetSize(); i++) {
+		delete m_ptrArray.GetAt(i);
+	}
 }
 
 BOOL CGraphic2View::PreCreateWindow(CREATESTRUCT& cs)
@@ -73,6 +78,32 @@ void CGraphic2View::OnDraw(CDC* pDC)
 		return;
 
 	// TODO: 在此处为本机数据添加绘制代码
+	CBrush* pBrush = CBrush::FromHandle((HBRUSH)GetStockObject(NULL_BRUSH));
+	CBrush* pOldBrush = pDC->SelectObject(pBrush);
+
+	for (int i = 0; i < m_ptrArray.GetSize(); i++) {
+		switch (((CGraph*)m_ptrArray.GetAt(i))->m_nDrawType)
+		{
+		case 1:
+			pDC->SetPixel(((CGraph*)m_ptrArray.GetAt(i))->m_ptEnd, RGB(0, 0, 0));
+			break;
+		case 2:
+			pDC->MoveTo(((CGraph*)m_ptrArray.GetAt(i))->m_ptOrigin);
+			pDC->LineTo(((CGraph*)m_ptrArray.GetAt(i))->m_ptEnd);
+			break;
+		case 3:
+			pDC->Rectangle(CRect(((CGraph*)m_ptrArray.GetAt(i))->m_ptOrigin,
+				((CGraph*)m_ptrArray.GetAt(i))->m_ptEnd));
+			break;
+		case 4:
+			pDC->Ellipse(CRect(((CGraph*)m_ptrArray.GetAt(i))->m_ptOrigin,
+				((CGraph*)m_ptrArray.GetAt(i))->m_ptEnd));
+			break;
+		default:
+			break;
+		}
+	}
+
 	CFont* pOldFont = pDC->SelectObject(&m_Font);
 	pDC->TextOutW(0, 0, m_strFontName);
 	pDC->SelectObject(pOldFont);
@@ -163,8 +194,9 @@ void CGraphic2View::OnLButtonUp(UINT nFlags, CPoint point)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CClientDC dc(this);
 	CPen pen(m_nLineStyle, m_nLineWidth, m_clr);
-	dc.SelectObject(&pen);
+	CPen* pOldPen = dc.SelectObject(&pen);
 	CBrush* pBrush = CBrush::FromHandle((HBRUSH)GetStockObject(NULL_BRUSH));
+	CBrush* pOldBrush = dc.SelectObject(pBrush);
 	switch (m_nDrawType)
 	{
 	case 1:
@@ -181,6 +213,13 @@ void CGraphic2View::OnLButtonUp(UINT nFlags, CPoint point)
 		dc.Ellipse(CRect(m_ptOrigin, point));
 		break;
 	}
+	dc.SelectObject(pOldPen);
+	dc.SelectObject(pOldBrush);
+
+	//CGraph qraph(m_nDrawType, m_ptOrigin, point);
+	//m_ptrArray.Add(&qraph);
+	CGraph* pGraph = new CGraph(m_nDrawType, m_ptOrigin, point);
+	m_ptrArray.Add(pGraph);
 	CView::OnLButtonUp(nFlags, point);
 }
 
@@ -233,3 +272,23 @@ void CGraphic2View::OnFont()
 }
 
 
+
+
+BOOL CGraphic2View::OnEraseBkgnd(CDC* pDC)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	/*CBitmap bitmap;
+	bitmap.LoadBitmapW(IDB_BITMAP1);
+	BITMAP bmp;
+	bitmap.GetBitmap(&bmp);
+	CDC dcCompatible;
+	dcCompatible.CreateCompatibleDC(pDC);
+	dcCompatible.SelectObject(&bitmap);
+	CRect rect;
+	GetClientRect(&rect);
+	//pDC->BitBlt(0, 0, rect.Width(), rect.Height(), &dcCompatible, 0, 0, SRCCOPY);
+	pDC->StretchBlt(0, 0, rect.Width(), rect.Height(), &dcCompatible, 
+					0, 0, bmp.bmWidth, bmp.bmHeight, SRCCOPY); */
+	return CView::OnEraseBkgnd(pDC); 
+	//return TRUE;
+}

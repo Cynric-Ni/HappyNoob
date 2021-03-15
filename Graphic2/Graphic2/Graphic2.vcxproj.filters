@@ -45,6 +45,9 @@
     <ClInclude Include="TestBtn.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphic2.cpp">
@@ -68,6 +71,9 @@
     <ClCompile Include="TestBtn.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Graph.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Graphic2.rc">
@@ -87,6 +93,15 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="res\Toolbar.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\bitmap2.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\mfc.bmp">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

@@ -6,6 +6,7 @@
 #define IDP_OLE_INIT_FAILED             100
 #define IDR_MAINFRAME                   128
 #define IDR_Graphic2TYPE                130
+#define IDB_BITMAP1                     316
 #define IDC_LINE_WIDTH                  1000
 #define IDC_EDIT1                       1001
 #define IDC_LINE_STYLE                  1002
@@ -28,7 +29,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        314
+#define _APS_NEXT_RESOURCE_VALUE        317
 #define _APS_NEXT_COMMAND_VALUE         32788
 #define _APS_NEXT_CONTROL_VALUE         1009
 #define _APS_NEXT_SYMED_VALUE           310
