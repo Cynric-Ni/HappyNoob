@@ -4,7 +4,7 @@
 
 #pragma once
 
-class CGraphic2View : public CView
+class CGraphic2View : public CScrollView
 {
 protected: // 仅从序列化创建
 	CGraphic2View() noexcept;
@@ -59,6 +59,7 @@ public:
 	afx_msg void OnColor();
 	afx_msg void OnFont();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	virtual void OnInitialUpdate();
 };
 
 #ifndef _DEBUG  // Graphic2View.cpp 中的调试版本

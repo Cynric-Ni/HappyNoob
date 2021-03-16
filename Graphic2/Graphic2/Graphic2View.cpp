@@ -22,13 +22,13 @@
 
 // CGraphic2View
 
-IMPLEMENT_DYNCREATE(CGraphic2View, CView)
+IMPLEMENT_DYNCREATE(CGraphic2View, CScrollView)
 
-BEGIN_MESSAGE_MAP(CGraphic2View, CView)
+BEGIN_MESSAGE_MAP(CGraphic2View, CScrollView)
 	// 标准打印命令
-	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_COMMAND(ID_FILE_PRINT, &CScrollView::OnFilePrint)
+	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CScrollView::OnFilePrint)
+	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CScrollView::OnFilePrintPreview)
 	ON_COMMAND(IDM_DOT, &CGraphic2View::OnDot)
 	ON_COMMAND(IDM_LINE, &CGraphic2View::OnLine)
 	ON_COMMAND(IDM_RECTANGLE, &CGraphic2View::OnRectangle)
@@ -65,7 +65,7 @@ BOOL CGraphic2View::PreCreateWindow(CREATESTRUCT& cs)
 	// TODO: 在此处通过修改
 	//  CREATESTRUCT cs 来修改窗口类或样式
 
-	return CView::PreCreateWindow(cs);
+	return CScrollView::PreCreateWindow(cs);
 }
 
 // CGraphic2View 绘图
@@ -136,12 +136,12 @@ void CGraphic2View::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 #ifdef _DEBUG
 void CGraphic2View::AssertValid() const
 {
-	CView::AssertValid();
+	CScrollView::AssertValid();
 }
 
 void CGraphic2View::Dump(CDumpContext& dc) const
 {
-	CView::Dump(dc);
+	CScrollView::Dump(dc);
 }
 
 CGraphic2Doc* CGraphic2View::GetDocument() const // 非调试版本是内联的
@@ -187,7 +187,7 @@ void CGraphic2View::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	m_ptOrigin = point;
-	CView::OnLButtonDown(nFlags, point);
+	CScrollView::OnLButtonDown(nFlags, point);
 }
 
 
@@ -222,7 +222,7 @@ void CGraphic2View::OnLButtonUp(UINT nFlags, CPoint point)
 	//m_ptrArray.Add(&qraph);
 	CGraph* pGraph = new CGraph(m_nDrawType, m_ptOrigin, point);
 	m_ptrArray.Add(pGraph);
-	CView::OnLButtonUp(nFlags, point);
+	CScrollView::OnLButtonUp(nFlags, point);
 }
 
 
@@ -291,6 +291,14 @@ BOOL CGraphic2View::OnEraseBkgnd(CDC* pDC)
 	//pDC->BitBlt(0, 0, rect.Width(), rect.Height(), &dcCompatible, 0, 0, SRCCOPY);
 	pDC->StretchBlt(0, 0, rect.Width(), rect.Height(), &dcCompatible, 
 					0, 0, bmp.bmWidth, bmp.bmHeight, SRCCOPY); */
-	return CView::OnEraseBkgnd(pDC); 
+	return CScrollView::OnEraseBkgnd(pDC); 
 	//return TRUE;
+}
+
+
+void CGraphic2View::OnInitialUpdate()
+{
+	CScrollView::OnInitialUpdate();
+	SetScrollSizes(MM_TEXT, CSize(1600, 900));
+	// TODO: 在此添加专用代码和/或调用基类
 }
