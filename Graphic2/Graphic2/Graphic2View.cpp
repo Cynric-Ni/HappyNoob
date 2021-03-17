@@ -39,6 +39,8 @@ BEGIN_MESSAGE_MAP(CGraphic2View, CScrollView)
 	ON_COMMAND(IDM_Color, &CGraphic2View::OnColor)
 	ON_COMMAND(IDM_FONT, &CGraphic2View::OnFont)
 	ON_WM_ERASEBKGND()
+	ON_COMMAND(ID_FILE_SAVE, &CGraphic2View::OnFileSave)
+	ON_COMMAND(ID_FILE_OPEN, &CGraphic2View::OnFileOpen)
 END_MESSAGE_MAP()
 
 // CGraphic2View 构造/析构
@@ -344,4 +346,34 @@ void CGraphic2View::OnInitialUpdate()
 	CScrollView::OnInitialUpdate();
 	SetScrollSizes(MM_TEXT, CSize(1600, 900));
 	// TODO: 在此添加专用代码和/或调用基类
+}
+
+
+void CGraphic2View::OnFileSave()
+{
+	// TODO: 在此添加命令处理程序代码
+	HENHMETAFILE hmetaFile;
+	hmetaFile = m_dcMetaFile.CloseEnhanced();
+	HENHMETAFILE hemfCopy = CopyEnhMetaFile(hmetaFile, L"meta.emf");
+	m_dcMetaFile.CreateEnhanced(NULL, NULL, NULL, NULL);
+	DeleteEnhMetaFile(hmetaFile);
+	DeleteEnhMetaFile(hemfCopy);
+}
+
+
+void CGraphic2View::OnFileOpen()
+{
+	// TODO: 在此添加命令处理程序代码
+	CRect rect;
+	GetClientRect(&rect);
+	rect.left = rect.right / 4;
+	rect.right = 3 * rect.right / 4;
+	rect.top = rect.bottom / 4;
+	rect.bottom = 3 * rect.bottom / 4;
+
+	HENHMETAFILE hmetaFile;
+	hmetaFile = GetEnhMetaFile(L"meta.emf");
+	m_dcMetaFile.PlayMetaFile(hmetaFile, &rect);
+	DeleteEnhMetaFile(hmetaFile);
+	Invalidate();
 }
