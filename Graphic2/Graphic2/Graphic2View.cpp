@@ -51,6 +51,7 @@ CGraphic2View::CGraphic2View() noexcept
 	m_nLineStyle = 0;
 	m_clr = RGB(0, 0, 0);
 	m_strFontName = "";
+	m_dcMetaFile.CreateEnhanced(NULL, NULL, NULL, NULL);
 }
 
 CGraphic2View::~CGraphic2View()
@@ -78,6 +79,7 @@ void CGraphic2View::OnDraw(CDC* pDC)
 		return;
 
 	// TODO: 在此处为本机数据添加绘制代码
+	/*第一种方法
 	CBrush* pBrush = CBrush::FromHandle((HBRUSH)GetStockObject(NULL_BRUSH));
 	CBrush* pOldBrush = pDC->SelectObject(pBrush);
 	CPen pen(m_nLineStyle, m_nLineWidth, m_clr);
@@ -108,7 +110,21 @@ void CGraphic2View::OnDraw(CDC* pDC)
 	pDC->SelectObject(pOldBrush);
 	CFont* pOldFont = pDC->SelectObject(&m_Font);
 	pDC->TextOutW(0, 0, m_strFontName);
-	pDC->SelectObject(pOldFont);
+	pDC->SelectObject(pOldFont);*/
+	HENHMETAFILE hmetaFile;
+	hmetaFile = m_dcMetaFile.CloseEnhanced();
+
+	CRect rect;
+	GetClientRect(&rect);
+	rect.left = rect.right / 4;
+	rect.right = 3 * rect.right / 4;
+	rect.top = rect.bottom / 4;
+	rect.bottom = 3 * rect.bottom / 4;
+
+	pDC->PlayMetaFile(hmetaFile, &rect);
+	m_dcMetaFile.CreateEnhanced(NULL, NULL, NULL, NULL);
+	m_dcMetaFile.PlayMetaFile(hmetaFile, &rect);
+	DeleteEnhMetaFile(hmetaFile);
 }
 
 
@@ -194,11 +210,12 @@ void CGraphic2View::OnLButtonDown(UINT nFlags, CPoint point)
 void CGraphic2View::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	CClientDC dc(this);
+	//CClientDC dc(this);
 	CPen pen(m_nLineStyle, m_nLineWidth, m_clr);
-	CPen* pOldPen = dc.SelectObject(&pen);
+	CPen* pOldPen = m_dcMetaFile.SelectObject(&pen);
 	CBrush* pBrush = CBrush::FromHandle((HBRUSH)GetStockObject(NULL_BRUSH));
-	CBrush* pOldBrush = dc.SelectObject(pBrush);
+	CBrush* pOldBrush = m_dcMetaFile.SelectObject(pBrush);
+  /*方法1：
 	switch (m_nDrawType)
 	{
 	case 1:
@@ -218,10 +235,36 @@ void CGraphic2View::OnLButtonUp(UINT nFlags, CPoint point)
 	dc.SelectObject(pOldPen);
 	dc.SelectObject(pOldBrush);
 
-	//CGraph qraph(m_nDrawType, m_ptOrigin, point);
-	//m_ptrArray.Add(&qraph);
+	//CGraph qraph(m_nDrawType, m_ptOrigin, point); 不在注释方法1里
+	//m_ptrArray.Add(&qraph);                       不在注释方法1里
+	
+	OnPrepareDC(&dc);
+	dc.DPtoLP(&m_ptOrigin);
+	dc.DPtoLP(&point);
+
 	CGraph* pGraph = new CGraph(m_nDrawType, m_ptOrigin, point);
 	m_ptrArray.Add(pGraph);
+	CScrollView::OnLButtonUp(nFlags, point);*/
+
+	switch (m_nDrawType)
+	{
+	case 1:
+		m_dcMetaFile.SetPixel(point, m_clr);
+		break;
+	case 2:
+		m_dcMetaFile.MoveTo(m_ptOrigin);
+		m_dcMetaFile.LineTo(point);
+		break;
+	case 3:
+		m_dcMetaFile.Rectangle(CRect(m_ptOrigin, point));
+		break;
+	case 4:
+		m_dcMetaFile.Ellipse(CRect(m_ptOrigin, point));
+		break;
+	}
+	m_dcMetaFile.SelectObject(pOldPen);
+	m_dcMetaFile.SelectObject(pOldBrush);
+
 	CScrollView::OnLButtonUp(nFlags, point);
 }
 

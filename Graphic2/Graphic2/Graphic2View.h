@@ -60,6 +60,8 @@ public:
 	afx_msg void OnFont();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	virtual void OnInitialUpdate();
+private:
+	CMetaFileDC m_dcMetaFile;
 };
 
 #ifndef _DEBUG  // Graphic2View.cpp 中的调试版本
