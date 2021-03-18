@@ -12,11 +12,13 @@
 
 #include "ch13Doc.h"
 #include "ch13View.h"
+#include<fstream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
+using  std::ifstream;
+using  std::ofstream;
 
 // Cch13View
 
@@ -110,22 +112,26 @@ Cch13Doc* Cch13View::GetDocument() const // 非调试版本是内联的
 void Cch13View::OnFileWrite()
 {
 	// TODO: 在此添加命令处理程序代码
-	FILE* pFile = fopen("1.txt", "w");
-	char buf[24] = "http://www.phei.com.cn/";
-	//fwrite("http://www.phei.com.cn/", 1, strlen("http://www.phei.com.cn/"), pFile);
-	//fseek(pFile, 0, SEEK_SET);
-	//fwrite("ftp:", 1, strlen("ftp:"), pFile);
-	//fwrite("欢迎访问", 1, strlen("欢迎访问"), pFile);
-	buf[23] = '\0';
-	fwrite(buf, 1, 24, pFile);
-	fclose(pFile);
+	//FILE* pFile = fopen("1.txt", "w");	2
+	//char buf[24] = "http://www.phei.com.cn/";
+	//fwrite("http://www.phei.com.cn/", 1, strlen("http://www.phei.com.cn/"), pFile);  1
+	//fseek(pFile, 0, SEEK_SET);	1
+	//fwrite("ftp:", 1, strlen("ftp:"), pFile);	1
+	//fwrite("欢迎访问", 1, strlen("欢迎访问"), pFile);	1
+	//buf[23] = '\0';	2
+	//fwrite(buf, 1, 24, pFile);	2
+	//fclose(pFile);	2
+	ofstream ofs("4.txt");
+	ofs.write("http://wwww.phei.com.cn/", strlen("http://wwww.phei.com.cn"));
+	ofs.close();
+	
 }
 
 
 void Cch13View::OnFileRead()
 {
 	// TODO: 在此添加命令处理程序代码
-	FILE* pFile = fopen("1.txt", "r");
+	/*FILE* pFile = fopen("1.txt", "r");
 	char* pBuf;
 	fseek(pFile, 0, SEEK_END);
 	int len = ftell(pFile);
@@ -135,5 +141,11 @@ void Cch13View::OnFileRead()
 	pBuf[len] = 0;
 	//fread(ch, 1, 100, pFile);
 	fclose(pFile);
-	::MessageBoxA(NULL, pBuf, "文件", 0);
+	::MessageBoxA(NULL, pBuf, "文件", 0);*/
+		ifstream ifs("4.txt");
+	char ch[100];
+	memset(ch, 0, 100);
+	ifs.read(ch,100);
+	ifs.close();
+	::MessageBoxA(NULL, ch, "文件", 0);
 }
