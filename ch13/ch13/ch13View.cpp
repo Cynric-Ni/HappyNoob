@@ -121,10 +121,19 @@ void Cch13View::OnFileWrite()
 	//buf[23] = '\0';	2
 	//fwrite(buf, 1, 24, pFile);	2
 	//fclose(pFile);	2
-	ofstream ofs("4.txt");
-	ofs.write("http://wwww.phei.com.cn/", strlen("http://wwww.phei.com.cn"));
-	ofs.close();
-	
+	//3 ofstream ofs("4.txt");
+	//3 ofs.write("http://wwww.phei.com.cn/", strlen("http://wwww.phei.com.cn"));
+	//3 ofs.close();
+	/*方法4HANDLE hFile;
+	hFile = CreateFile(L"5.txt", GENERIC_WRITE, 0, NULL, CREATE_NEW,
+		FILE_ATTRIBUTE_NORMAL, NULL);
+	DWORD dwWrites;
+	WriteFile(hFile, "http://wwww.phei.com.cn/", strlen("http://www.phei.com.cn/"),
+		&dwWrites, NULL);
+	CloseHandle(hFile);*/
+	CFile file(L"6.txt", CFile::modeCreate | CFile::modeWrite);
+	file.Write("http://www.phei.com.cn/", strlen("http://www.phei.com.cn"));
+	file.Close();
 }
 
 
@@ -142,10 +151,21 @@ void Cch13View::OnFileRead()
 	//fread(ch, 1, 100, pFile);
 	fclose(pFile);
 	::MessageBoxA(NULL, pBuf, "文件", 0);*/
-		ifstream ifs("4.txt");
+	/*方法2 ifstream ifs("4.txt");
 	char ch[100];
 	memset(ch, 0, 100);
 	ifs.read(ch,100);
 	ifs.close();
-	::MessageBoxA(NULL, ch, "文件", 0);
+	::MessageBoxA(NULL, ch, "文件", 0); */
+	/*方法3HANDLE hFile;
+	hFile = CreateFile(L"5.txt", GENERIC_READ, 0, NULL, OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL, NULL);
+	char ch[100];
+	DWORD dwReads;
+	ReadFile(hFile, ch, 100, &dwReads, NULL);
+	ch[dwReads] = 0;
+	CloseHandle(hFile);
+	MessageBoxA(NULL, ch, "文件", 0);*/
+	
+	
 }
