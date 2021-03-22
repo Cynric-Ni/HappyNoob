@@ -41,6 +41,8 @@ BEGIN_MESSAGE_MAP(CGraphic2View, CScrollView)
 	ON_WM_ERASEBKGND()
 	ON_COMMAND(ID_FILE_SAVE, &CGraphic2View::OnFileSave)
 	ON_COMMAND(ID_FILE_OPEN, &CGraphic2View::OnFileOpen)
+	ON_COMMAND(IDM_FILE_WRITE, &CGraphic2View::OnFileWrite)
+	ON_COMMAND(IDM_FILE_READ, &CGraphic2View::OnFileRead)
 END_MESSAGE_MAP()
 
 // CGraphic2View 构造/析构
@@ -376,4 +378,39 @@ void CGraphic2View::OnFileOpen()
 	m_dcMetaFile.PlayMetaFile(hmetaFile, &rect);
 	DeleteEnhMetaFile(hmetaFile);
 	Invalidate();
+}
+
+
+void CGraphic2View::OnFileWrite()
+{
+	// TODO: 在此添加命令处理程序代码
+	//构造CFile文件对象
+	CFile file(L"1.txt", CFile::modeCreate | CFile::modeWrite);
+	//构造存档对象
+	CArchive ar(&file, CArchive::store);
+	int i = 4;
+	char ch = 'a';
+	float f = 1.3f;
+	CString str("http://www.phei.com.cn");
+	//保存数据
+	ar << i << ch << f << str;
+}
+
+
+void CGraphic2View::OnFileRead()
+{
+	// TODO: 在此添加命令处理程序代码
+	CFile file(L"1.txt", CFile::modeRead);
+	//构造存档对象
+	CArchive ar(&file, CArchive::load);
+	int i;
+	char ch;
+	float f;
+	CString str;
+	CString strResult;
+
+	//读取数据
+	ar >> i >> ch >> f >> str;
+	strResult.Format(L"%d,%c,%f,%s", i, ch, f, str);
+	MessageBox(strResult);
 }

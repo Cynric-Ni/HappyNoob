@@ -31,6 +31,8 @@ BEGIN_MESSAGE_MAP(Cch13View, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_COMMAND(IDM_FILE_WRITE, &Cch13View::OnFileWrite)
 	ON_COMMAND(IDM_FILE_READ, &Cch13View::OnFileRead)
+	ON_COMMAND(IDM_REG_WRITE, &Cch13View::OnRegWrite)
+	ON_COMMAND(IDM_REG_READ, &Cch13View::OnRegRead)
 END_MESSAGE_MAP()
 
 // Cch13View 构造/析构
@@ -168,4 +170,42 @@ void Cch13View::OnFileRead()
 	MessageBoxA(NULL, ch, "文件", 0);*/
 	
 	
+}
+
+
+void Cch13View::OnRegWrite()
+{
+	// TODO: 在此添加命令处理程序代码
+	HKEY hKey;
+	LONG lResult;
+	lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
+		L"Software\\wwww.cynric.me\\admin",
+		0, NULL, REG_OPTION_NON_VOLATILE,
+		KEY_WRITE | KEY_WOW64_64KEY, NULL, &hKey, NULL);
+	if (lResult == ERROR_SUCCESS) {
+		MessageBox(L"创建注册表项成功");
+	} else {
+		MessageBox(L"创建注册表项失败");
+		return;;
+	}
+	RegSetValue(hKey, NULL, REG_SZ, L"zhangsan", _tcslen(L"zhangsan"));
+	RegCloseKey(hKey);
+}
+
+
+void Cch13View::OnRegRead()
+{
+	// TODO: 在此添加命令处理程序代码
+	HKEY hKey;
+	LONG lValue;
+	RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software", 0, KEY_READ | KEY_WOW64_64KEY, &hKey);
+	LONG lResult;
+	lResult = RegQueryValue(hKey, L"wwww.cynric.me\\admin", NULL, &lValue);
+	if (lResult == ERROR_SUCCESS) {
+		TCHAR* pBuf = new TCHAR[lValue];
+		RegQueryValue(hKey, L"wwww.cynric.me\\admin", pBuf, &lValue);
+		MessageBox(pBuf);
+	}else {
+		MessageBox(L"创建失败");
+	}
 }

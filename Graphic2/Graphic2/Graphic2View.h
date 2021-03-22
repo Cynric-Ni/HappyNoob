@@ -65,6 +65,8 @@ private:
 public:
 	afx_msg void OnFileSave();
 	afx_msg void OnFileOpen();
+	afx_msg void OnFileWrite();
+	afx_msg void OnFileRead();
 };
 
 #ifndef _DEBUG  // Graphic2View.cpp 中的调试版本
