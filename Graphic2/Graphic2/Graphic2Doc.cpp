@@ -45,7 +45,7 @@ BOOL CGraphic2Doc::OnNewDocument()
 
 	// TODO: 在此添加重新初始化代码
 	// (SDI 文档将重用该文档)
-
+	SetTitle(L"http://www.cynric.me");
 	return TRUE;
 }
 
