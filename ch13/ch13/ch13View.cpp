@@ -31,14 +31,11 @@ BEGIN_MESSAGE_MAP(Cch13View, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_COMMAND(IDM_FILE_WRITE, &Cch13View::OnFileWrite)
 	ON_COMMAND(IDM_FILE_READ, &Cch13View::OnFileRead)
-<<<<<<< HEAD
 //	ON_COMMAND(IDM_REG_WIRTE, &Cch13View::OnRegWirte)
 	ON_COMMAND(IDM_REG_READ, &Cch13View::OnRegRead)
 	ON_COMMAND(IDM_REG_WRITE, &Cch13View::OnRegWrite)
-=======
-	ON_COMMAND(IDM_REG_WRITE, &Cch13View::OnRegWrite)
-	ON_COMMAND(IDM_REG_READ, &Cch13View::OnRegRead)
->>>>>>> 27e20d92e0bcd07f5a0d001d53d12e06e8765bda
+
+
 END_MESSAGE_MAP()
 
 // Cch13View 构造/析构
@@ -229,46 +226,6 @@ void Cch13View::OnFileRead()
 //}
 
 
-void Cch13View::OnRegRead()
-{
-	// TODO: 在此添加命令处理程序代码
-	HKEY hKey;
-	DWORD lValue = 256;
-	RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software", 0,
-		KEY_READ |KEY_WOW64_64KEY, &hKey);
-	LONG lResult;
-	DWORD dwType = REG_SZ;
-	TCHAR *szStr = new TCHAR[lValue];
-	DWORD dwSize = sizeof(DWORD);
-
-	lResult = RegQueryValueEx(hKey,
-		TEXT("www.cynric.me\\admin"), NULL,NULL,NULL,&lValue);
-	if (lResult == ERROR_SUCCESS) {
-		//char *pBuf = new char[lValue];
-		RegQueryValueEx(hKey,
-			TEXT("www.cynric.me\\admin"), 0, &dwType, (LPBYTE)(LPCTSTR)szStr, &lValue);
-		MessageBox(szStr);
-	}
-}
-
-
-void Cch13View::OnRegWrite()
-{
-	// TODO: 在此添加命令处理程序代码
-	HKEY hKey;
-	LONG lResult;
-	lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE, L"Software\\www.cynric.me\\admin",
-		0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE | KEY_WOW64_64KEY, NULL, &hKey, NULL);
-	if (lResult == ERROR_SUCCESS) {
-		MessageBox(L"创建注册表成功");
-	}
-	else {
-		MessageBox(L"创建注册表项失败");
-		return;
-	}
-	RegSetValue(hKey, NULL, REG_SZ, L"zhangsan", _tcslen(L"zhangsan"));
-	RegCloseKey(hKey);
-}
 
 
 void Cch13View::OnRegWrite()
@@ -277,7 +234,7 @@ void Cch13View::OnRegWrite()
 	HKEY hKey;
 	LONG lResult;
 	lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
-		L"Software\\wwww.cynric.me\\admin",
+		L"Software\\www.cynric.me\\admin",
 		0, NULL, REG_OPTION_NON_VOLATILE,
 		KEY_WRITE | KEY_WOW64_64KEY, NULL, &hKey, NULL);
 	if (lResult == ERROR_SUCCESS) {
@@ -298,10 +255,10 @@ void Cch13View::OnRegRead()
 	LONG lValue;
 	RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software", 0, KEY_READ | KEY_WOW64_64KEY, &hKey);
 	LONG lResult;
-	lResult = RegQueryValue(hKey, L"wwww.cynric.me\\admin", NULL, &lValue);
+	lResult = RegQueryValue(hKey, L"www.cynric.me\\admin", NULL, &lValue);
 	if (lResult == ERROR_SUCCESS) {
 		TCHAR* pBuf = new TCHAR[lValue];
-		RegQueryValue(hKey, L"wwww.cynric.me\\admin", pBuf, &lValue);
+		RegQueryValue(hKey, L"www.cynric.me\\admin", pBuf, &lValue);
 		MessageBox(pBuf);
 	}else {
 		MessageBox(L"创建失败");
