@@ -43,6 +43,9 @@ protected:
 public:
 	afx_msg void OnFileWrite();
 	afx_msg void OnFileRead();
+//	afx_msg void OnRegWirte();
+	afx_msg void OnRegRead();
+	afx_msg void OnRegWrite();
 };
 
 #ifndef _DEBUG  // ch13View.cpp 中的调试版本

@@ -93,7 +93,7 @@ BOOL Cch13App::InitInstance()
 	// 更改用于存储设置的注册表项
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
-	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
+	SetRegistryKey(_T("http://www.cynric.me/"));
 	LoadStdProfileSettings(4);  // 加载标准 INI 文件选项(包括 MRU)
 
 
@@ -124,6 +124,14 @@ BOOL Cch13App::InitInstance()
 	// 唯一的一个窗口已初始化，因此显示它并对其进行更新
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
+	//写入INI																倪忻亮
+	//第1种写入WritePrivateProfileString(L"http://www.cynric.me/", L"admin", L"zhangsan", L".\\file.ini");
+	//第1种读取
+/*	CString str;
+	::GetPrivateProfileString(L"http://www.cynric.me/", L"admin", L"Lisi", str.GetBuffer(100), 100, L".\\file.ini");
+	AfxMessageBox(str);*/
+	//写入注册表
+	WriteProfileString(L"http://www.cynric.me/", L"admin", L"zhangsan");
 	return TRUE;
 }
 
@@ -156,6 +164,7 @@ protected:
 // 实现
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
 };
 
 CAboutDlg::CAboutDlg() noexcept : CDialogEx(IDD_ABOUTBOX)
@@ -178,6 +187,8 @@ void Cch13App::OnAppAbout()
 }
 
 // Cch13App 消息处理程序
+
+
 
 
 

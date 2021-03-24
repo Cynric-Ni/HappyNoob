@@ -124,6 +124,7 @@ BOOL CGraphic2App::InitInstance()
 	// 唯一的一个窗口已初始化，因此显示它并对其进行更新
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
+	WritePrivateProfileString(L"http://www.cynric.me/", L"admin", L"zhangsan", L".\\file.ini");
 	return TRUE;
 }
 

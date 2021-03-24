@@ -31,6 +31,9 @@ BEGIN_MESSAGE_MAP(Cch13View, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_COMMAND(IDM_FILE_WRITE, &Cch13View::OnFileWrite)
 	ON_COMMAND(IDM_FILE_READ, &Cch13View::OnFileRead)
+//	ON_COMMAND(IDM_REG_WIRTE, &Cch13View::OnRegWirte)
+	ON_COMMAND(IDM_REG_READ, &Cch13View::OnRegRead)
+	ON_COMMAND(IDM_REG_WRITE, &Cch13View::OnRegWrite)
 END_MESSAGE_MAP()
 
 // Cch13View 构造/析构
@@ -131,9 +134,18 @@ void Cch13View::OnFileWrite()
 	WriteFile(hFile, "http://wwww.phei.com.cn/", strlen("http://www.phei.com.cn/"),
 		&dwWrites, NULL);
 	CloseHandle(hFile);*/
-	CFile file(L"6.txt", CFile::modeCreate | CFile::modeWrite);
+	/*方法5 CFile file(L"6.txt", CFile::modeCreate | CFile::modeWrite);
 	file.Write("http://www.phei.com.cn/", strlen("http://www.phei.com.cn"));
-	file.Close();
+	file.Close();*/
+	CFileDialog fileDlg(FALSE);
+	fileDlg.m_ofn.lpstrTitle = L"我的文件保存对话框";
+	fileDlg.m_ofn.lpstrFilter = L"Text Files(*.txt)\0*.txt\0ALL files(*.*)\0*.*\0\0";
+	fileDlg.m_ofn.lpstrDefExt = L"txt";
+	if (IDOK == fileDlg.DoModal()) {
+		CFile file(fileDlg.GetFileName(), CFile::modeCreate | CFile::modeWrite);
+		file.Write("http://www.cynric.me/", strlen("http://www.cynric.me/"));
+		file.Close();
+	}
 }
 
 
@@ -166,6 +178,89 @@ void Cch13View::OnFileRead()
 	ch[dwReads] = 0;
 	CloseHandle(hFile);
 	MessageBoxA(NULL, ch, "文件", 0);*/
+	/*方法4CFile  file(L"6.txt", CFile::modeRead);
+	char *pBuf;
+	UINT dwFileLen;
+	dwFileLen =(UINT) file.GetLength();
+	pBuf = new char[dwFileLen + 1];
+	pBuf[dwFileLen] = 0;
+	file.Read(pBuf, dwFileLen);
+	file.Close();
+	MessageBoxA(NULL, pBuf, "文件", 0);*/
+	CFileDialog fileDlg(TRUE);
+	fileDlg.m_ofn.lpstrTitle = L"我的文件打开对话框";
+	fileDlg.m_ofn.lpstrFilter = L"Text Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0";
+	if (IDOK == fileDlg.DoModal()) {
+		CFile file(fileDlg.GetFileName(), CFile::modeRead);
+		char* pBuf;
+		UINT dwFileLen;
+		dwFileLen = (UINT)file.GetLength();
+		pBuf = new char[dwFileLen + 1];
+		pBuf[dwFileLen] = 0;
+		file.Read(pBuf, dwFileLen);
+		file.Close();
+		MessageBoxA(NULL, pBuf, "文件", 0);
+	}
 	
-	
+}
+
+
+//void Cch13View::OnRegWirte()
+//{
+//	// TODO: 在此添加命令处理程序代码
+//	HKEY hKey;
+//	LONG lResult;
+//	lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE, L"Software\\www.cynric.me\\admin",
+//		0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
+//	if (lResult == ERROR_SUCCESS) {
+//		MessageBox(L"创建注册表成功");
+//	}
+//	else {
+//		MessageBox(L"创建注册表项失败");
+//		return;
+//	}
+//	RegSetValue(hKey, NULL, REG_SZ, L"zhangsan", _tcslen(L"zhangsan"));
+//	RegCloseKey(hKey);
+//}
+
+
+void Cch13View::OnRegRead()
+{
+	// TODO: 在此添加命令处理程序代码
+	HKEY hKey;
+	DWORD lValue = 256;
+	RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software", 0,
+		KEY_READ |KEY_WOW64_64KEY, &hKey);
+	LONG lResult;
+	DWORD dwType = REG_SZ;
+	TCHAR *szStr = new TCHAR[lValue];
+	DWORD dwSize = sizeof(DWORD);
+
+	lResult = RegQueryValueEx(hKey,
+		TEXT("www.cynric.me\\admin"), NULL,NULL,NULL,&lValue);
+	if (lResult == ERROR_SUCCESS) {
+		//char *pBuf = new char[lValue];
+		RegQueryValueEx(hKey,
+			TEXT("www.cynric.me\\admin"), 0, &dwType, (LPBYTE)(LPCTSTR)szStr, &lValue);
+		MessageBox(szStr);
+	}
+}
+
+
+void Cch13View::OnRegWrite()
+{
+	// TODO: 在此添加命令处理程序代码
+	HKEY hKey;
+	LONG lResult;
+	lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE, L"Software\\www.cynric.me\\admin",
+		0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE | KEY_WOW64_64KEY, NULL, &hKey, NULL);
+	if (lResult == ERROR_SUCCESS) {
+		MessageBox(L"创建注册表成功");
+	}
+	else {
+		MessageBox(L"创建注册表项失败");
+		return;
+	}
+	RegSetValue(hKey, NULL, REG_SZ, L"zhangsan", _tcslen(L"zhangsan"));
+	RegCloseKey(hKey);
 }
