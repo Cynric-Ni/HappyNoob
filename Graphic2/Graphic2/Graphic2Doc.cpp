@@ -59,10 +59,23 @@ void CGraphic2Doc::Serialize(CArchive& ar)
 	if (ar.IsStoring())
 	{
 		// TODO: 在此添加存储代码
+		int i = 5;
+		char ch = 'b';
+		float f = 1.2f;
+		CString str("http://bbs.cynric.me");
+		ar << i << ch << f << str;
 	}
 	else
 	{
 		// TODO: 在此添加加载代码
+		int i;
+		char ch;
+		float f;
+		CString str;
+		CString strResult;
+		ar >> i >> ch >> f >> str;
+		strResult.Format(L"%d,%c,%f", i, ch, f, str);
+		AfxMessageBox(strResult);
 	}
 }
 
