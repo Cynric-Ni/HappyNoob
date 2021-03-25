@@ -60,8 +60,8 @@ CGraphic2View::CGraphic2View() noexcept
 
 CGraphic2View::~CGraphic2View()
 {
-	for (int i = 0; i < m_ptrArray.GetSize(); i++) {
-		delete m_ptrArray.GetAt(i);
+	for (int i = 0; i < m_obArray.GetSize(); i++) {
+		delete m_obArray.GetAt(i);
 	}
 }
 
@@ -83,52 +83,11 @@ void CGraphic2View::OnDraw(CDC* pDC)
 		return;
 
 	// TODO: 在此处为本机数据添加绘制代码
-	/*第一种方法
-	CBrush* pBrush = CBrush::FromHandle((HBRUSH)GetStockObject(NULL_BRUSH));
-	CBrush* pOldBrush = pDC->SelectObject(pBrush);
-	CPen pen(m_nLineStyle, m_nLineWidth, m_clr);
-	CPen* pOldPen = pDC->SelectObject(&pen);
-	for (int i = 0; i < m_ptrArray.GetSize(); i++) {
-		switch (((CGraph*)m_ptrArray.GetAt(i))->m_nDrawType)
-		{
-		case 1:
-			pDC->SetPixel(((CGraph*)m_ptrArray.GetAt(i))->m_ptEnd, m_clr);
-			break;
-		case 2:
-			pDC->MoveTo(((CGraph*)m_ptrArray.GetAt(i))->m_ptOrigin);
-			pDC->LineTo(((CGraph*)m_ptrArray.GetAt(i))->m_ptEnd);
-			break;
-		case 3:
-			pDC->Rectangle(CRect(((CGraph*)m_ptrArray.GetAt(i))->m_ptOrigin,
-				((CGraph*)m_ptrArray.GetAt(i))->m_ptEnd));
-			break;
-		case 4:
-			pDC->Ellipse(CRect(((CGraph*)m_ptrArray.GetAt(i))->m_ptOrigin,
-				((CGraph*)m_ptrArray.GetAt(i))->m_ptEnd));
-			break;
-		default:
-			break;
-		}
+	int nCount;
+	nCount = m_obArray.GetSize();
+	for (int i = 0; i < nCount; i++) {
+		((CGraph*)m_obArray.GetAt(i))->Draw(pDC);
 	}
-	pDC->SelectObject(pOldPen);
-	pDC->SelectObject(pOldBrush);
-	CFont* pOldFont = pDC->SelectObject(&m_Font);
-	pDC->TextOutW(0, 0, m_strFontName);
-	pDC->SelectObject(pOldFont);*/
-	HENHMETAFILE hmetaFile;
-	hmetaFile = m_dcMetaFile.CloseEnhanced();
-
-	CRect rect;
-	GetClientRect(&rect);
-	rect.left = rect.right / 4;
-	rect.right = 3 * rect.right / 4;
-	rect.top = rect.bottom / 4;
-	rect.bottom = 3 * rect.bottom / 4;
-
-	pDC->PlayMetaFile(hmetaFile, &rect);
-	m_dcMetaFile.CreateEnhanced(NULL, NULL, NULL, NULL);
-	m_dcMetaFile.PlayMetaFile(hmetaFile, &rect);
-	DeleteEnhMetaFile(hmetaFile);
 }
 
 

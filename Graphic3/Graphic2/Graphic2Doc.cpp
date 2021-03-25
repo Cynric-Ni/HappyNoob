@@ -11,7 +11,8 @@
 #endif
 
 #include "Graphic2Doc.h"
-
+#include "Graphic2View.h"
+#include "Graph.h"
 #include <propkey.h>
 
 #ifdef _DEBUG
@@ -56,26 +57,27 @@ BOOL CGraphic2Doc::OnNewDocument()
 
 void CGraphic2Doc::Serialize(CArchive& ar)
 {
+	POSITION pos = GetFirstViewPosition();
+	CGraphic2View* pView = (CGraphic2View*)GetNextView(pos);
 	if (ar.IsStoring())
 	{
 		// TODO: 在此添加存储代码
-		int i = 5;
-		char ch = 'b';
-		float f = 1.2f;
-		CString str("http://bbs.cynric.me");
-		ar << i << ch << f << str;
-	}
-	else
-	{
+		int nCount = pView->m_obArray.GetSize();
+		ar << nCount;
+		for (int i = 0; i < nCount; i++) {
+			ar << pView->m_obArray.GetAt(i);
+		}
+	}else{
 		// TODO: 在此添加加载代码
-		int i;
-		char ch;
-		float f;
-		CString str;
-		CString strResult;
-		ar >> i >> ch >> f >> str;
-		strResult.Format(L"%d,%c,%f", i, ch, f, str);
-		AfxMessageBox(strResult);
+		int nCount;
+		ar >> nCount;
+		CGraph* pGraph;
+		for (int i = 0; i < nCount; i++) {
+			ar >> pGraph;
+			pView->m_obArray.Add(pGraph);
+		}
+
+
 	}
 }
 

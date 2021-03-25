@@ -48,7 +48,6 @@ private:
 	CFont       m_Font;
 	CString		m_strFontName;
 	CPtrArray	m_ptrArray;
-	CObArray	m_obArray;
 public:
 	afx_msg void OnDot();
 	afx_msg void OnLine();
@@ -61,6 +60,7 @@ public:
 	afx_msg void OnFont();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	virtual void OnInitialUpdate();
+	CObArray	m_obArray;
 private:
 	CMetaFileDC m_dcMetaFile;
 public:
