@@ -34,12 +34,17 @@ int main()
 	addrSrv.sin_port = htons(6000);
  //向服务器发出连接请求
 	connect(sockClient, (SOCKADDR*)&addrSrv, sizeof(SOCKADDR));
-
+ //接受数据
+	char recvBuf[100];
+	recv(sockClient, recvBuf, 100, 0);
+	printf("%s\n", recvBuf);
  //发送数据
 	send(sockClient, "This is lisi", strlen("This is lisi") + 1, 0);
  //关闭套接字
 	closesocket(sockClient);
 	WSACleanup();
+	system("PAUSE");
+
 	return 0;
 	
 }
