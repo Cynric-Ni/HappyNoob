@@ -17,6 +17,12 @@ int main()
 	if (err != 0) {
 		return -1;
 	}
+
+	if (LOBYTE(wsaData.wVersion) != 1 ||
+		HIBYTE(wsaData.wVersion) != 1) {
+		WSACleanup();
+		return -1;
+	}
   //创建套接字
 	SOCKET sockClient = socket(AF_INET, SOCK_DGRAM, 0);
 

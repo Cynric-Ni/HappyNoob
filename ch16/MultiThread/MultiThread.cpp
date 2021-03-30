@@ -6,17 +6,27 @@
 
 using std::cout;
 
+//int index = 0;
+int tickets = 100;
 DWORD WINAPI Fun1Proc(
     LPVOID lpParameter //thread data
 );
-
+DWORD WINAPI Fun2Proc(
+    LPVOID lpParameter
+);
 int main()
 {
     HANDLE hThread1;
+    HANDLE hThread2;
+    //创建线程
     hThread1 = CreateThread(NULL, 0, Fun1Proc, NULL, 0, NULL);
+    hThread2 = CreateThread(NULL, 0, Fun2Proc, NULL, 0, NULL);
     CloseHandle(hThread1);
+    CloseHandle(hThread2);
+  /*  while (index++ < 1000)
     cout << "main thread is running\n";
-    Sleep(10);
+    //Sleep(10);*/
+    Sleep(4000);
     return 0;
 }
 
@@ -25,11 +35,41 @@ DWORD WINAPI Fun1Proc(
     LPVOID lpParameter  // thread data
 )
 {
-    cout << "thread1 is running\n";
+ /*   while(index++<1000)
+    cout << "thread1 is running\n";*/
    
+    char buf[100] = { 0 };
+    while (TRUE)
+    {
+        if (tickets > 0) {
+            sprintf_s(buf, "thread1 sell ticket:%d\n", tickets);
+            cout << buf;
+            tickets--;
+        }else{
+            break;
+        }
+        
+    }
     return 0;
 }
 
+//线程2的入口函数
+DWORD WINAPI Fun2Proc(
+    LPVOID lpParameter
+)
+{
+    char buf[100] = { 0 };
+    while (TRUE) {
+        if (tickets > 0) {
+            sprintf_s(buf, "thread2 sell ticket :%d\n", tickets);
+            cout << buf;
+            tickets--;
+        }else{
+            break;
+        }
+    }
+    return 0;
+}
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
 
