@@ -8,6 +8,7 @@ using std::cout;
 
 //int index = 0;
 int tickets = 100;
+HANDLE hMutex;
 DWORD WINAPI Fun1Proc(
     LPVOID lpParameter //thread data
 );
@@ -18,6 +19,10 @@ int main()
 {
     HANDLE hThread1;
     HANDLE hThread2;
+
+    //创建互斥对象
+    hMutex = CreateMutex(NULL, FALSE, NULL);
+
     //创建线程
     hThread1 = CreateThread(NULL, 0, Fun1Proc, NULL, 0, NULL);
     hThread2 = CreateThread(NULL, 0, Fun2Proc, NULL, 0, NULL);
@@ -26,7 +31,7 @@ int main()
   /*  while (index++ < 1000)
     cout << "main thread is running\n";
     //Sleep(10);*/
-    Sleep(4000);
+    Sleep(10000);
     return 0;
 }
 
@@ -41,14 +46,18 @@ DWORD WINAPI Fun1Proc(
     char buf[100] = { 0 };
     while (TRUE)
     {
+        WaitForSingleObject(hMutex, INFINITE);
         if (tickets > 0) {
+            //Sleep(10);
             sprintf_s(buf, "thread1 sell ticket:%d\n", tickets);
             cout << buf;
             tickets--;
+            ReleaseMutex(hMutex);
         }else{
+            ReleaseMutex(hMutex);
             break;
         }
-        
+        //ReleaseMutex(hMutex);
     }
     return 0;
 }
@@ -60,13 +69,18 @@ DWORD WINAPI Fun2Proc(
 {
     char buf[100] = { 0 };
     while (TRUE) {
+        WaitForSingleObject(hMutex, INFINITE);
         if (tickets > 0) {
+            //Sleep(10);
             sprintf_s(buf, "thread2 sell ticket :%d\n", tickets);
             cout << buf;
             tickets--;
+            ReleaseMutex(hMutex);
         }else{
-            break;
+            ReleaseMutex(hMutex);
+            break;     
         }
+        //ReleaseMutex(hMutex);
     }
     return 0;
 }
