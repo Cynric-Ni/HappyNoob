@@ -21,8 +21,14 @@ int main()
     HANDLE hThread2;
 
     //创建互斥对象
-    hMutex = CreateMutex(NULL, FALSE, NULL);
-
+    hMutex = CreateMutex(NULL, FALSE, L"tickets");
+    if (hMutex) {
+        if (ERROR_ALREADY_EXISTS == GetLastError()) {
+            cout << "only one instance can run!\n";
+            system("pause");
+            return -1;
+        }
+    }
     //创建线程
     hThread1 = CreateThread(NULL, 0, Fun1Proc, NULL, 0, NULL);
     hThread2 = CreateThread(NULL, 0, Fun2Proc, NULL, 0, NULL);
@@ -31,7 +37,7 @@ int main()
   /*  while (index++ < 1000)
     cout << "main thread is running\n";
     //Sleep(10);*/
-    Sleep(10000);
+    Sleep(40000);
     return 0;
 }
 
