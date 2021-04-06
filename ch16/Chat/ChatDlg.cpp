@@ -100,6 +100,7 @@ BOOL CChatDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	InitSocket();
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -153,3 +154,46 @@ HCURSOR CChatDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+bool CChatDlg::InitSocket()
+{
+	// TODO: 在此处添加实现代码.
+	//创建并初始化套接字
+	m_socket = socket(AF_INET, SOCK_DGRAM, 0);
+	if (INVALID_SOCKET == m_socket) {
+		MessageBox(L"套接字创建失败!");
+		return FALSE;
+	}
+	SOCKADDR_IN addrSock;
+	addrSock.sin_family = AF_INET;
+	addrSock.sin_port = htons(6000);
+	addrSock.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+
+	int retval;
+	//绑定套接字
+	retval = bind(m_socket, (SOCKADDR*)&addrSock, sizeof(SOCKADDR));
+	if (SOCKET_ERROR == retval) {
+		closesocket(m_socket);
+
+		MessageBox(L"绑定失败！");
+		return FALSE;
+	}
+
+	RECVPARAM* pRecvParam = new RECVPARAM;
+	pRecvParam->sock = m_socket;
+	pRecvParam->hwnd = m_hWnd;
+	//创建接收线程
+	HANDLE hThread = CreateThread(NULL, 0, RecProc, (LPVOID)pRecvParam, 0, NULL);
+	//关闭该接收线程句柄，释放其引用计数
+	CloseHandle(hThread);
+
+	return FALSE;
+}
+
+
+DWORD WINAPI CChatDlg::RecProc()
+{
+	// TODO: 在此处添加实现代码.
+	return 0;
+}

@@ -31,4 +31,17 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+private:
+	SOCKET m_socket;
+public:
+	bool InitSocket();
+	static DWORD WINAPI RecProc();
+};
+
+//自定义结构体
+
+struct  RECVPARAM
+{
+	SOCKET sock;  //已创建的套接字
+	HWND   hwnd;  //对话框句柄
 };

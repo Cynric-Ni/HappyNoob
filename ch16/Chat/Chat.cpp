@@ -6,6 +6,7 @@
 #include "framework.h"
 #include "Chat.h"
 #include "ChatDlg.h"
+#include <afxsock.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -102,6 +103,12 @@ BOOL CChatApp::InitInstance()
 
 	// 由于对话框已关闭，所以将返回 FALSE 以便退出应用程序，
 	//  而不是启动应用程序的消息泵。
+
+	if (!AfxSocketInit()) {
+		AfxMessageBox(L"加载套接字库失败！");
+		return FALSE;
+	}
+
 	return FALSE;
 }
 
