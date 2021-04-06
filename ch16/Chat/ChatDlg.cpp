@@ -7,6 +7,7 @@
 #include "Chat.h"
 #include "ChatDlg.h"
 #include "afxdialogex.h"
+#include <afxsock.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -65,6 +66,7 @@ BEGIN_MESSAGE_MAP(CChatDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_MESSAGE(WM_RECVDATA,OnRecvData)
 END_MESSAGE_MAP()
 
 
@@ -192,8 +194,45 @@ bool CChatDlg::InitSocket()
 }
 
 
-DWORD WINAPI CChatDlg::RecProc()
+DWORD WINAPI CChatDlg::RecProc(LPVOID lpParameter)
 {
 	// TODO: 在此处添加实现代码.
+	//获取主线程传递的套接字和窗口句柄
+	SOCKET sock = ((RECVPARAM*)lpParameter)->sock;
+	HWND hwnd = ((RECVPARAM*)lpParameter)->hwnd;
+	delete lpParameter;
+
+	SOCKADDR_IN addrFrom;
+	int len = sizeof(SOCKADDR);
+
+	char recvBuf[200];
+	char tempBuf[300];
+	char str[INET_ADDRSTRLEN];
+	int  retval;
+	while (TRUE) {
+		//接受数据
+		retval = recvfrom(sock, recvBuf, 200, 0, (SOCKADDR*)&addrFrom, &len);
+		if (SOCKET_ERROR == retval)
+			break;
+		sprintf_s(tempBuf, "%s 说：%s",
+			inet_ntop(AF_INET, &addrFrom.sin_addr, str, sizeof(str)), 
+			recvBuf);
+		::PostMessage(hwnd, WM_RECVDATA, 0, (LPARAM)tempBuf);
+	}
+	return 0;
+}
+
+LRESULT CChatDlg::OnRecvData(WPARAM wParam, LPARAM lParam) {
+	//取出接收到的数据
+	CString str;
+	USES_CONVERSION;
+	str = A2T((char*)lParam);
+	CString strTemp;
+	//获得已有数据
+	GetDlgItemText(IDC_EDIT_RECV, strTemp);
+	str += "\r\n";
+	str += strTemp;
+	//显示所有接收到的数据
+	SetDlgItemText(IDC_EDIT_RECV, str);
 	return 0;
 }

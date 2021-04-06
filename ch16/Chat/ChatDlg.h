@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#define WM_RECVDATA  WM_USER+1
 
 
 // CChatDlg 对话框
@@ -30,12 +31,13 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg LRESULT OnRecvData(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 private:
 	SOCKET m_socket;
 public:
 	bool InitSocket();
-	static DWORD WINAPI RecProc();
+	static DWORD WINAPI RecProc(LPVOID lpParameter);
 };
 
 //自定义结构体
