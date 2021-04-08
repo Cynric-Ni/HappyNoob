@@ -38,6 +38,7 @@ private:
 public:
 	bool InitSocket();
 	static DWORD WINAPI RecProc(LPVOID lpParameter);
+	afx_msg void OnClickedBtnSend();
 };
 
 //自定义结构体
