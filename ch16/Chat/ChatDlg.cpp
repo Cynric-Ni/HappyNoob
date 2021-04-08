@@ -203,8 +203,8 @@ DWORD WINAPI CChatDlg::RecProc(LPVOID lpParameter)
 	SOCKADDR_IN addrFrom;
 	int len = sizeof(SOCKADDR);
 
-	char recvBuf[200];
-	char tempBuf[300];
+	char recvBuf[200] = {0};
+	char tempBuf[300] = {0};
 	char str[INET_ADDRSTRLEN];
 	int  retval;
 	while (TRUE) {
