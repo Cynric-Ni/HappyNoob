@@ -1,4 +1,4 @@
-﻿// Event.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+﻿// Critical.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
 
 #include <iostream>
@@ -9,25 +9,23 @@ DWORD WINAPI Fun1Proc(LPVOID lpParameter);
 DWORD WINAPI Fun2Proc(LPVOID lpParameter);
 
 int tickets = 100;
-HANDLE g_hEvent;
+CRITICAL_SECTION g_cs;
 
 int main()
 {
     HANDLE hThread1;
     HANDLE hThread2;
-    //创建人工重置事件内核对象
-    g_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-    SetEvent(g_hEvent);
     //创建线程
     hThread1 = CreateThread(NULL, 0, Fun1Proc, NULL, 0, NULL);
     hThread2 = CreateThread(NULL, 0, Fun2Proc, NULL, 0, NULL);
     CloseHandle(hThread1);
     CloseHandle(hThread2);
 
+    InitializeCriticalSection(&g_cs);
     //让主线程睡眠4秒
     Sleep(4000);
-    //关闭事件对象句柄
-    CloseHandle(g_hEvent);
+
+    DeleteCriticalSection(&g_cs);
     return 0;
 }
 
@@ -36,17 +34,20 @@ int main()
 DWORD WINAPI Fun1Proc(LPVOID lpParameter) {
     char buf[100] = { 0 };
     while (TRUE) {
-        //请求事件对象
-        WaitForSingleObject(g_hEvent, INFINITE);
-        if (tickets > 0) {
-            sprintf_s(buf, "thread1 sell ticket: %d\n", tickets);
-            cout << buf;
-            tickets--;
-            SetEvent(g_hEvent);
-        }else{
-            SetEvent(g_hEvent);
-            break;
-        }
+        //请求事件对象       
+            EnterCriticalSection(&g_cs);
+            if(tickets>0){
+                Sleep(1);
+                sprintf_s(buf, "thread1 sell ticket: %d\n", tickets);
+                cout << buf;
+                tickets--;
+                LeaveCriticalSection(&g_cs);
+                Sleep(1);
+            }else{
+                LeaveCriticalSection(&g_cs);
+                Sleep(1);
+                break;
+            }      
     }
     return 0;
 }
@@ -56,16 +57,19 @@ DWORD WINAPI Fun2Proc(LPVOID lpParameter) {
     char buf[100] = { 0 };
     while (TRUE) {
         //请求事件对象
-        WaitForSingleObject(g_hEvent, INFINITE);
-        if (tickets > 0) {
-            sprintf_s(buf, "thread2 sell ticket: %d\n", tickets);
-            cout << buf;
-            tickets--;
-            SetEvent(g_hEvent);
-        }else{
-            SetEvent(g_hEvent);
-            break;
-        }
+            EnterCriticalSection(&g_cs);
+            if (tickets > 0) {
+                Sleep(1);
+                sprintf_s(buf, "thread2 sell ticket: %d\n", tickets);
+                cout << buf;
+                tickets--;
+                LeaveCriticalSection(&g_cs);
+                Sleep(1);
+            }else{
+                LeaveCriticalSection(&g_cs);
+                Sleep(1);
+                break;
+            }       
     }
     return 0;
 }
