@@ -7,8 +7,10 @@
 #include "chat.h"
 #include "chatDlg.h"
 #include "afxdialogex.h"
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#pragma comment(lib,"ws2_32.lib")
 
-#define UM_SOCK WM_USER+1
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -68,6 +70,7 @@ BEGIN_MESSAGE_MAP(CchatDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_MESSAGE(UM_SOCK,OnSock)
+	ON_BN_CLICKED(IDC_BTN_SEND, &CchatDlg::OnClickedBtnSend)
 END_MESSAGE_MAP()
 
 
@@ -103,7 +106,7 @@ BOOL CchatDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-
+	InitSocket();
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -179,13 +182,66 @@ BOOL CchatDlg::InitSocket()
 	return TRUE;
 }
 
-LRESULT CchatDlg::onSock(WPARAM wParam, LPARAM lParam)
+LRESULT CchatDlg::OnSock(WPARAM wParam, LPARAM lParam)
 {
 	switch(LOWORD(lParam)) {
 		case FD_READ:
 			WSABUF wsabuf;
 			wsabuf.buf = new char[200]{ 0 };
 			wsabuf.len = 200;
-			DOWRD dwRead;0
+			DWORD dwRead;
+			DWORD dwFlag = 0;
+			SOCKADDR_IN addrFrom;
+			int len = sizeof(SOCKADDR);
+			CString str;
+			CString strTemp;
+			char tempBuf[300] = { 0 };
+			char buf[INET_ADDRSTRLEN];
+			if (SOCKET_ERROR == WSARecvFrom(m_socket, &wsabuf, 1, &dwRead,
+				&dwFlag, (SOCKADDR*)&addrFrom, &len, NULL, NULL)) {
+				MessageBox(L"接受数据失败！");
+				delete[]wsabuf.buf;
+				return -1;
+			}
+			sprintf_s(tempBuf, "%s 说：%s", inet_ntop(AF_INET, &addrFrom.sin_addr, buf, sizeof(buf)),
+				wsabuf.buf);
+			USES_CONVERSION;
+			str = A2T((char*)tempBuf);
+			str += "\r\n";
+			GetDlgItemText(IDC_EDIT_RECV, strTemp);
+			str += strTemp;
+
+			SetDlgItemText(IDC_EDIT_RECV, str);
+			delete[] wsabuf.buf;
+			break;
+	}
+	return 0;
+}
+
+void CchatDlg::OnClickedBtnSend()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	DWORD dwIP;
+	CString strSend;
+	WSABUF wsabuf;
+	DWORD dwSend;
+	SOCKADDR_IN addrTo;
+
+	USES_CONVERSION;
+	((CIPAddressCtrl*)GetDlgItem(IDC_IPADDRESS1))->GetAddress(dwIP);
+	addrTo.sin_addr.S_un.S_addr = htonl(dwIP);
+	addrTo.sin_family = AF_INET;
+	addrTo.sin_port = htons(6000);
+
+	GetDlgItemText(IDC_EDIT_SEND, strSend);
+
+	wsabuf.buf = T2A(strSend);
+	wsabuf.len = strlen(wsabuf.buf) + 1;
+
+	SetDlgItemText(IDC_EDIT_SEND, L"");
+	if (SOCKET_ERROR == WSASendTo(m_socket, &wsabuf, 1, &dwSend, 0,
+		(SOCKADDR*)&addrTo, sizeof(SOCKADDR), NULL, NULL)) {
+		MessageBox(L"发送数据失败！");
+		return;
 	}
 }

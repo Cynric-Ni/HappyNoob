@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+#define UM_SOCK WM_USER+1
 
 // CchatDlg 对话框
 class CchatDlg : public CDialogEx
@@ -30,9 +30,11 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg LRESULT onSock(WPARAM, LPARAM);
+	afx_msg LRESULT OnSock(WPARAM, LPARAM);
 	DECLARE_MESSAGE_MAP()
 private:
 	SOCKET  m_socket;
 	BOOL	InitSocket();
+public:
+	afx_msg void OnClickedBtnSend();
 };
