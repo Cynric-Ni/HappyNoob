@@ -209,8 +209,11 @@ LRESULT CchatDlg::OnSock(WPARAM wParam, LPARAM lParam)
 				delete[]wsabuf.buf;
 				return -1;
 			}
-			sprintf_s(tempBuf, "%s 说：%s", inet_ntop(AF_INET, &addrFrom.sin_addr, buf, sizeof(buf)),
-				wsabuf.buf);
+			HOSTENT* pHost;
+			pHost = gethostbyaddr((char*)&addrFrom.sin_addr.S_un.S_addr, 4, AF_INET);
+			sprintf_s(tempBuf, "%s 说: %s", pHost->h_name, wsabuf.buf);
+			/*sprintf_s(tempBuf, "%s 说：%s", inet_ntop(AF_INET, &addrFrom.sin_addr, buf, sizeof(buf)),
+				wsabuf.buf);*/  //因为这段被上面代替，上面是通过IP查找到计算机名。
 			USES_CONVERSION;
 			str = A2T((char*)tempBuf);
 			str += "\r\n";
