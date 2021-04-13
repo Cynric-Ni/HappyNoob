@@ -60,6 +60,12 @@ CchatDlg::CchatDlg(CWnd* pParent /*=nullptr*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
+CchatDlg::~CchatDlg()
+{
+	if (m_socket)
+		closesocket(m_socket);
+}
+
 void CchatDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
@@ -226,10 +232,19 @@ void CchatDlg::OnClickedBtnSend()
 	WSABUF wsabuf;
 	DWORD dwSend;
 	SOCKADDR_IN addrTo;
+	CString strHostName;
+	HOSTENT* pHost;
 
 	USES_CONVERSION;
-	((CIPAddressCtrl*)GetDlgItem(IDC_IPADDRESS1))->GetAddress(dwIP);
-	addrTo.sin_addr.S_un.S_addr = htonl(dwIP);
+
+	if (GetDlgItemText(IDC_EDIT_HOSTNAME,strHostName), strHostName == "") {
+		((CIPAddressCtrl*)GetDlgItem(IDC_IPADDRESS1))->GetAddress(dwIP);
+		addrTo.sin_addr.S_un.S_addr = htonl(dwIP);
+	}else {
+		pHost = gethostbyname(T2A(strHostName));
+		addrTo.sin_addr.S_un.S_addr = *((DWORD*)pHost->h_addr_list[0]);
+	}
+	
 	addrTo.sin_family = AF_INET;
 	addrTo.sin_port = htons(6000);
 

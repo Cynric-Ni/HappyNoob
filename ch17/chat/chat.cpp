@@ -32,7 +32,10 @@ CchatApp::CchatApp()
 	// 将所有重要的初始化放置在 InitInstance 中
 }
 
-
+CchatApp::~CchatApp()
+{
+	WSACleanup();
+}
 // 唯一的 CchatApp 对象
 
 CchatApp theApp;

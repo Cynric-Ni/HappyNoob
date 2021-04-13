@@ -19,6 +19,7 @@ class CchatApp : public CWinApp
 {
 public:
 	CchatApp();
+	~CchatApp();
 
 // 重写
 public:

@@ -11,7 +11,7 @@ class CchatDlg : public CDialogEx
 // 构造
 public:
 	CchatDlg(CWnd* pParent = nullptr);	// 标准构造函数
-
+	~CchatDlg();
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_CHAT_DIALOG };
