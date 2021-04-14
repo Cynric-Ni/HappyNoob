@@ -65,6 +65,8 @@ BEGIN_MESSAGE_MAP(CClipBoardDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BTN_SEND, &CClipBoardDlg::OnBnClickedBtnSend)
+	ON_BN_CLICKED(IDC_BTN_RECV, &CClipBoardDlg::OnBnClickedBtnRecv)
 END_MESSAGE_MAP()
 
 
@@ -153,3 +155,46 @@ HCURSOR CClipBoardDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CClipBoardDlg::OnBnClickedBtnSend()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (OpenClipboard()) {		//打开剪贴板
+		CString str;			//保存发送编辑框控件上的数据
+		HANDLE hClip;			//保存调用GlobalAlloc函数后分配的内存对象的句柄
+		char* pBuf;				//保存调用GlobalLock函数后返回的内存地址
+		char* pData;			//保存str对象转换后的ANSI字符串
+		EmptyClipboard();		//清空剪贴板上的数据
+
+		GetDlgItemText(IDC_EDIT_SEND, str);
+
+		USES_CONVERSION;
+		pData = T2A(str);
+
+		hClip = GlobalAlloc(GMEM_MOVEABLE, strlen(pData) + 1);
+		pBuf = (char*)GlobalLock(hClip);
+		strcpy_s(pBuf, strlen(pData) + 1, pData);
+		GlobalUnlock(hClip);
+		SetClipboardData(CF_TEXT, hClip);
+		CloseClipboard();        //关闭剪贴板
+	}
+}
+
+
+void CClipBoardDlg::OnBnClickedBtnRecv()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (OpenClipboard()) {
+		if (IsClipboardFormatAvailable(CF_TEXT)) {
+			HANDLE hClip;
+			char* pBuf;
+			hClip = GetClipboardData(CF_TEXT);
+			pBuf = (char*)GlobalLock(hClip);
+			GlobalUnlock(hClip);
+			USES_CONVERSION;
+			SetDlgItemText(IDC_EDIT_RECV, A2T(pBuf));
+		}
+		CloseClipboard();
+	}
+}
