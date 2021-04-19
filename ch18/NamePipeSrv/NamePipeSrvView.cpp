@@ -28,6 +28,8 @@ BEGIN_MESSAGE_MAP(CNamePipeSrvView, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_COMMAND(IDM_PIPE_CREATE, &CNamePipeSrvView::OnPipeCreate)
+	ON_COMMAND(IDM_PIPE_READ, &CNamePipeSrvView::OnPipeRead)
+	ON_COMMAND(IDM_PIPE_WRITE, &CNamePipeSrvView::OnPipeWrite)
 END_MESSAGE_MAP()
 
 // CNamePipeSrvView 构造/析构
@@ -150,4 +152,30 @@ void CNamePipeSrvView::OnPipeCreate()
 		return;
 	}
 	CloseHandle(hEvent);
+}
+
+
+void CNamePipeSrvView::OnPipeRead()
+{
+	// TODO: 在此添加命令处理程序代码
+	char buf[100];
+	DWORD dwRead;
+	if (!ReadFile(hPipe, buf, 100, &dwRead, NULL)) {
+		MessageBox(L"读取数据失败！");
+		return;
+	}
+	USES_CONVERSION;
+	MessageBox(A2T(buf));
+}
+
+
+void CNamePipeSrvView::OnPipeWrite()
+{
+	// TODO: 在此添加命令处理程序代码
+	char buf[] = "http://www.cynric.me";
+	DWORD dwWrite;
+	if (!WriteFile(hPipe, buf, strlen(buf) + 1, &dwWrite, NULL)) {
+		MessageBox(L"写入数据失败！");
+		return;
+	}
 }

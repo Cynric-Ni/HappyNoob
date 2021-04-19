@@ -1,19 +1,19 @@
 ﻿
-// NamePipeSrvView.h: CNamePipeSrvView 类的接口
+// NamedPipeCltView.h: CNamedPipeCltView 类的接口
 //
 
 #pragma once
 
 
-class CNamePipeSrvView : public CView
+class CNamedPipeCltView : public CView
 {
 protected: // 仅从序列化创建
-	CNamePipeSrvView() noexcept;
-	DECLARE_DYNCREATE(CNamePipeSrvView)
+	CNamedPipeCltView() noexcept;
+	DECLARE_DYNCREATE(CNamedPipeCltView)
 
 // 特性
 public:
-	CNamePipeSrvDoc* GetDocument() const;
+	CNamedPipeCltDoc* GetDocument() const;
 
 // 操作
 public:
@@ -29,7 +29,7 @@ protected:
 
 // 实现
 public:
-	virtual ~CNamePipeSrvView();
+	virtual ~CNamedPipeCltView();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -43,13 +43,13 @@ protected:
 private:
 	HANDLE hPipe;
 public:
-	afx_msg void OnPipeCreate();
+	afx_msg void OnPipeConnect();
 	afx_msg void OnPipeRead();
 	afx_msg void OnPipeWrite();
 };
 
-#ifndef _DEBUG  // NamePipeSrvView.cpp 中的调试版本
-inline CNamePipeSrvDoc* CNamePipeSrvView::GetDocument() const
-   { return reinterpret_cast<CNamePipeSrvDoc*>(m_pDocument); }
+#ifndef _DEBUG  // NamedPipeCltView.cpp 中的调试版本
+inline CNamedPipeCltDoc* CNamedPipeCltView::GetDocument() const
+   { return reinterpret_cast<CNamedPipeCltDoc*>(m_pDocument); }
 #endif
 
