@@ -1,0 +1,51 @@
+﻿// Clock.idl: ActiveX 控件项目的类型库源。
+
+// 此文件将由 MIDL 编译器工具处理以
+// 生成类型库(Clock.tlb)，该类型库将成为
+// Clock.ocx。
+
+#include <olectl.h>
+#include <idispids.h>
+
+[ uuid(ab4b8360-e516-45e2-82cf-ec76dcb96cbe), version(1.0),
+  control ]
+library ClockLib
+{
+	importlib(STDOLE_TLB);
+
+	//  CClockCtrl 的主调度接口
+	[ 
+		uuid(d8dbafe5-6f1f-4c4f-8c87-991f8aa74fd3)
+	]
+	dispinterface _DClock
+	{
+		properties:
+		methods:
+
+			[id(DISPID_ABOUTBOX)] void AboutBox();
+	};
+
+	//  CClockCtrl 的事件调度接口
+
+	[ 
+		uuid(79450c3c-6b04-482e-b11e-d1f016c91c1a)
+	]
+	dispinterface _DClockEvents
+	{
+		properties:
+			//  事件接口没有任何属性
+
+		methods:
+	};
+
+	//  CClockCtrl 的类信息
+	[
+		uuid(3ce7d57b-62f0-4173-a39f-f41f3f2b9268)
+	]
+	coclass Clock
+	{
+		[default] dispinterface _DClock;
+		[default, source] dispinterface _DClockEvents;
+	};
+
+};
