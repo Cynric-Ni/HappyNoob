@@ -17,12 +17,16 @@ IMPLEMENT_DYNCREATE(CClockCtrl, COleControl)
 
 BEGIN_MESSAGE_MAP(CClockCtrl, COleControl)
 	ON_OLEVERB(AFX_IDS_VERB_PROPERTIES, OnProperties)
+	ON_WM_CREATE()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // 调度映射
 
 BEGIN_DISPATCH_MAP(CClockCtrl, COleControl)
 	DISP_FUNCTION_ID(CClockCtrl, "AboutBox", DISPID_ABOUTBOX, AboutBox, VT_EMPTY, VTS_NONE)
+	DISP_STOCKPROP_BACKCOLOR()
+	DISP_STOCKPROP_FORECOLOR()
 END_DISPATCH_MAP()
 
 // 事件映射
@@ -96,6 +100,7 @@ CClockCtrl::CClockCtrl()
 {
 	InitializeIIDs(&IID_DClock, &IID_DClockEvents);
 	// TODO:  在此初始化控件的实例数据。
+	m_timerId = 0;
 }
 
 // CClockCtrl::~CClockCtrl - 析构函数
@@ -152,3 +157,23 @@ void CClockCtrl::AboutBox()
 
 
 // CClockCtrl 消息处理程序
+
+
+int CClockCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (COleControl::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	// TODO:  在此添加您专用的创建代码
+	m_timerId = SetTimer(1, 1000, NULL);
+
+	return 0;
+}
+
+
+void CClockCtrl::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	Invalidate();
+	COleControl::OnTimer(nIDEvent);
+}

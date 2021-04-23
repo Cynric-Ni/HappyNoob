@@ -43,5 +43,10 @@ protected:
 public:
 	enum {
 	};
+private:
+	UINT m_timerId;
+public:
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 

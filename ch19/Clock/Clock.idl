@@ -20,6 +20,8 @@ library ClockLib
 	dispinterface _DClock
 	{
 		properties:
+			[id(DISPID_BACKCOLOR), bindable, requestedit] OLE_COLOR BackColor;
+			[id(DISPID_FORECOLOR), bindable, requestedit] OLE_COLOR ForeColor;
 		methods:
 
 			[id(DISPID_ABOUTBOX)] void AboutBox();
