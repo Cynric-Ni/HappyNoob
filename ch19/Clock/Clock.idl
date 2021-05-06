@@ -22,9 +22,11 @@ library ClockLib
 		properties:
 			[id(DISPID_BACKCOLOR), bindable, requestedit] OLE_COLOR BackColor;
 			[id(DISPID_FORECOLOR), bindable, requestedit] OLE_COLOR ForeColor;
+			[id(1)] LONG Interval;
 		methods:
 
 			[id(DISPID_ABOUTBOX)] void AboutBox();
+			[id(2)] void Hello(void);
 	};
 
 	//  CClockCtrl 的事件调度接口
@@ -38,6 +40,8 @@ library ClockLib
 			//  事件接口没有任何属性
 
 		methods:
+			[id(DISPID_KEYDOWN)] void KeyDown(SHORT* KeyCode, SHORT Shift);
+			[id(1)] void FireNewMinute();
 	};
 
 	//  CClockCtrl 的类信息

@@ -37,6 +37,7 @@ BOOL CClockPropPage::CClockPropPageFactory::UpdateRegistry(BOOL bRegister)
 
 CClockPropPage::CClockPropPage() :
 	COlePropertyPage(IDD, IDS_CLOCK_PPG_CAPTION)
+	, m_updateInterval(0)
 {
 }
 
@@ -44,6 +45,8 @@ CClockPropPage::CClockPropPage() :
 
 void CClockPropPage::DoDataExchange(CDataExchange* pDX)
 {
+	DDX_Text(pDX, IDC_EDIT_INTERVAL, m_updateInterval);
+	DDP_Text(pDX, IDC_EDIT_INTERVAL, m_updateInterval, _T("Interval"));
 	DDP_PostProcessing(pDX);
 }
 

@@ -42,11 +42,23 @@ protected:
 // 调度和事件 ID
 public:
 	enum {
+		eventidFireNewMinute = 1L,
+		dispidInterval = 1,dispidHello = 2,
 	};
 private:
 	UINT m_timerId;
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+protected:
+	void OnIntervalChanged(void);
+	LONG m_Interval;
+	void Hello(void);
+private:
+
+	void FireNewMinute()
+	{
+		FireEvent(eventidFireNewMinute, EVENT_PARAM(VTS_NONE) );
+	}
 };
 

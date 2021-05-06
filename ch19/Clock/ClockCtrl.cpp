@@ -27,18 +27,24 @@ BEGIN_DISPATCH_MAP(CClockCtrl, COleControl)
 	DISP_FUNCTION_ID(CClockCtrl, "AboutBox", DISPID_ABOUTBOX, AboutBox, VT_EMPTY, VTS_NONE)
 	DISP_STOCKPROP_BACKCOLOR()
 	DISP_STOCKPROP_FORECOLOR()
+	DISP_PROPERTY_NOTIFY_ID(CClockCtrl,"Interval",dispidInterval,
+		m_Interval,OnIntervalChanged,VT_I4)
+	DISP_FUNCTION_ID(CClockCtrl, "Hello",dispidHello, Hello, VT_EMPTY,VTS_NONE)
 END_DISPATCH_MAP()
 
 // 事件映射
 
 BEGIN_EVENT_MAP(CClockCtrl, COleControl)
+	EVENT_STOCK_KEYDOWN()
+	EVENT_CUSTOM_ID("FireNewMinute", eventidFireNewMinute, FireNewMinute, VTS_NONE)
 END_EVENT_MAP()
 
 // 属性页
 
 // TODO: 根据需要添加更多属性页。请记住增加计数!
-BEGIN_PROPPAGEIDS(CClockCtrl, 1)
+BEGIN_PROPPAGEIDS(CClockCtrl, 2)
 	PROPPAGEID(CClockPropPage::guid)
+	PROPPAGEID(CLSID_CColorPropPage)
 END_PROPPAGEIDS(CClockCtrl)
 
 // 初始化类工厂和 guid
@@ -101,6 +107,7 @@ CClockCtrl::CClockCtrl()
 	InitializeIIDs(&IID_DClock, &IID_DClockEvents);
 	// TODO:  在此初始化控件的实例数据。
 	m_timerId = 0;
+	m_Interval = 1000;
 }
 
 // CClockCtrl::~CClockCtrl - 析构函数
@@ -117,11 +124,17 @@ void CClockCtrl::OnDraw(
 {
 	if (!pdc)
 		return;
-
+	CBrush brush(TranslateColor(GetBackColor()));
+	pdc->FillRect(rcBounds, &brush);
+	pdc->SetBkMode(TRANSPARENT);
+	pdc->SetTextColor(TranslateColor(GetForeColor()));
 	// TODO:  用您自己的绘图代码替换下面的代码。
 	//pdc->FillRect(rcBounds, CBrush::FromHandle((HBRUSH)GetStockObject(WHITE_BRUSH)));
 	//pdc->Ellipse(rcBounds);
 	CTime time = CTime::GetCurrentTime();
+	if (0 == time.GetSecond()) {
+		FireNewMinute();
+	}
 	CString str = time.Format("%H:%M:%S");
 	pdc->TextOutW(0, 0, str);
 }
@@ -134,6 +147,7 @@ void CClockCtrl::DoPropExchange(CPropExchange* pPX)
 	COleControl::DoPropExchange(pPX);
 
 	// TODO: 为每个持久的自定义属性调用 PX_ 函数。
+	PX_Long(pPX, L"Interval", m_Interval, 1000);
 }
 
 
@@ -165,7 +179,7 @@ int CClockCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	// TODO:  在此添加您专用的创建代码
-	m_timerId = SetTimer(1, 1000, NULL);
+	m_timerId = SetTimer(1, m_Interval, NULL);
 
 	return 0;
 }
@@ -176,4 +190,26 @@ void CClockCtrl::OnTimer(UINT_PTR nIDEvent)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	Invalidate();
 	COleControl::OnTimer(nIDEvent);
+}
+
+void CClockCtrl::OnIntervalChanged()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+	if (m_Interval < 0 || m_Interval>6000) {
+		m_Interval = 1000;
+	}else {
+		m_Interval = m_Interval / 1000 * 1000;
+		if (m_timerId != 0) {
+			KillTimer(m_timerId);
+		}
+		m_timerId = SetTimer(1, m_Interval, NULL);
+		BoundPropertyChanged(1);
+	}
+	SetModifiedFlag();
+}
+
+void CClockCtrl::Hello(void)
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+	MessageBox(L"Hello Worlld");
 }

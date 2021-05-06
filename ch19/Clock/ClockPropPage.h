@@ -24,5 +24,7 @@ protected:
 // 消息映射
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	LONG m_updateInterval;
 };
 
