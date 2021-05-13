@@ -1,14 +1,12 @@
 ﻿
-// DllTestDlg.cpp: 实现文件
+// InnerHookDlg.cpp: 实现文件
 //
 
 #include "pch.h"
 #include "framework.h"
-#include "DllTest.h"
-#include "DllTestDlg.h"
+#include "InnerHook.h"
+#include "InnerHookDlg.h"
 #include "afxdialogex.h"
-/*#include "..\Dll1\Dll1.h"*/
-
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -48,34 +46,34 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CDllTestDlg 对话框
+// CInnerHookDlg 对话框
 
 
 
-CDllTestDlg::CDllTestDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DLLTEST_DIALOG, pParent)
+CInnerHookDlg::CInnerHookDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_INNERHOOK_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CDllTestDlg::DoDataExchange(CDataExchange* pDX)
+void CInnerHookDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CDllTestDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CInnerHookDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BTN_ADD, &CDllTestDlg::OnBnClickedBtnAdd)
-	//ON_BN_CLICKED(IDC_BTN_SUBTRACT, &CDllTestDlg::OnBnClickedBtnSubtract)
-	//ON_BN_CLICKED(IDC_BTN_OUTPUT, &CDllTestDlg::OnBnClickedBtnOutput)
 END_MESSAGE_MAP()
 
+HHOOK g_hMouse = NULL;
+LRESULT CALLBACK MouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
+	return 1;
+}
+// CInnerHookDlg 消息处理程序
 
-// CDllTestDlg 消息处理程序
-
-BOOL CDllTestDlg::OnInitDialog()
+BOOL CInnerHookDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -105,11 +103,13 @@ BOOL CDllTestDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	g_hMouse = SetWindowsHookEx(
+		WH_MOUSE, MouseProc, NULL, GetCurrentThreadId());
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
-void CDllTestDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CInnerHookDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -126,7 +126,7 @@ void CDllTestDlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  来绘制该图标。  对于使用文档/视图模型的 MFC 应用程序，
 //  这将由框架自动完成。
 
-void CDllTestDlg::OnPaint()
+void CInnerHookDlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -153,50 +153,8 @@ void CDllTestDlg::OnPaint()
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
-HCURSOR CDllTestDlg::OnQueryDragIcon()
+HCURSOR CInnerHookDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-//extern int add(int a, int b);
-//extern int subtract(int a, int b);
-
-/*void CDllTestDlg::OnBnClickedBtnAdd()
-{
-	// TODO: 在此添加控件通知处理程序代码
-	CString str;
-	str.Format(L"5+3=%d", add(5, 3));
-	MessageBox(str);
-}
-
-
-void CDllTestDlg::OnBnClickedBtnSubtract()
-{
-	// TODO: 在此添加控件通知处理程序代码
-	CString str;
-	str.Format(L"5-3=%d", subtract(5, 3));
-	MessageBox(str);
-}
-
-
-void CDllTestDlg::OnBnClickedBtnOutput()
-{
-	// TODO: 在此添加控件通知处理程序代码
-	Point pt;
-	pt.output(5, 3);
-}*/
-
-void CDllTestDlg::OnBnClickedBtnAdd()
-{
-	HINSTANCE hInst;
-	hInst = LoadLibrary(L"Dll3.dll");
-	typedef int ( *ADDPROC)(int a, int b);
-	ADDPROC Add = (ADDPROC)GetProcAddress(hInst, "?add@@YAHHH@Z");
-	if (!Add) {
-		MessageBox(L"获取函数地址失败！");
-		return;
-	}
-	CString str;
-	str.Format(L"5+3=%d", Add(5, 3));
-	MessageBox(str);
-}

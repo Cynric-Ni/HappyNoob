@@ -1,20 +1,21 @@
 ﻿
-// DllTestDlg.h: 头文件
+// InnerHookDlg.h: 头文件
 //
 
 #pragma once
 
 
-// CDllTestDlg 对话框
-class CDllTestDlg : public CDialogEx
+// CInnerHookDlg 对话框
+class CInnerHookDlg : public CDialogEx
 {
 // 构造
 public:
-	CDllTestDlg(CWnd* pParent = nullptr);	// 标准构造函数
+	CInnerHookDlg(CWnd* pParent = nullptr);	// 标准构造函数
+	//LRESULT CALLBACK MouseProc(int nCode, WPARAM wParam, LPARAM lParam);
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_DLLTEST_DIALOG };
+	enum { IDD = IDD_INNERHOOK_DIALOG };
 #endif
 
 	protected:
@@ -31,8 +32,4 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg void OnBnClickedBtnAdd();
-	//afx_msg void OnBnClickedBtnSubtract();
-	//afx_msg void OnBnClickedBtnOutput();
 };
