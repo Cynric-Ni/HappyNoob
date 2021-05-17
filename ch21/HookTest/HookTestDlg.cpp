@@ -1,11 +1,11 @@
 ﻿
-// InnerHookDlg.cpp: 实现文件
+// HookTestDlg.cpp: 实现文件
 //
 
 #include "pch.h"
 #include "framework.h"
-#include "InnerHook.h"
-#include "InnerHookDlg.h"
+#include "HookTest.h"
+#include "HookTestDlg.h"
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
@@ -46,48 +46,31 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CInnerHookDlg 对话框
+// CHookTestDlg 对话框
 
 
 
-CInnerHookDlg::CInnerHookDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_INNERHOOK_DIALOG, pParent)
+CHookTestDlg::CHookTestDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_HOOKTEST_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CInnerHookDlg::DoDataExchange(CDataExchange* pDX)
+void CHookTestDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CInnerHookDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CHookTestDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 END_MESSAGE_MAP()
 
-HHOOK g_hMouse = NULL;
-HHOOK g_hKeyboard = NULL;
-HWND  g_hWnd = NULL;
-LRESULT CALLBACK MouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
-	return 1;
-}
-LRESULT CALLBACK KeyboardProc(int code, WPARAM wParam, LPARAM lParam) {
-	/*if (VK_SPACE == wParam || VK_RETURN == wParam)
-		return 1;
-	else
-		return CallNextHookEx(g_hKeyboard, code, wParam, lParam);*/
-	if (VK_F2 == wParam) {
-		::SendMessage(g_hWnd, WM_CLOSE, 0, 0);
-		UnhookWindowsHookEx(g_hKeyboard);
-		UnhookWindowsHookEx(g_hMouse);
-	}
-	return 1;
-}
-// CInnerHookDlg 消息处理程序
+_declspec(dllimport) void SetHook(HWND hwnd);
+// CHookTestDlg 消息处理程序
 
-BOOL CInnerHookDlg::OnInitDialog()
+BOOL CHookTestDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -117,17 +100,12 @@ BOOL CInnerHookDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	g_hWnd = m_hWnd;
-	g_hMouse = SetWindowsHookEx(
-		WH_MOUSE, MouseProc, NULL, GetCurrentThreadId());
-	g_hKeyboard = SetWindowsHookEx(
-		WH_KEYBOARD, KeyboardProc, NULL, GetCurrentThreadId()
-	);
+	SetHook(m_hWnd);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
-void CInnerHookDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CHookTestDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -144,7 +122,7 @@ void CInnerHookDlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  来绘制该图标。  对于使用文档/视图模型的 MFC 应用程序，
 //  这将由框架自动完成。
 
-void CInnerHookDlg::OnPaint()
+void CHookTestDlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -171,7 +149,7 @@ void CInnerHookDlg::OnPaint()
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
-HCURSOR CInnerHookDlg::OnQueryDragIcon()
+HCURSOR CHookTestDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
