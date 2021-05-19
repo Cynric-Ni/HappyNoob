@@ -21,8 +21,9 @@ LRESULT CALLBACK MouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 }
 
 LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
-    if (VK_F4 == wParam) {
-        
+    if (wParam == VK_F4 &&((lParam &(1<<31))==0)) {
+        //if(((1<<31)&lParam)==(1<<31))
+       
         MessageBox(NULL, TEXT("111"), TEXT("222"),0);
         //OutputDebugString(L"退出");
     }
