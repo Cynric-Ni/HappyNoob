@@ -23,16 +23,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="HelloQt.qrc">
+    <QtRcc Include="finddialog.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="HelloQt.ui">
+    <QtUic Include="finddialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="HelloQt.h">
+    <QtMoc Include="finddialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClCompile Include="HelloQt.cpp">
+    <ClCompile Include="finddialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
