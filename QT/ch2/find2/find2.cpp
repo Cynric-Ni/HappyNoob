@@ -1,7 +1,7 @@
-#include "finddialog.h"
+#include "find2.h"
 #include <QtWidgets>
 
-finddialog::finddialog(QWidget *parent)
+find2::find2(QWidget *parent)
     : QDialog(parent)
 {
     label = new QLabel(tr("Find&what:"));
@@ -46,18 +46,19 @@ finddialog::finddialog(QWidget *parent)
     ui.setupUi(this);
 }
 
-void finddialog::findClicked() {
+void find2::findClicked() {
     QString text = lineEdit->text();
     Qt::CaseSensitivity cs =
         caseCheckBox->isChecked() ? Qt::CaseSensitive
-                                  : Qt::CaseInsensitive;
+        : Qt::CaseInsensitive;
     if (backwardCheckBox->isChecked()) {
         emit findPrevious(text, cs);
-    } else {
+    }
+    else {
         emit findNext(text, cs);
     }
 }
 
-void finddialog::enableFindButton(const QString& text) {
+void find2::enableFindButton(const QString& text) {
     findButton->setEnabled(!text.isEmpty());
 }

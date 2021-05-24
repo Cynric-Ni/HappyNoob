@@ -23,16 +23,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="finddialog.qrc">
+    <QtRcc Include="find2.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="finddialog.ui">
+    <QtUic Include="find2.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="finddialog.h">
+    <QtMoc Include="find2.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClCompile Include="finddialog.cpp">
+    <ClCompile Include="find2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -42,7 +42,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtTranslation Include="finddialog_zh.ts">
+    <QtTranslation Include="find2_zh.ts">
       <Filter>Translation Files</Filter>
     </QtTranslation>
   </ItemGroup>

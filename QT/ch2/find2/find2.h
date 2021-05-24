@@ -1,14 +1,13 @@
 #pragma once
 
-#include <QDialog>
-#include "ui_finddialog.h"
-
+#include <QtWidgets/QDialog>
+#include "ui_find2.h"
 class QCheckBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
 
-class finddialog : public QDialog
+class find2 : public QDialog
 {
     Q_OBJECT
 signals:
@@ -25,8 +24,8 @@ private:
     QPushButton* findButton;
     QPushButton* closeButton;
 public:
-    finddialog(QWidget *parent = Q_NULLPTR);
+    find2(QWidget *parent = Q_NULLPTR);
 
 private:
-    Ui::finddialogClass ui;
+    Ui::find2Class ui;
 };

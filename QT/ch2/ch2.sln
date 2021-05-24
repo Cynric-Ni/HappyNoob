@@ -5,21 +5,44 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "finddialog", "finddialog\finddialog.vcxproj", "{18F8DEF5-E969-4B5F-8FAF-C6EE0A86B4F0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "find2", "find2\find2.vcxproj", "{F205A12D-139C-4A7C-AD86-720EDE925CBD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoToCell", "GoToCell\GoToCell.vcxproj", "{096446CB-712B-4C34-B29F-4FA1C2B9245F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18F8DEF5-E969-4B5F-8FAF-C6EE0A86B4F0}.Debug|x64.ActiveCfg = Debug|x64
+		{18F8DEF5-E969-4B5F-8FAF-C6EE0A86B4F0}.Debug|x64.Build.0 = Debug|x64
 		{18F8DEF5-E969-4B5F-8FAF-C6EE0A86B4F0}.Debug|x86.ActiveCfg = Debug|Win32
 		{18F8DEF5-E969-4B5F-8FAF-C6EE0A86B4F0}.Debug|x86.Build.0 = Debug|Win32
+		{18F8DEF5-E969-4B5F-8FAF-C6EE0A86B4F0}.Release|x64.ActiveCfg = Release|x64
+		{18F8DEF5-E969-4B5F-8FAF-C6EE0A86B4F0}.Release|x64.Build.0 = Release|x64
 		{18F8DEF5-E969-4B5F-8FAF-C6EE0A86B4F0}.Release|x86.ActiveCfg = Release|Win32
 		{18F8DEF5-E969-4B5F-8FAF-C6EE0A86B4F0}.Release|x86.Build.0 = Release|Win32
+		{F205A12D-139C-4A7C-AD86-720EDE925CBD}.Debug|x64.ActiveCfg = Debug|x64
+		{F205A12D-139C-4A7C-AD86-720EDE925CBD}.Debug|x64.Build.0 = Debug|x64
+		{F205A12D-139C-4A7C-AD86-720EDE925CBD}.Debug|x86.ActiveCfg = Debug|x64
+		{F205A12D-139C-4A7C-AD86-720EDE925CBD}.Release|x64.ActiveCfg = Release|x64
+		{F205A12D-139C-4A7C-AD86-720EDE925CBD}.Release|x64.Build.0 = Release|x64
+		{F205A12D-139C-4A7C-AD86-720EDE925CBD}.Release|x86.ActiveCfg = Release|x64
+		{096446CB-712B-4C34-B29F-4FA1C2B9245F}.Debug|x64.ActiveCfg = Debug|x64
+		{096446CB-712B-4C34-B29F-4FA1C2B9245F}.Debug|x64.Build.0 = Debug|x64
+		{096446CB-712B-4C34-B29F-4FA1C2B9245F}.Debug|x86.ActiveCfg = Debug|x64
+		{096446CB-712B-4C34-B29F-4FA1C2B9245F}.Release|x64.ActiveCfg = Release|x64
+		{096446CB-712B-4C34-B29F-4FA1C2B9245F}.Release|x64.Build.0 = Release|x64
+		{096446CB-712B-4C34-B29F-4FA1C2B9245F}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {245E761F-C68B-4057-9E6C-F3BC8B8ADA0C}
+		Qt5Version = 6.1.0_msvc2019_64
 	EndGlobalSection
 EndGlobal
