@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "find2", "find2\find2.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoToCell", "GoToCell\GoToCell.vcxproj", "{096446CB-712B-4C34-B29F-4FA1C2B9245F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sort", "Sort\Sort.vcxproj", "{FC3681B7-2AEA-4028-95A7-CF11A6C6BC62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -37,12 +39,18 @@ Global
 		{096446CB-712B-4C34-B29F-4FA1C2B9245F}.Release|x64.ActiveCfg = Release|x64
 		{096446CB-712B-4C34-B29F-4FA1C2B9245F}.Release|x64.Build.0 = Release|x64
 		{096446CB-712B-4C34-B29F-4FA1C2B9245F}.Release|x86.ActiveCfg = Release|x64
+		{FC3681B7-2AEA-4028-95A7-CF11A6C6BC62}.Debug|x64.ActiveCfg = Debug|x64
+		{FC3681B7-2AEA-4028-95A7-CF11A6C6BC62}.Debug|x64.Build.0 = Debug|x64
+		{FC3681B7-2AEA-4028-95A7-CF11A6C6BC62}.Debug|x86.ActiveCfg = Debug|x64
+		{FC3681B7-2AEA-4028-95A7-CF11A6C6BC62}.Release|x64.ActiveCfg = Release|x64
+		{FC3681B7-2AEA-4028-95A7-CF11A6C6BC62}.Release|x64.Build.0 = Release|x64
+		{FC3681B7-2AEA-4028-95A7-CF11A6C6BC62}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {245E761F-C68B-4057-9E6C-F3BC8B8ADA0C}
 		Qt5Version = 6.1.0_msvc2019_64
+		SolutionGuid = {245E761F-C68B-4057-9E6C-F3BC8B8ADA0C}
 	EndGlobalSection
 EndGlobal

@@ -1,7 +1,6 @@
 #pragma once
 #include <QtWidgets/QDialog>
 #include "ui_GoToCell.h"
-
 class GoToCellDialog : public QDialog,public Ui::GoToCellDialog
 {
     Q_OBJECT
