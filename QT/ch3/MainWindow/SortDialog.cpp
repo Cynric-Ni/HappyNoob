@@ -1,10 +1,6 @@
 #include "SortDialog.h"
 #include <QtGui>
-<<<<<<< HEAD
-#include <QtCharts>
-=======
 //#include <QtCharts>
->>>>>>> 16e792ba6bff3e5de8650a9ade682ed65212a875
 SortDialog::SortDialog(QWidget *parent)
     : QDialog(parent)
 {
@@ -33,12 +29,6 @@ void SortDialog::setColumnRange(QChar first,
         ui.primaryColumnCombo->addItem(QString(ch));
         ui.secondaryColumnCombo->addItem(QString(ch));
         ui.tertiaryColumnCombo->addItem(QString(ch));
-<<<<<<< HEAD
-        //char16_t temp;
-        ch = QChar(ch.unicode() + 1);
-        //ch = QChar(temp);
-=======
         ch = QChar((ch.unicode() + 1));
->>>>>>> 16e792ba6bff3e5de8650a9ade682ed65212a875
     }
 }
