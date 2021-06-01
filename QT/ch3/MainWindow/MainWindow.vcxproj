@@ -95,11 +95,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SortDialog.cpp" />
+    <ClCompile Include="Spreadsheet.cpp" />
     <QtRcc Include="MainWindow.qrc" />
     <QtUic Include="finddialog.ui" />
     <QtUic Include="GoToCell.ui" />
     <QtUic Include="MainWindow.ui" />
     <QtMoc Include="MainWindow.h" />
+    <ClCompile Include="finddialog.cpp" />
+    <ClCompile Include="GoToCell.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="SortDialog.ui" />
@@ -112,6 +116,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="finddialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Spreadsheet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

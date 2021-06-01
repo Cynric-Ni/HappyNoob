@@ -7,8 +7,14 @@
 message("You are running qmake on a generated .pro file. This may not work!")
 
 
-HEADERS += ./MainWindow.h
+HEADERS += ./MainWindow.h \
+    ./GoToCell.h \
+    ./SortDialog.h \
+    ./finddialog.h
 SOURCES += ./MainWindow.cpp \
     ./main.cpp
-FORMS += ./MainWindow.ui
+FORMS += ./finddialog.ui \
+    ./GoToCell.ui \
+    ./MainWindow.ui \
+    ./SortDialog.ui
 RESOURCES += MainWindow.qrc
