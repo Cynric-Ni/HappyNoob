@@ -1,5 +1,5 @@
 #include <QtGui>
-
+#include <QtWidgets>
 #include "MainWindow.h"
 #include "finddialog.h"
 #include "GoToCell.h"
@@ -208,3 +208,32 @@ void MainWindow::createStatusbar()
     updateStatusBar();
 }
 
+void MainWindow::newFile()
+{
+    if (okToContinue()) {
+        spreadsheet->clear();
+        setCurrentFile("");
+    }
+}
+
+bool MainWindow::okToContinue()
+{
+    if (isWindowModified()) {
+        int r = QMessageBox::warning(this, tr("Spreadsheet"), tr("The document has been modified.\n"
+            "Do you want to save your changes?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        if (r == QMessageBox::Yes) {
+            return save();
+        } else if (r == QMessageBox::Cancel) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void MainWindow::open()
+{
+    if (okToContinue()) {
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Open Spreadsheet"), ".",
+            tr("Spreadsheet files(*.sp)"));
+    }
+}
