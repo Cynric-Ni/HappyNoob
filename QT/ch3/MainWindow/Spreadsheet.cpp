@@ -1,5 +1,7 @@
 #include "Spreadsheet.h"
-
+#include <QtGui>
+#include <QtCore>
+#include <QtWidgets>
 
 
 Spreadsheet::Spreadsheet(QWidget *parent)
@@ -26,4 +28,41 @@ QString Spreadsheet::currentLocation()const
 QString Spreadsheet::currentFormula() const
 {
 	return formula(currentRow(), currentColumn());
+}
+
+bool Spreadsheet::readFile(const QString &fileName)
+{
+	QFile file(fileName);
+	if (!file.open(QIODevice::ReadOnly)) {
+		QMessageBox::warning(this, tr("Spreadshtte"),
+			tr("Cannot read file %1:\n%2.")
+			.arg(file.fileName())
+			.arg(file.errorString()));
+		return false;
+	}
+
+	QDataStream in(&file);
+	in.setVersion(QDataStream::Qt_6_2);
+
+	quint32 magic;
+	in >> magic;
+	if (magic != MagicNumber) {
+		QMessageBox::warning(this, tr("Spreadsheet"),
+			tr("The file is not a Spreadsheet file."));
+		return false;
+	}
+
+	clear();
+
+	quint16 row;
+	quint16 column;
+	QString str;
+
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	while (!in.atEnd()) {
+		in >> row >> column >> str;
+		setFormula(row, column, str);
+	}
+	QApplication::restoreOverrideCursor();
+	return true;
 }

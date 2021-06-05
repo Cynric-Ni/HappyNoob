@@ -12,4 +12,5 @@ MOC_DIR += .
 OBJECTS_DIR += debug
 UI_DIR += .
 RCC_DIR += .
+CONFIG += C++17 console
 include(MainWindow.pri)

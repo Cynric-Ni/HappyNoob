@@ -5,6 +5,7 @@
 #include "GoToCell.h"
 #include "SortDialog.h"
 #include "Spreadsheet.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -230,10 +231,36 @@ bool MainWindow::okToContinue()
     return true;
 }
 
+bool MainWindow::loadFile(const QString& fileName)
+{
+    if (!spreadsheet->readFile(fileName)) {
+        statusBar()->showMessage(tr("Loading canceled"), 2000);
+        return false;
+    }
+}
+
 void MainWindow::open()
 {
     if (okToContinue()) {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Open Spreadsheet"), ".",
             tr("Spreadsheet files(*.sp)"));
+        if (!fileName.isEmpty())
+            loadFile(fileName);
+    }
+}
+
+bool MainWindow::save()
+{
+    if (curFile.isEmpty()) {
+        return saveAs();
+    } else {
+        return saveFile(curFile);
+    }
+}
+
+bool MainWindow::saveFile(const QString& fileName)
+{
+    if (!spreadsheet->writeFile(fileName)) {
+
     }
 }

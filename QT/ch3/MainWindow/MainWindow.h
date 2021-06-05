@@ -53,6 +53,7 @@ private:
     FindDialog* findDialog;
     QLabel* locationLabel;
     QLabel* formulaLabel;
+    QString curFile;
    
     enum{MaxRecentFiles = 5};
     QAction* recentFileActions[MaxRecentFiles];
