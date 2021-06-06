@@ -54,6 +54,7 @@ private:
     QLabel* locationLabel;
     QLabel* formulaLabel;
     QString curFile;
+    QStringList recentFiles;
    
     enum{MaxRecentFiles = 5};
     QAction* recentFileActions[MaxRecentFiles];
