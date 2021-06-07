@@ -309,3 +309,8 @@ void MainWindow::setCurrentFile(const QString& fileName)
     setWindowTitle(tr("%1[*]-%2").arg(showName)
         .arg(tr("Spreadsheet")));
 }
+
+void MainWindow::updateRecentFileActions()
+{
+    QMutableStringListIterator i
+}
