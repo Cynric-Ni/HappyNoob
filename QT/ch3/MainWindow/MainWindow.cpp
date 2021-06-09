@@ -331,3 +331,27 @@ void MainWindow::updateRecentFileActions()
     }
     separatorAction->setVisible(!recentFiles.isEmpty());
 }
+
+void MainWindow::openRecentFile()
+{
+    if (okToContinue()) {
+        QAction* action = qobject_cast<QAction*>(sender());
+        if (action)
+            loadFile(action->data().toString());
+    }
+}
+
+void MainWindow::find()
+{
+    if (!findDialog) {
+        findDialog = new FindDialog(this);
+        connect(findDialog, SIGNAL(findNext(const QString&, Qt::CaseSensitivity)),
+            spreadsheet, SLOT(findNext(const QString&, Qt::CaseSensitivity)));
+        connect(findDialog, SIGNAL(findPrevious(const QString&, Qt::CaseSensitivity)),
+            spreadsheet, SLOT(findPrevious(const QString&, Qt::CaseSensitivity)));
+    }
+    findDialog->show();
+    findDialog->raise();
+    findDialog->activateWindow();
+
+}

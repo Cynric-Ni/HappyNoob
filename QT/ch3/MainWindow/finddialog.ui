@@ -1,10 +1,8 @@
-<UI version="4.0" >
- <class>finddialogClass</class>
- <widget class="QDialog" name="finddialogClass" >
-  <property name="objectName" >
-   <string notr="true">finddialogClass</string>
-  </property>
-  <property name="geometry" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FindDialogClass</class>
+ <widget class="QDialog" name="FindDialogClass">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,14 +10,13 @@
     <height>400</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>finddialog</string>
-  </property>$centralwidget$
+  </property>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources>
-   <include location="finddialog.qrc"/>
+  <include location="finddialog.qrc"/>
  </resources>
  <connections/>
-</UI>
+</ui>
