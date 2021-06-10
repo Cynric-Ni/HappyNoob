@@ -365,3 +365,11 @@ void MainWindow::goToCell()
             str[0].unicode() - 'A');
     }
 }
+
+void MainWindow::sort()
+{
+    SortDialog dialog(this);
+    QTableWidgetSelectionRange range = spreadsheet->selectedRange();
+    dialog.setColumnRange(QChar('A' + range.leftColumn()),
+        QChar('A' + range.rightColumn()));
+}

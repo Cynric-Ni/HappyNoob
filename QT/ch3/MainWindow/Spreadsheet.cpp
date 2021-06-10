@@ -66,3 +66,11 @@ bool Spreadsheet::readFile(const QString &fileName)
 	QApplication::restoreOverrideCursor();
 	return true;
 }
+
+QTableWidgetSelectionRange Spreadsheet::selectedRange()const
+{
+	QList<QTableWidgetSelectionRange> ranges = selectedRanges();
+	if (ranges.isEmpty())
+		return QTableWidgetSelectionRange();
+	return ranges.first();
+}
