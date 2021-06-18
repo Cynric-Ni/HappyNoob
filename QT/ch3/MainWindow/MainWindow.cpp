@@ -372,4 +372,21 @@ void MainWindow::sort()
     QTableWidgetSelectionRange range = spreadsheet->selectedRange();
     dialog.setColumnRange(QChar('A' + range.leftColumn()),
         QChar('A' + range.rightColumn()));
+
+    if (dialog.exec()) {
+        SpreadsheetCompare compare;
+        compare.keys[0] =
+            dialog.primaryColumnCombo->currentIndex();
+        compare.keys[1] =
+            dialog.secondaryColumnCombo->currentIndex() - 1;
+        compare.keys[2] =
+            dialog.tertiaryColumnCombo->currentIndex() - 1;
+        compare.ascending[0] =
+            (dialog.primaryColumnCombo->currentIndex() == 0);
+        compare.ascending[1] =
+            (dialog.secondaryColumnCombo->currentIndex() == 0);
+        compare.ascending[2] =
+            (dialog.tertiaryColumnCombo->currentIndex() == 0);
+        spreadsheet->sortByColumn(compare);
+    }
 }
