@@ -387,6 +387,16 @@ void MainWindow::sort()
             (dialog.secondaryColumnCombo->currentIndex() == 0);
         compare.ascending[2] =
             (dialog.tertiaryColumnCombo->currentIndex() == 0);
-        spreadsheet->sortByColumn(compare);
+        spreadsheet->sort(compare);
     }
+}
+
+void MainWindow::about()
+{
+    QMessageBox::about(this, tr("关于 Spreadsheet"),
+        tr("<h2>Spreadsheet 1.1</h2>"
+            "<p>Copyright &copy; 2021 Software Inc."
+            "<p>Spreadsheet 目前是一个类似Excel程序"
+            "他实现了动作，主程序框架，工具栏等功能,"
+            "该程序基于QT实现"));
 }

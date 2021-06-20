@@ -12,7 +12,7 @@ public:
 	QString currentFormula() const;
 	bool readFile(const QString& fileName);
 	QTableWidgetSelectionRange selectedRange()const;
-	void sort(const SpreadsheetCompare& compare);
+	void sort(const SpreadsheetCompare &compare);
 private:
 	enum{MagicNumber = 0x7F51C883,};
 	Cell* cell(int row, int column) const;
