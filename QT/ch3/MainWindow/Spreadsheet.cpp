@@ -15,7 +15,7 @@ Cell* Spreadsheet::cell(int row, int colunm)const
 
 }
 
-QString Spreadsheet::formula(int raw, int colum) const
+QString Spreadsheet::formula(int row, int column) const
 {
 	Cell* c = cell(row, column);
 }

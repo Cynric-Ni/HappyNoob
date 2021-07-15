@@ -96,6 +96,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cell.cpp" />
     <ClCompile Include="SortDialog.cpp" />
     <ClCompile Include="Spreadsheet.cpp" />
     <QtRcc Include="MainWindow.qrc" />
@@ -120,6 +121,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Spreadsheet.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Cell.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

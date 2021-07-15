@@ -83,7 +83,6 @@ private:
     QAction* cutAction;
     QAction* selectRowAction;
     QAction* selectColumAction;
-    QAction* selectAllAction;
     QAction* findAction;
     QAction* goToAction;
     QAction* recalculateAction;

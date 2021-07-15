@@ -1,6 +1,17 @@
 #pragma once
 #include <QTableWidget>
+#include "Cell.h"
 
+
+class SpreadsheetCompare
+{
+public:
+	bool operator()(const QStringList& row1,
+		const QStringList& row2) const;
+	enum { KeyCount = 3 };
+	int keys[KeyCount];
+	bool ascending[KeyCount];
+};
 
 class Spreadsheet :public  QTableWidget
 {
@@ -20,12 +31,3 @@ private:
 	
 };
 
-class SpreadsheetCompare
-{
-public:
-	bool operator()(const QStringList& row1,
-		const QStringList& row2) const;
-	enum{KeyCount = 3};
-	int keys[KeyCount];
-	bool ascending[KeyCount];
-};

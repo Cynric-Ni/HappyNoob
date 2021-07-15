@@ -400,3 +400,14 @@ void MainWindow::about()
             "他实现了动作，主程序框架，工具栏等功能,"
             "该程序基于QT实现"));
 }
+
+void MainWindow::writeSettings()
+{
+    QSettings settings("Software Inc.", "Spreadsheet");
+
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("recentFiles", recentFiles);
+    settings.setValue("showGrid", showGridAction->isChecked());
+    settings.setValue("autoRecalc", autoRecalcAction->isChecked());
+
+}
