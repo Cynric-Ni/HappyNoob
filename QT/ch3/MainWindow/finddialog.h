@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QDialog>
-#include "ui_FindDialog.h"
+#include "FindDialog.h"
 
 class QCheckBox;
 class QLabel;
@@ -27,6 +27,4 @@ private:
 public:
     FindDialog(QWidget *parent = Q_NULLPTR);
 
-private:
-    Ui::FindDialogClass ui;
 };

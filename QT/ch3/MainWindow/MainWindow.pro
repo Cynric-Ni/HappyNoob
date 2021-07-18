@@ -13,4 +13,27 @@ OBJECTS_DIR += debug
 UI_DIR += .
 RCC_DIR += .
 CONFIG += C++17 console
-include(MainWindow.pri)
+
+QT += widgets
+QT += gui
+QT += core
+HEADERS       = cell.h \
+                finddialog.h \
+                GoToCell.h \
+                MainWindow.h \
+                Sortdialog.h \
+                Spreadsheet.h
+SOURCES       = cell.cpp \
+                finddialog.cpp \
+                GoToCell.cpp \
+                main.cpp \
+                MainWindow.cpp \
+                sortdialog.cpp \
+                Spreadsheet.cpp
+FORMS         = GoTocell.ui \
+                SortDialog.ui
+RESOURCES     = MainWindow.qrc
+
+QT += widgets
+QT += gui
+QT += core

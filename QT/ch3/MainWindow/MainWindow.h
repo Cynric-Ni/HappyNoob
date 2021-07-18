@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-#include "ui_MainWindow.h"
+#include "MainWindow.h"
 
 class QAction;
 class QLabel;
@@ -14,9 +14,6 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = Q_NULLPTR);
-
-private:
-    Ui::MainWindowClass ui;
 
 protected:
     void closeEvent(QCloseEvent* event);
@@ -37,7 +34,7 @@ private slots:
 private:
     void createActions();
     void createMenus();
-    void createContextMenu();
+    //void createContextMenu();
     void createToolBars();
     void createStatusbar();
     void readSettings();

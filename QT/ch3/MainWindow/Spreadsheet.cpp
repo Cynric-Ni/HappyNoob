@@ -10,25 +10,31 @@ Spreadsheet::Spreadsheet(QWidget *parent)
 
 };
 
-Cell* Spreadsheet::cell(int row, int colunm)const
+/*Cell* Spreadsheet::cell(int row, int column)const
 {
-
+	return static_cast<Cell*>(item(row, column));
 }
 
 QString Spreadsheet::formula(int row, int column) const
 {
 	Cell* c = cell(row, column);
-}
+	if (c) {
+		return c->formula();
+	}
+	else {
+		return "";
+	}
+}*/
 
 QString Spreadsheet::currentLocation()const
 {
 	return QChar('A' + currentColumn()) + QString::number(currentRow() + 1);
 }
 
-QString Spreadsheet::currentFormula() const
+/*QString Spreadsheet::currentFormula() const
 {
 	return formula(currentRow(), currentColumn());
-}
+}*/
 
 bool Spreadsheet::readFile(const QString &fileName)
 {
@@ -61,7 +67,7 @@ bool Spreadsheet::readFile(const QString &fileName)
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	while (!in.atEnd()) {
 		in >> row >> column >> str;
-		setFormula(row, column, str);
+		//setFormula(row, column, str);
 	}
 	QApplication::restoreOverrideCursor();
 	return true;
@@ -77,8 +83,6 @@ QTableWidgetSelectionRange Spreadsheet::selectedRange()const
 
 void Spreadsheet::sort(const SpreadsheetCompare& compare)
 {
-	QList<QStringList> rows;
-	QTableWidgetSelectionRange range = selectedRange();
 
 }
 
@@ -100,3 +104,65 @@ bool SpreadsheetCompare::operator()(const QStringList& row1,
 	}
 	return false; 
 }
+
+/*void Spreadsheet::cut()
+{
+    copy();
+    del();
+}
+
+void Spreadsheet::copy()
+{
+    QTableWidgetSelectionRange range = selectedRange();
+    QString str;
+
+    for (int i = 0; i < range.rowCount(); ++i) {
+        if (i > 0)
+            str += "\n";
+        for (int j = 0; j < range.columnCount(); ++j) {
+            if (j > 0)
+                str += "\t";
+            str += formula(range.topRow() + i, range.leftColumn() + j);
+        }
+    }
+    QApplication::clipboard()->setText(str);
+}
+
+void Spreadsheet::paste()
+{
+    QTableWidgetSelectionRange range = selectedRange();
+    QString str = QApplication::clipboard()->text();
+    QStringList rows = str.split('\n');
+    int numRows = rows.count();
+    int numColumns = rows.first().count('\t') + 1;
+
+    if (range.rowCount() * range.columnCount() != 1
+            && (range.rowCount() != numRows
+                || range.columnCount() != numColumns)) {
+        QMessageBox::information(this, tr("Spreadsheet"),
+                tr("The information cannot be pasted because the copy "
+                   "and paste areas aren't the same size."));
+        return;
+    }
+
+    for (int i = 0; i < numRows; ++i) {
+        QStringList columns = rows[i].split('\t');
+        for (int j = 0; j < numColumns; ++j) {
+            int row = range.topRow() + i;
+            int column = range.leftColumn() + j;
+            if (row < RowCount && column < ColumnCount)
+                setFormula(row, column, columns[j]);
+        }
+    }
+    somethingChanged();
+}
+
+void Spreadsheet::del()
+{
+    QList<QTableWidgetItem *> items = selectedItems();
+    if (!items.isEmpty()) {
+        foreach (QTableWidgetItem *item, items)
+            delete item;
+        somethingChanged();
+    }
+}*/

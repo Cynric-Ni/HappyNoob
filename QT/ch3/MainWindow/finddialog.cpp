@@ -1,4 +1,4 @@
-#include "FindDialog.h"
+#include "finddialog.h"
 #include <QtWidgets>
 
 FindDialog::FindDialog(QWidget *parent)
@@ -43,7 +43,7 @@ FindDialog::FindDialog(QWidget *parent)
     setLayout(mainLayout);
     setWindowTitle(tr("Find"));
     setFixedHeight(sizeHint().height());
-    ui.setupUi(this);
+    //ui.setupUi(this);
 }
 
 void FindDialog::findClicked() {

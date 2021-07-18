@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     createActions();
     createMenus();
-    createContextMenu();
+    //createContextMenu();
     createToolBars();
     createStatusbar();
 
@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::updateStatusBar()
 {
     locationLabel->setText(spreadsheet->currentLocation());
-    formulaLabel->setText(spreadsheet->currentFormula());
+    //formulaLabel->setText(spreadsheet->currentFormula());
 }
 
 void MainWindow::spreadsheetModified()
@@ -52,7 +52,7 @@ void MainWindow::createActions()
     openAction->setIcon(QIcon(":/images/open.png"));
     openAction->setShortcut(QKeySequence::Open);
     openAction->setStatusTip(tr("Open an existing spreadsheet file"));
-    connect(openAction, SIGNAL(triggered()), this, SLOT(openFile()));
+    connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
 
     saveAction = new QAction(tr("&Save"), this);
     saveAction->setIcon(QIcon(":/images/save.png"));
@@ -77,7 +77,7 @@ void MainWindow::createActions()
     exitAction->setStatusTip(tr("Exit the application"));
     connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
-    copyAction = new QAction(tr("&Copy"), this);
+   /* copyAction = new QAction(tr("&Copy"), this);
     copyAction->setIcon(QIcon(":/images/copy.png"));
     copyAction->setShortcut(QKeySequence::Copy);
     copyAction->setStatusTip(tr("Copy the current selection's contents "
@@ -97,7 +97,7 @@ void MainWindow::createActions()
     deleteAction->setStatusTip(tr("Delete the current selection's "
         "contents"));
     connect(deleteAction, SIGNAL(triggered()),
-        spreadsheet, SLOT(del()));
+        spreadsheet, SLOT(del()));*/
 
     selectAllAction = new QAction(tr("&All"), this);
     selectAllAction->setShortcut(QKeySequence::SelectAll);
@@ -131,49 +131,49 @@ void MainWindow::createMenus()
     fileMenu->addAction(saveAction);
     fileMenu->addAction(saveAsAction);
     separatorAction = fileMenu->addSeparator();
-    for (int i = 0; i < MaxRecentFiles; ++i)
-        fileMenu->addAction(recentFileActions[i]);
+    for (int i = 0; i < MaxRecentFiles; ++i){
+        fileMenu->addAction(recentFileActions[i]);}
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
     editMenu = menuBar()->addMenu(tr("&Edit"));
-    editMenu->addAction(cutAction);
+   /* editMenu->addAction(cutAction);
     editMenu->addAction(copyAction);
     editMenu->addAction(pasteAction);
-    editMenu->addAction(deleteAction);
+    editMenu->addAction(deleteAction);*/
 
     selectSubMenu = editMenu->addMenu(tr("&Select"));
-    selectSubMenu->addAction(selectRowAction);
+    /*selectSubMenu->addAction(selectRowAction);
     selectSubMenu->addAction(selectColumAction);
-    selectSubMenu->addAction(selectAllAction);
+    selectSubMenu->addAction(selectAllAction);*/
 
     editMenu->addSeparator();
-    editMenu->addAction(findAction);
-    editMenu->addAction(goToAction);
+   /* editMenu->addAction(findAction);
+    editMenu->addAction(goToAction);*/
     
     toolsMenu = menuBar()->addMenu(tr("&Tools"));
-    toolsMenu->addAction(recalculateAction);
-    toolsMenu->addAction(sortAction);
+    /*toolsMenu->addAction(recalculateAction);
+    toolsMenu->addAction(sortAction);*/
 
     optionsMenu = menuBar()->addMenu(tr("&Options"));
     optionsMenu->addAction(showGridAction);
-    optionsMenu->addAction(autoRecalcAction);
+    //optionsMenu->addAction(autoRecalcAction);
 
     menuBar()->addSeparator();
 
-helpMenu = menuBar()->addMenu(tr("&Help"));
-helpMenu->addAction(aboutAction);
-helpMenu->addAction(aboutQtAction);
+    helpMenu = menuBar()->addMenu(tr("&Help"));
+    helpMenu->addAction(aboutAction);
+    helpMenu->addAction(aboutQtAction);
 
 }
 
-void MainWindow::createContextMenu()
-{
-    spreadsheet->addAction(cutAction);
+//void MainWindow::createContextMenu()
+//{
+    /*spreadsheet->addAction(cutAction);
     spreadsheet->addAction(copyAction);
     spreadsheet->addAction(pasteAction);
-    spreadsheet->setContextMenuPolicy(Qt::ActionsContextMenu);
-}
+    spreadsheet->setContextMenuPolicy(Qt::ActionsContextMenu);*/
+//}
 
 void MainWindow::createToolBars()
 {
@@ -183,12 +183,12 @@ void MainWindow::createToolBars()
     fileToolBar->addAction(saveAction);
 
     editToolBar = addToolBar(tr("&Edit"));
-    editToolBar->addAction(cutAction);
+   /* editToolBar->addAction(cutAction);
     editToolBar->addAction(copyAction);
     editToolBar->addAction(pasteAction);
     editToolBar->addSeparator();
     editToolBar->addAction(findAction);
-    editToolBar->addAction(goToCellAction);
+    editToolBar->addAction(goToCellAction);*/
 }
 
 void MainWindow::createStatusbar()
@@ -238,6 +238,9 @@ bool MainWindow::loadFile(const QString& fileName)
         statusBar()->showMessage(tr("Loading canceled"), 2000);
         return false;
     }
+    setCurrentFile(fileName);
+    statusBar()->showMessage(tr("File loaded"), 2000);
+    return true;
 }
 
 void MainWindow::open()
@@ -262,12 +265,12 @@ bool MainWindow::save()
 
 bool MainWindow::saveFile(const QString& fileName)
 {
-    if (!spreadsheet->writeFile(fileName)) {
+   /*if (!spreadsheet->writeFile(fileName)) {
         statusBar()->showMessage(tr("Saving canceled"), 2000);
         return false;
     }
     setCurrentFile(fileName);
-    statusBar()->showMessage(tr("File saved"), 2000);
+    statusBar()->showMessage(tr("File saved"), 2000);*/
     return true;
 }
 
@@ -393,12 +396,13 @@ void MainWindow::sort()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, tr("关于 Spreadsheet"),
-        tr("<h2>Spreadsheet 1.1</h2>"
-            "<p>Copyright &copy; 2021 Software Inc."
-            "<p>Spreadsheet 目前是一个类似Excel程序"
-            "他实现了动作，主程序框架，工具栏等功能,"
-            "该程序基于QT实现"));
+    QMessageBox::about(this, tr("About Spreadsheet"),
+            tr("<h2>Spreadsheet 1.1</h2>"
+               "<p>Copyright &copy; 2008 Software Inc."
+               "<p>Spreadsheet is a small application that "
+               "demonstrates QAction, QMainWindow, QMenuBar, "
+               "QStatusBar, QTableWidget, QToolBar, and many other "
+               "Qt classes."));
 }
 
 void MainWindow::writeSettings()
@@ -408,6 +412,22 @@ void MainWindow::writeSettings()
     settings.setValue("geometry", saveGeometry());
     settings.setValue("recentFiles", recentFiles);
     settings.setValue("showGrid", showGridAction->isChecked());
-    settings.setValue("autoRecalc", autoRecalcAction->isChecked());
+    //settings.setValue("autoRecalc", autoRecalcAction->isChecked());
 
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings("Software Inc.", "Spreadsheet");
+
+    restoreGeometry(settings.value("geometry").toByteArray());
+
+    recentFiles = settings.value("recentFiles").toStringList();
+    updateRecentFileActions();
+
+    bool showGrid = settings.value("showGrid", true).toBool();
+    showGridAction->setChecked(showGrid);
+
+    /*bool autoRecalc = settings.value("autoRecalc", true).toBool();
+    autoRecalcAction->setChecked(autoRecalc);*/
 }
