@@ -2,6 +2,49 @@
 #include <QTableWidget>
 #include "Cell.h"
 
+class Cell;
+class SpreadsheetCompare;
+
+
+class Spreadsheet :public  QTableWidget
+{
+	Q_OBJECT
+public:
+	Spreadsheet(QWidget *parent = 0);
+
+	bool autoRecalculate() const { return autoRecalc; }
+	QString currentLocation() const;
+	QString currentFormula() const;
+	bool readFile(const QString& fileName);
+	bool writeFile(const QString& fileName);
+	QTableWidgetSelectionRange selectedRange()const;
+	void clear();
+	void sort(const SpreadsheetCompare &compare);
+private:
+	enum{MagicNumber = 0x7F51C883,};
+	Cell* cell(int row, int column) const;
+	QString text(int row, int column)const;
+	QString formula(int row, int column) const;
+	void setFormula(int row, int column,const QString &formula) const;
+
+	bool autoRecalc;
+public slots:
+    void cut();
+    void copy();
+    void paste();
+    void del();
+	void selectCurrentRow();
+	void selectCurrentColumn();
+	void recalculate();
+	void setAutoRecalculate(bool recalc);
+	void findNext(const QString& str, Qt::CaseSensitivity cs);
+
+signals:
+	void modified();
+
+private slots:
+	void somethingChanged();
+};
 
 class SpreadsheetCompare
 {
@@ -12,27 +55,3 @@ public:
 	int keys[KeyCount];
 	bool ascending[KeyCount];
 };
-
-class Spreadsheet :public  QTableWidget
-{
-	Q_OBJECT
-public:
-	Spreadsheet(QWidget *parent = 0);
-
-	QString currentLocation() const;
-	QString currentFormula() const;
-	bool readFile(const QString& fileName);
-	QTableWidgetSelectionRange selectedRange()const;
-	void sort(const SpreadsheetCompare &compare);
-private:
-	enum{MagicNumber = 0x7F51C883,};
-	Cell* cell(int row, int column) const;
-	QString formula(int raw, int colum) const;
-/*public slots:
-    void cut();
-    void copy();
-    void paste();
-    void del();*/
-	
-};
-
