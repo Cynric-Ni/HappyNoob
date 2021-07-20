@@ -1,6 +1,5 @@
 #pragma once
 #include <QTableWidget>
-#include "Cell.h"
 
 class Cell;
 class SpreadsheetCompare;
@@ -38,7 +37,8 @@ public slots:
 	void recalculate();
 	void setAutoRecalculate(bool recalc);
 	void findNext(const QString& str, Qt::CaseSensitivity cs);
-
+private:
+	enum { MagicNumber = 0x7F51C883, RowCount = 999,ColumnCount = 26};
 signals:
 	void modified();
 

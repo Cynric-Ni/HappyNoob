@@ -1,5 +1,9 @@
 #pragma once
-class Cell
+
+#include <QTableWidgetItem>
+class Cell : public QTableWidgetItem
 {
+public:
+	Cell();
 };
 
