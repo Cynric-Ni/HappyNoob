@@ -24,7 +24,7 @@ private:
 	Cell* cell(int row, int column) const;
 	QString text(int row, int column)const;
 	QString formula(int row, int column) const;
-	void setFormula(int row, int column,const QString &formula) const;
+	void setFormula(int row, int column,const QString &formula);
 
 	bool autoRecalc;
 public slots:

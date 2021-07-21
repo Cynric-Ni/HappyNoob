@@ -34,9 +34,19 @@ void Spreadsheet::clear()
 	setCurrentCell(0, 0);
 }
 
-/*Cell* Spreadsheet::cell(int row, int column)const
+Cell* Spreadsheet::cell(int row, int column)const
 {
 	return static_cast<Cell*>(item(row, column));
+}
+
+QString Spreadsheet::text(int row, int column)const
+{
+	Cell* c = cell(row, column);
+		if (c) {
+			return c->text();
+		} else {
+			return "";
+		}
 }
 
 QString Spreadsheet::formula(int row, int column) const
@@ -48,7 +58,17 @@ QString Spreadsheet::formula(int row, int column) const
 	else {
 		return "";
 	}
-}*/
+}
+
+void Spreadsheet::setFormula(int row, int column, const QString& formula)
+{
+	Cell* c = cell(row, column);
+	if (!c) {
+		c = new Cell;
+		setItem(row, column, c);
+	}
+	c->setFormula(formula);
+}
 
 QString Spreadsheet::currentLocation()const
 {
