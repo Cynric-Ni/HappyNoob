@@ -75,10 +75,43 @@ QString Spreadsheet::currentLocation()const
 	return QChar('A' + currentColumn()) + QString::number(currentRow() + 1);
 }
 
-/*QString Spreadsheet::currentFormula() const
+QString Spreadsheet::currentFormula() const
 {
 	return formula(currentRow(), currentColumn());
-}*/
+}
+
+void Spreadsheet::somethingChanged()
+{
+	if (autoRecalc)
+		recalculate();
+	emit modified();
+}
+
+bool Spreadsheet::writeFile(const QString& fileName)
+{
+	QFile file(fileName);
+	if (!file.open(QIODevice::WriteOnly)) {
+		QMessageBox::warning(this, tr("Spreadsheet"),
+			tr("Cannot write file %1:\n%2.")
+			.arg(file.fileName())
+			.arg(file.errorString()));
+		return false;
+	}
+	QDataStream out(&file);
+	out.setVersion(QDataStream::Qt_6_1);
+	out << quint32(MagicNumber);
+
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	for (int row = 0; row < RowCount; ++row) {
+		for (int column; column < ColumnCount; ++column) {
+			QString str = formula(row, column);
+			if (!str.isEmpty())
+				out << quint16(row) << quint16(column) << str;
+		}
+	}
+	QApplication::restoreOverrideCursor();
+	return true;
+}
 
 bool Spreadsheet::readFile(const QString &fileName)
 {
@@ -111,7 +144,7 @@ bool Spreadsheet::readFile(const QString &fileName)
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	while (!in.atEnd()) {
 		in >> row >> column >> str;
-		//setFormula(row, column, str);
+		setFormula(row, column, str);
 	}
 	QApplication::restoreOverrideCursor();
 	return true;
@@ -149,7 +182,7 @@ bool SpreadsheetCompare::operator()(const QStringList& row1,
 	return false; 
 }
 
-/*void Spreadsheet::cut()
+void Spreadsheet::cut()
 {
     copy();
     del();
@@ -209,4 +242,4 @@ void Spreadsheet::del()
             delete item;
         somethingChanged();
     }
-}*/
+}

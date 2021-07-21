@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::updateStatusBar()
 {
     locationLabel->setText(spreadsheet->currentLocation());
-    //formulaLabel->setText(spreadsheet->currentFormula());
+    formulaLabel->setText(spreadsheet->currentFormula());
 }
 
 void MainWindow::spreadsheetModified()
