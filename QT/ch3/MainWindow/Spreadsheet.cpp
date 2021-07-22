@@ -243,3 +243,55 @@ void Spreadsheet::del()
         somethingChanged();
     }
 }
+
+void Spreadsheet::selectCurrentRow()
+{
+	selectRow(currentRow());
+}
+
+void Spreadsheet::selectCurrentColumn()
+{
+	selectColumn(currentColumn());
+}
+
+void Spreadsheet::findNext(const QString& str, Qt::CaseSensitivity cs)
+{
+	int row = currentRow();
+	int column = currentColumn() + 1;
+
+	while (row < RowCount) {
+		while(column<ColumnCount){
+			if (text(row, column).contains(str, cs)) {
+				clearSelection();
+				setCurrentCell(row, column);
+				activateWindow();
+				return;
+		}
+			++column;
+		}
+		column = 0;
+		++row;
+	}
+	QApplication::beep();
+}
+
+void Spreadsheet::findPrevious(const QString &str, Qt::CaseSensitivity cs)
+{
+	int row = currentRow();
+	int column = currentColumn()-1;
+
+	while (row >= 0) {
+		while (column >= 0) {
+			if (text(row, column).contains(str, cs)) {
+				clearSelection();
+				setCurrentCell(row,column);
+				activateWindow();
+				return;
+			}
+			--column;
+		}
+		column = ColumnCount - 1;
+		--row;
+	}
+QApplication::beep();
+}

@@ -37,6 +37,7 @@ public slots:
 	void recalculate();
 	void setAutoRecalculate(bool recalc);
 	void findNext(const QString& str, Qt::CaseSensitivity cs);
+	void findPrevious(const QString& str, Qt::CaseSensitivity cs);
 private:
 	enum { MagicNumber = 0x7F51C883, RowCount = 999,ColumnCount = 26};
 signals:
