@@ -328,4 +328,13 @@ void Spreadsheet::sort(const SpreadsheetCompare& compare)
 		rows.append(row);
 	}
 	std::stable_sort(rows.begin(), rows.end(), compare);
+
+	for (i = 0; i < range.rowCount(); ++i) {
+		for (int j = 0; j < range.columnCount(); ++j) {
+			setFormula(range.topRow() + i, range.leftColumn() + j, rows[i][j]);
+		}
+	}
+	clearSelection();
+	somethingChanged();
 }
+
