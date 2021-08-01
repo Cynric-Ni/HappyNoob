@@ -20,7 +20,6 @@ public:
 	void clear();
 	void sort(const SpreadsheetCompare &compare);
 private:
-	enum{MagicNumber = 0x7F51C883,};
 	Cell* cell(int row, int column) const;
 	QString text(int row, int column)const;
 	QString formula(int row, int column) const;

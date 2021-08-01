@@ -13,7 +13,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = Q_NULLPTR);
+    MainWindow();
 
 protected:
     void closeEvent(QCloseEvent* event);
@@ -34,7 +34,7 @@ private slots:
 private:
     void createActions();
     void createMenus();
-    //void createContextMenu();
+    void createContextMenu();
     void createToolBars();
     void createStatusbar();
     void readSettings();
@@ -71,19 +71,20 @@ private:
     QAction* saveAsAction;
     QAction* exitAction;
     QAction* copyAction;
+    QAction* cutAction;
     QAction* pasteAction;
     QAction* deleteAction;
-    QAction* selectAllAction;
-    QAction* showGridAction;
-    QAction* aboutAction;
-    QAction* aboutQtAction;
-    QAction* cutAction;
     QAction* selectRowAction;
-    QAction* selectColumAction;
+    QAction* selectColumnAction;
+    QAction* selectAllAction;
     QAction* findAction;
-    QAction* goToAction;
+    QAction* goToCellAction;
     QAction* recalculateAction;
     QAction* sortAction;
+    QAction* showGridAction;
     QAction* autoRecalcAction;
-    QAction* goToCellAction;
+    QAction* aboutAction;
+    QAction* aboutQtAction;
+   
+    
 };

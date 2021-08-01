@@ -159,10 +159,6 @@ QTableWidgetSelectionRange Spreadsheet::selectedRange()const
 	return ranges.first();
 }
 
-void Spreadsheet::sort(const SpreadsheetCompare& compare)
-{
-
-}
 
 bool SpreadsheetCompare::operator()(const QStringList& row1,
 	                               const QStringList& row2) const
@@ -318,7 +314,7 @@ void Spreadsheet::setAutoRecalculate(bool recalc)
 
 void Spreadsheet::sort(const SpreadsheetCompare& compare)
 {
-	QList<QString> rows;
+	QList<QStringList> rows;
 	QTableWidgetSelectionRange range = selectedRange();
 	int i;
 	for (i = 0; i < range.rowCount(); ++i) {

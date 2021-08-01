@@ -1,4 +1,4 @@
-#include "finddialog.h"
+#include "FindDialog.h"
 #include <QtWidgets>
 
 FindDialog::FindDialog(QWidget *parent)

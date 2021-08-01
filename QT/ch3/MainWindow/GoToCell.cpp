@@ -6,7 +6,6 @@ GoToCellDialog::GoToCellDialog(QWidget *parent)
 {
     setupUi(this);
     buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-   // buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     QRegularExpression regExp("[A-Za-z][1-9][0-9]{0,2}");
     lineEdit->setValidator(new QRegularExpressionValidator(regExp, this));
 
