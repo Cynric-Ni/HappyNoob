@@ -1,18 +1,13 @@
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-
+#include <QApplication>
+#include <QHBoxLayout>
+#include "hexspinbox.h"
 int main(int argc, char *argv[])
 {
-#if defined(Q_OS_WIN)
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
+    QApplication app(argc, argv);
 
-    QGuiApplication app(argc, argv);
-
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    if (engine.rootObjects().isEmpty())
-        return -1;
+    HexSpinBox spinBox;
+    spinBox.setWindowTitle(QObject::tr("Hex Spin Box"));
+    spinBox.show();
 
     return app.exec();
 }
