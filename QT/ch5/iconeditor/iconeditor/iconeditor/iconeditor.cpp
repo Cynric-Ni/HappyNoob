@@ -49,7 +49,44 @@ void IconEditor::paintEvent(QPaintEvent* event)
     for (int i = 0; i < image.width(); ++i) {
         for (int j = 0; j < image.height(); ++j) {
             QRect rect = pixelRect(i, j);
-            if(!event->region().intersects(rect).isEmpty())
+            if (!event->region().intersects(rect).isEmpty()) {
+                QColor color = QColor::fromRgba(image.pixel(i, j));
+                if (color.alpha() < 255)
+                    painter.fillRect(rect, Qt::white);
+                painter.fillRect(rect, color);
+            }
         }
+    }
+}
+
+QRect IconEditor::pixlRect(int i, int j) const
+{
+    if (zoom >= 3) {
+        return QRect(zoom * i + 1, zoom * j + 1, zoom - 1, zoom - 1);
+    } else {
+        return QRect(zoom * i, zoom * j, zoom, zoom);
+    }
+}
+
+void IconEditor::mouseMoveEvent(QMouseEvent* event)
+{
+    if (event->buttons() & Qt::LeftButton) {
+        setImagePixel(event->pos(), true);
+    } else if (event->buttons() & Qt::RightButton) {
+        setImagePixel(event->pos(), false);
+    }
+}
+void IconEditor::setImagePixel(const QPoint& pos, bool opaque)
+{
+    int i = pos.x() / zoom;
+    int j = pos.y() / zoom;
+
+    if (image.rect().contains(i, j)) {
+        if (opaque) {
+            image.setPixel(i, j, penColor().rgba());
+        } else {
+            image.setPixel(i, j, qRgba(0, 0, 0, 0));
+        }
+        update(pixelRect(i, j));
     }
 }

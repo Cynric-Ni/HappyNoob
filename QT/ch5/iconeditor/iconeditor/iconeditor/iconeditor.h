@@ -28,6 +28,8 @@ protected:
     void paintEvent(QPaintEvent* event);
 
 private:
+    void setImagePixel(const QPoint &pos, bool opaque);
+    QRect pixelRect(int i, int j)const;
     QColor curColor;
     QImage image;
     int zoom;
