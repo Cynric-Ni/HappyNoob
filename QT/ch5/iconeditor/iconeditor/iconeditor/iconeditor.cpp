@@ -40,6 +40,16 @@ void IconEditor::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
     if (zoom >= 3) {
-        painter.setPen(*palette().WindowText());//这里书上有错误foreground被弃用，使用windowText()代替
+        painter.setPen(palette().WindowText());//这里书上有错误foreground被弃用，使用windowText()代替
+        for (int i = 0; i <= image.width(); ++i)
+            painter.drawLine(zoom * i, 0, zoom * i, zoom * image.height());
+        for (int j = 0; j <= image.height(); ++j)
+            painter.drawLine(0, zoom * j, zoom * image.width(), zoom * j);
+    }
+    for (int i = 0; i < image.width(); ++i) {
+        for (int j = 0; j < image.height(); ++j) {
+            QRect rect = pixelRect(i, j);
+            if(!event->region().intersects(rect).isEmpty())
+        }
     }
 }
