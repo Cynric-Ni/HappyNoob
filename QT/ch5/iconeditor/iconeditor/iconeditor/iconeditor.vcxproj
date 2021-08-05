@@ -98,7 +98,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
     <QtMoc Include="iconeditor.h" />
     <ClCompile Include="iconeditor.cpp" />
     <QtMoc Include="iconeditorPlugin.h" />
