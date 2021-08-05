@@ -24,7 +24,7 @@ bool iconeditorPlugin::isInitialized() const
 
 QWidget *iconeditorPlugin::createWidget(QWidget *parent)
 {
-    return new iconeditor(parent);
+    return new IconEditor(parent);
 }
 
 QString iconeditorPlugin::name() const
@@ -39,7 +39,7 @@ QString iconeditorPlugin::group() const
 
 QIcon iconeditorPlugin::icon() const
 {
-    return QIcon();
+    return QIcon(":/images/iconeditor.png");
 }
 
 QString iconeditorPlugin::toolTip() const
@@ -49,7 +49,8 @@ QString iconeditorPlugin::toolTip() const
 
 QString iconeditorPlugin::whatsThis() const
 {
-    return QString();
+    return QString(tr("这个部件是联系5中<i>C++ GUI"
+    "Programming with Qt4 </i>里的一个练习自定义Qt部件。"));
 }
 
 bool iconeditorPlugin::isContainer() const
@@ -59,7 +60,7 @@ bool iconeditorPlugin::isContainer() const
 
 QString iconeditorPlugin::domXml() const
 {
-    return "<widget class=\"iconeditor\" name=\"iconeditor\">\n"
+    return "<widget class=\"IconEditor\" name=\"iconeditor\">\n"
         " <property name=\"geometry\">\n"
         "  <rect>\n"
         "   <x>0</x>\n"

@@ -40,7 +40,8 @@ void IconEditor::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
     if (zoom >= 3) {
-        painter.setPen(palette().WindowText());//这里书上有错误foreground被弃用，使用windowText()代替
+        QPalette ThePalette = palette();
+        painter.setPen(ThePalette.WindowText());//这里书上有错误foreground被弃用，使用windowText()代替
         for (int i = 0; i <= image.width(); ++i)
             painter.drawLine(zoom * i, 0, zoom * i, zoom * image.height());
         for (int j = 0; j <= image.height(); ++j)
@@ -49,7 +50,7 @@ void IconEditor::paintEvent(QPaintEvent* event)
     for (int i = 0; i < image.width(); ++i) {
         for (int j = 0; j < image.height(); ++j) {
             QRect rect = pixelRect(i, j);
-            if (!event->region().intersects(rect).isEmpty()) {
+            if (!event->region().intersects(rect)) {
                 QColor color = QColor::fromRgba(image.pixel(i, j));
                 if (color.alpha() < 255)
                     painter.fillRect(rect, Qt::white);
@@ -59,12 +60,33 @@ void IconEditor::paintEvent(QPaintEvent* event)
     }
 }
 
-QRect IconEditor::pixlRect(int i, int j) const
+void IconEditor::setZoomFactor(int newZoom)
+{
+    if (newZoom < 1)
+        newZoom = 1;
+    if (newZoom != zoom) {
+        zoom = newZoom;
+        update();
+        updateGeometry();
+    }
+        
+}
+
+QRect IconEditor::pixelRect(int i, int j) const
 {
     if (zoom >= 3) {
         return QRect(zoom * i + 1, zoom * j + 1, zoom - 1, zoom - 1);
     } else {
         return QRect(zoom * i, zoom * j, zoom, zoom);
+    }
+}
+
+void IconEditor::mousePressEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton) {
+        setImagePixel(event->pos(), true);
+    } else if (event->button() == Qt::RightButton) {
+        setImagePixel(event->pos(), false);
     }
 }
 
