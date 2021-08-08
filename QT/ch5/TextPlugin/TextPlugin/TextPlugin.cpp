@@ -1,8 +1,10 @@
+ï»¿#include "TextPlugin.h"
+
 #include <QtGui>
 #include <QPalette>
-#include "iconeditor.h"
+#include "TextPlugin.h"
 
-IconEditor::IconEditor(QWidget *parent)
+IconEditor::IconEditor(QWidget* parent)
     : QWidget(parent)
 {
     setAttribute(Qt::WA_StaticContents);
@@ -41,7 +43,8 @@ void IconEditor::paintEvent(QPaintEvent* event)
     QPainter painter(this);
     if (zoom >= 3) {
         QPalette ThePalette = palette();
-        painter.setPen(ThePalette.WindowText());//ÕâÀïÊéÉÏÓĞ´íÎóforeground±»ÆúÓÃ£¬Ê¹ÓÃwindowText()´úÌæ
+        QBrush TheBrush = ThePalette.WindowText();
+        painter.setPen(TheBrush.color());
         for (int i = 0; i <= image.width(); ++i)
             painter.drawLine(zoom * i, 0, zoom * i, zoom * image.height());
         for (int j = 0; j <= image.height(); ++j)
@@ -69,7 +72,7 @@ void IconEditor::setZoomFactor(int newZoom)
         update();
         updateGeometry();
     }
-        
+
 }
 
 QRect IconEditor::pixelRect(int i, int j) const

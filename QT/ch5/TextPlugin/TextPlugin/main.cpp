@@ -1,6 +1,5 @@
-#include <QApplication>
-
-#include "iconeditor.h"
+#include "TextPlugin.h"
+#include <QtWidgets/QApplication>
 
 int main(int argc, char* argv[])
 {
@@ -11,3 +10,4 @@ int main(int argc, char* argv[])
     iconEditor.show();
     return app.exec();
 }
+

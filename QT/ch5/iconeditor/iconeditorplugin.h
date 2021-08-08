@@ -1,15 +1,18 @@
-#pragma once
+#ifndef ICONEDITORPLUGIN_H
+#define ICONEDITORPLUGIN_H
 
-#include <QtUiPlugin/QDesignerCustomWidgetInterface>
+#include <QDesignerCustomWidgetInterface>
 
-class iconeditorPlugin : public QObject, public QDesignerCustomWidgetInterface
+class IconEditorPlugin : public QObject, public QDesignerCustomWidgetInterface
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QDesignerCustomWidgetInterface" FILE "iconeditorplugin.json")
     Q_INTERFACES(QDesignerCustomWidgetInterface)
+#if QT_VERSION >= 0x050000
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QDesignerCustomWidgetInterface")
+#endif // QT_VERSION >= 0x050000
 
 public:
-    iconeditorPlugin(QObject *parent = Q_NULLPTR);
+    IconEditorPlugin(QObject *parent = 0);
 
     bool isContainer() const;
     bool isInitialized() const;
@@ -24,5 +27,7 @@ public:
     void initialize(QDesignerFormEditorInterface *core);
 
 private:
-    bool initialized;
+    bool m_initialized;
 };
+
+#endif // ICONEDITORPLUGIN_H

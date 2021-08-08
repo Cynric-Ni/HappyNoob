@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/TestPlugs">
+        <file>images/mouse.png</file>
+        <file>images/iconeditor.png</file>
+    </qresource>
+</RCC>
