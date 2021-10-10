@@ -1,0 +1,25 @@
+<UI version="4.0" >
+ <class>PlotterClass</class>
+ <widget class="QWidget" name="PlotterClass" >
+  <property name="objectName" >
+   <string notr="true">PlotterClass</string>
+  </property>
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Plotter</string>
+  </property>$centralwidget$
+ </widget>
+ <layoutDefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <resources>
+   <include location="plotter.qrc"/>
+ </resources>
+ <connections/>
+</UI>
