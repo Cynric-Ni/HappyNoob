@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PyAppExcel", "PyAppExcel\PyAppExcel.pyproj", "{51D7CF28-DF6F-42B4-A53E-B96E65F96669}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51D7CF28-DF6F-42B4-A53E-B96E65F96669}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51D7CF28-DF6F-42B4-A53E-B96E65F96669}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BD7C55B6-7E15-437A-9C20-BDB59FF6EE5D}
+	EndGlobalSection
+EndGlobal
