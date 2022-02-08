@@ -7,8 +7,17 @@ TARGET = plotter
 DESTDIR = ../x64/Debug
 CONFIG += debug
 LIBS += -L"."
+QT += widgets
+QT += gui
+QT += core
 DEPENDPATH += .
 MOC_DIR += .
 OBJECTS_DIR += debug
 UI_DIR += .
 RCC_DIR += .
+HEADERS       = plotter.h
+SOURCES       = plotter.cpp \
+                main.cpp \
+                plotter.cpp
+FORMS         = plotter.ui
+RESOURCES     = plotter.qrc

@@ -1,0 +1,13 @@
+debug/cell.o
+debug/finddialog.o
+debug/GoToCell.o
+debug/main.o
+debug/MainWindow.o
+debug/sortdialog.o
+debug/Spreadsheet.o
+debug/qrc_MainWindow.o
+debug/moc_finddialog.o
+debug/moc_GoToCell.o
+debug/moc_MainWindow.o
+debug/moc_Sortdialog.o
+debug/moc_Spreadsheet.o

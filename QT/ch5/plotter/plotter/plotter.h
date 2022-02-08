@@ -5,7 +5,7 @@
 #include <QVector>
 #include <QtWidgets/QWidget>
 #include <QToolButton>
-#include "ui_plotter.h"
+//#include "ui_plotter.h"
 
 class QToolButton;
 class PlotSettings;
@@ -38,7 +38,7 @@ protected:
 private:
     void updateRubberBandRegion();
     void refreshPixmap();
-    void drawCurves(QPainter* painter);
+    void drawGrid(QPainter* painter);
     void drawCurves(QPainter* painter);
 
     enum{Margin = 50};
