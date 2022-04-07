@@ -42,4 +42,6 @@ public:
 	BOOL m_NoGuest;
 	BOOL m_OpenFireWall;
 	BOOL m_SrceenPsw;
+	BOOL m_DisablePortRdp;     //禁止端口变量
+	
 };

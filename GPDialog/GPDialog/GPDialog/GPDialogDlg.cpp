@@ -79,6 +79,7 @@ void CGPDialogDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_NO_GUEST, m_NoGuest);
 	DDX_Check(pDX, IDC_OPEN_FIREWALL, m_OpenFireWall);
 	DDX_Check(pDX, IDC_SCREEN_PSW, m_SrceenPsw);
+	DDX_Check(pDX, IDC_DisablePortRdp, m_DisablePortRdp);
 }
 
 BEGIN_MESSAGE_MAP(CGPDialogDlg, CDialogEx)
@@ -217,7 +218,7 @@ void CGPDialogDlg::OnBnClickedOk()
 	m_bat += m_ch3;
 	m_bat += L" >> 1.inf\necho MaximumPasswordAge = ";
 	m_bat += m_ch2;
-	m_bat += "  >> 1.inf\n";
+	m_bat += "  >> 1.inf\n";     //在配置安全策略时会创建已个1.inf文件进行执行
 
 	if (m_ch4 != "0") {
 		m_bat += L"necho LockoutBadCount = ";
@@ -265,6 +266,18 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L"cls\n";
 	}
 
+	if (m_DisablePortRdp) {
+		m_bat += L"echo******************************************\n";
+		m_bat += L"echo 正在禁止RDP端口\n";
+		m_bat += L"echo******************************************\n";
+		m_bat += L"echo .\n";
+		m_bat += L"netsh advfirewall firewall add rule name = \"Disable port 3389 - TCP\" dir = in action = block protocol = TCP localport = 3389";
+		m_bat += L"echo 设置完毕\n";
+		m_bat += L"echo.\n";
+		m_bat += L"pause\n";
+		m_bat += L"cls\n";
+	}
+
 	if (m_SrceenPsw) {
 		m_bat += L"echo******************************************\n";
 		m_bat += L"echo 屏幕保护口令设置\n";
@@ -277,6 +290,8 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L"echo.\n";
 		m_bat += L"pause\n";
 	}
+
+
 	setlocale(LC_CTYPE, "chs");
 	file.WriteString(m_bat);
 	file.Close();
@@ -287,4 +302,5 @@ void CGPDialogDlg::OnBnClickedOk()
 	}
 
 }
+
 
