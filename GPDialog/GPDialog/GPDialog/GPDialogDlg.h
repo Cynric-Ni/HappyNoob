@@ -30,6 +30,9 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+	DWORD getOSName();
+	void checkMSpack();
+	ULONG getBuildNum();
 public:
 	CString m_ch1;
 	CString m_ch2;
@@ -44,4 +47,5 @@ public:
 	BOOL m_SrceenPsw;
 	BOOL m_DisablePortRdp;     //禁止端口变量
 	
+	afx_msg void OnBnClickedcheckupdate();
 };
