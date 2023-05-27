@@ -26,6 +26,14 @@ public class ManagerTest{
             System.out.println("name=" + e.getName() + ",salary=" + e.getSalary());
         System.out.println("name=" + Aboss.getName() + ",salary=" + Aboss.getSalary());
         System.out.println("name=" + boss.getName() + ",salary=" + boss.getSalary());
+
+        Employee A = new Employee("A",8000,1987,12,15);
+        Manager B = new Manager("A",8000,1987,12,15);
+        System.out.println(A instanceof Employee);
+        System.out.println(A instanceof Manager);
+        System.out.println(B instanceof Employee);
+        System.out.println(B instanceof Manager);
+
     }
 
 }

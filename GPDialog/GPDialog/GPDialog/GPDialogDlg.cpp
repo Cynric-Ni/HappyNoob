@@ -36,8 +36,7 @@
 #define WIN1010586				10010586
 #define WIN1014393				10014393
 
-BOOL GetVersionEx2(LPOSVERSIONINFOW lpVersionInformation);
-void checkupdata();
+
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -45,6 +44,7 @@ class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
+	
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -92,7 +92,18 @@ CGPDialogDlg::CGPDialogDlg(CWnd* pParent /*=nullptr*/)
 	m_ch4 = L"6";
 	m_ch5 = L"16";
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	hRead = NULL;
+	hWrite = NULL;
 
+}
+
+CGPDialogDlg::~CGPDialogDlg() {
+	if (hRead) {
+		CloseHandle(hRead);
+	}
+	if (hWrite) {
+		CloseHandle(hWrite);
+	}
 }
 
 void CGPDialogDlg::DoDataExchange(CDataExchange* pDX)
@@ -327,7 +338,8 @@ void CGPDialogDlg::OnBnClickedOk()
 
 }
 
-BOOL GetVersionEx2(LPOSVERSIONINFOW lpVersionInformation)
+//以下代码用来获取版本build号
+BOOL CGPDialogDlg::GetVersionEx2(LPOSVERSIONINFOW lpVersionInformation)
 {
 	HMODULE hNtDll = GetModuleHandleW(L"NTDLL"); // 获取ntdll.dll的句柄
 	typedef long (NTAPI* tRtlGetVersion)(_Out_ PRTL_OSVERSIONINFOW povi); // RtlGetVersion的原型
@@ -406,8 +418,11 @@ DWORD CGPDialogDlg::getOSName()
 		else if (dwMajorVersion == 10 && dwMinorVersion == 0 && dwBuildNumber == 14393)
 			OsVersion = WIN1014393;
 		else if (dwMajorVersion == 10 && dwMinorVersion == 0)
-			OsVersion = WIN10;
 
+		{
+			OsVersion = WIN10;
+			AfxMessageBox(L"确认你的是WIN10");
+		}
 		else
 		{
 			return FALSE;
@@ -455,20 +470,18 @@ ULONG CGPDialogDlg::getBuildNum()
 	OSVERSIONINFOEXW ovi = { sizeof ovi };
 	GetVersionEx2((LPOSVERSIONINFOW)&ovi);
 	dwBuildNumber = ovi.dwBuildNumber;
-	//CString temp_value = _T("");
-	//temp_value.Format(_T("你的系统版本是%d"), dwBuildNumber);
-	//AfxMessageBox(temp_value);
+	CString temp_value = _T("");
+	temp_value.Format(_T("你的系统版本是%d"), dwBuildNumber);
+	AfxMessageBox(temp_value);
 	return dwBuildNumber;
 }
 
-void checkupdata()
-{
 
-}
 void CGPDialogDlg::checkMSpack()
 {
+
+	//调用CreatePipe创建管道
 	SECURITY_ATTRIBUTES sa;
-	HANDLE hRead, hWrite;
 	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
 	sa.lpSecurityDescriptor = NULL;  //使用系统默认的安全描述符	
 	sa.bInheritHandle = TRUE;  //创建的进程继承句柄
@@ -479,19 +492,21 @@ void CGPDialogDlg::checkMSpack()
 		return;
 	}
 
+	//创建子进程
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
-
-	ZeroMemory(&si, sizeof(STARTUPINFO));
+    ZeroMemory(&si, sizeof(STARTUPINFO));
 	si.cb = sizeof(STARTUPINFO);
-	GetStartupInfo(&si);
-	si.hStdError = hWrite;
-	si.hStdOutput = hWrite;	 //新创建进程的标准输出连在写管道一端
-	si.wShowWindow = SW_HIDE;  //隐藏窗口	
 	si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+	GetStartupInfo(&si);
+	//si.hStdInput = hRead;
+	si.hStdOutput = hWrite;	 //新创建进程的标准输出连在写管道一端
+	si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
+	si.wShowWindow = SW_HIDE;  //隐藏窗口	
+	
 
 
-	TCHAR cmdline[256] = { _T("systeminfo.exe") };
+	TCHAR cmdline[256] = { _T("C:\\WINDOWS\\system32\\cmd.exe /C systeminfo") };
 	//CString tmp,stredit2;
 //	GetDlgItemText(IDC_EDIT2,stredit2);  //获取编辑框中输入的命令行
 //	tmp.Format(_T("cmd /C %s"),stredit2);
@@ -501,22 +516,27 @@ void CGPDialogDlg::checkMSpack()
 #else
 	//MessageBox(_T("ANSI!"), _T("提示"), MB_OK | MB_ICONWARNING);
 #endif
-	if (!CreateProcess(NULL, cmdline, NULL, NULL, TRUE, NULL, NULL, NULL, &si, &pi))  //创建子进程
+	if (!CreateProcess(0,cmdline, NULL, NULL,TRUE, 0, NULL, NULL, &si, &pi))  //创建子进程
 	{
+		CloseHandle(hRead);
+		CloseHandle(hWrite);
+
 		MessageBox(_T("CreateProcess Failed!"), _T("Tip"), MB_OK | MB_ICONWARNING);
 		return;
+	} else {
+		CloseHandle(pi.hProcess);//关闭管道句柄   问题出在这里 注销就好了
+		CloseHandle(pi.hThread);
+		CloseHandle(hWrite);
 	}
-	CloseHandle(hWrite);  //关闭管道句柄
-
 	char buffer[4096] = { 0 };
 	CString strOutput;
-	CString PatchKB;
+	CString PatchKB = {_T("不用装")};
 	DWORD bytesRead;
 	bool is64app;
 	is64app = IsAppProcessWOW64();
 	DWORD i = getOSName();
 	ULONG j = getBuildNum();
-	do {
+
 		if (i == WIN7 && is64app)
 			PatchKB = { _T("KB4012212") };
 		else if (i == WIN7 && is64app == 0)
@@ -525,31 +545,32 @@ void CGPDialogDlg::checkMSpack()
 			PatchKB = { _T("KB4013429") };
 		else
 		{
-			AfxMessageBox(L"你的系统不需要安装补丁");
-			return;
+			AfxMessageBox(_T("你的系统不需要安装补丁"));
 		}
-	} while (false);
+			
 		
-	
 
-	while (true)
-	{
-		if (ReadFile(hRead, buffer, 4095, &bytesRead, NULL) == NULL)  //读取管道
-			break;
+		
+		while (true) {
+			if (ReadFile(hRead, buffer, 4095, &bytesRead, NULL) == NULL)  //读取管道
+				break;
 
-		strOutput += buffer;
-		//SetDlgItemText(IDC_EDIT1, strOutput);  //显示输出信息到编辑框,并刷新窗口
-		//AfxMessageBox(strOutput);
-		//UpdateWindow();
-		//Sleep(100);
-	}
+			strOutput += buffer;
+			//SetDlgItemText(IDC_EDIT1, strOutput);  //显示输出信息到编辑框,并刷新窗口
+			AfxMessageBox(strOutput);
+			//UpdateWindow();
+			//Sleep(100);
+		}
 	if (_tcsstr(strOutput, PatchKB))
 	{
 		AfxMessageBox(_T("兄弟，你按要求安装补丁~不扣你绩效了"));
 	}
 	else
 		AfxMessageBox(_T("没有装相应的补丁。"));
+	
 	CloseHandle(hRead);
+	//CloseHandle(pi.hProcess);//关闭管道句柄   问题出在这里 注销就好了
+    //CloseHandle(pi.hThread);
 	//getOSName();
 
 	//	CDialog::OnOK();

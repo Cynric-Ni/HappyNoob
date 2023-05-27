@@ -10,6 +10,7 @@ class CGPDialogDlg : public CDialogEx
 // 构造
 public:
 	CGPDialogDlg(CWnd* pParent = nullptr);	// 标准构造函数
+	~CGPDialogDlg();
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -46,6 +47,10 @@ public:
 	BOOL m_OpenFireWall;
 	BOOL m_SrceenPsw;
 	BOOL m_DisablePortRdp;     //禁止端口变量
-	
+	BOOL GetVersionEx2(LPOSVERSIONINFOW lpVersionInformation);
 	afx_msg void OnBnClickedcheckupdate();
+
+private:
+	HANDLE hRead;
+	HANDLE hWrite;
 };
