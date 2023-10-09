@@ -86,7 +86,7 @@ CGPDialogDlg::CGPDialogDlg(CWnd* pParent /*=nullptr*/)
 	, m_OpenFireWall(TRUE)
 	, m_SrceenPsw(TRUE)
 {
-	m_ch1 = L"12";
+	m_ch1 = L"8";
 	m_ch2 = L"90";
 	m_ch3 = L"5";
 	m_ch4 = L"6";
@@ -354,7 +354,9 @@ BOOL CGPDialogDlg::GetVersionEx2(LPOSVERSIONINFOW lpVersionInformation)
 	}
 	return FALSE;
 }
-bool IsAppProcessWOW64(void)
+
+//下面代码测试是是32位还是64位程序
+BOOL CGPDialogDlg:: IsAppProcessWOW64(void)
 {
 	typedef BOOL(WINAPI* LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
 	HMODULE hKernel32 = GetModuleHandle(L"kernel32");
@@ -421,7 +423,7 @@ DWORD CGPDialogDlg::getOSName()
 
 		{
 			OsVersion = WIN10;
-			AfxMessageBox(L"确认你的是WIN10");
+			AfxMessageBox(L"确认系统是WIN10");
 		}
 		else
 		{
@@ -474,6 +476,18 @@ ULONG CGPDialogDlg::getBuildNum()
 	temp_value.Format(_T("你的系统版本是%d"), dwBuildNumber);
 	AfxMessageBox(temp_value);
 	return dwBuildNumber;
+}
+
+//它的功能把systeminfo信息和pathKB补丁进行对比
+void CGPDialogDlg::strContrast(CString str1, CString str2) {
+
+	if (_tcsstr(str1, str2))
+	{
+		AfxMessageBox(_T("兄弟，你按要求安装补丁~不扣你绩效了"));
+	}
+	else
+		AfxMessageBox(_T("注意！！没有按要求安装安全补丁"));
+
 }
 
 
@@ -537,37 +551,32 @@ void CGPDialogDlg::checkMSpack()
 	DWORD i = getOSName();
 	ULONG j = getBuildNum();
 
-		if (i == WIN7 && is64app)
-			PatchKB = { _T("KB4012212") };
-		else if (i == WIN7 && is64app == 0)
-			PatchKB = { _T("KB4012215") };
-		else if (i == WIN101607)
-			PatchKB = { _T("KB4013429") };
-		else
+	while (true) {
+		if (ReadFile(hRead, buffer, 4095, &bytesRead, NULL) == NULL)  //读取管道
+			break;
+
+		strOutput += buffer;
+		//SetDlgItemText(IDC_EDIT1, strOutput);  //显示输出信息到编辑框,并刷新窗口
+		AfxMessageBox(strOutput);
+		//UpdateWindow();
+		//Sleep(100);
+	}
+	if (i == WIN7 && is64app) {
+		PatchKB = { _T("KB4012212") };
+		strContrast(strOutput, PatchKB);
+	}
+	else if (i == WIN7 && is64app == 0) {
+		PatchKB = { _T("KB4012215") };
+		strContrast(strOutput, PatchKB);
+
+	}else if (i == WIN101607){
+		PatchKB = { _T("KB4013429") };
+		strContrast(strOutput, PatchKB);
+	}else
 		{
 			AfxMessageBox(_T("你的系统不需要安装补丁"));
 		}
 			
-		
-
-		
-		while (true) {
-			if (ReadFile(hRead, buffer, 4095, &bytesRead, NULL) == NULL)  //读取管道
-				break;
-
-			strOutput += buffer;
-			//SetDlgItemText(IDC_EDIT1, strOutput);  //显示输出信息到编辑框,并刷新窗口
-			AfxMessageBox(strOutput);
-			//UpdateWindow();
-			//Sleep(100);
-		}
-	if (_tcsstr(strOutput, PatchKB))
-	{
-		AfxMessageBox(_T("兄弟，你按要求安装补丁~不扣你绩效了"));
-	}
-	else
-		AfxMessageBox(_T("没有装相应的补丁。"));
-	
 	CloseHandle(hRead);
 	//CloseHandle(pi.hProcess);//关闭管道句柄   问题出在这里 注销就好了
     //CloseHandle(pi.hThread);
@@ -598,3 +607,5 @@ void CGPDialogDlg::OnBnClickedcheckupdate()
 
 
 }
+
+

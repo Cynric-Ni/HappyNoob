@@ -49,8 +49,10 @@ public:
 	BOOL m_DisablePortRdp;     //禁止端口变量
 	BOOL GetVersionEx2(LPOSVERSIONINFOW lpVersionInformation);
 	afx_msg void OnBnClickedcheckupdate();
+	BOOL IsAppProcessWOW64(void);
 
 private:
 	HANDLE hRead;
 	HANDLE hWrite;
+	void strContrast(CString str1,CString str2);
 };
