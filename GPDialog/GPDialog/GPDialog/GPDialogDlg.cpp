@@ -114,6 +114,8 @@ void CGPDialogDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_OPEN_FIREWALL, m_OpenFireWall);
 	DDX_Check(pDX, IDC_SCREEN_PSW, m_SrceenPsw);
 	DDX_Check(pDX, IDC_DisablePortRdp, m_DisablePortRdp);
+	DDX_Check(pDX, IDC_CNAME,m_)
+
 }
 
 BEGIN_MESSAGE_MAP(CGPDialogDlg, CDialogEx)
@@ -607,5 +609,4 @@ void CGPDialogDlg::OnBnClickedcheckupdate()
 
 
 }
-
 

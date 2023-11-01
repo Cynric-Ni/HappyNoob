@@ -35,11 +35,13 @@ protected:
 	void checkMSpack();
 	ULONG getBuildNum();
 public:
+
 	CString m_ch1;
 	CString m_ch2;
 	CString m_ch3;
 	CString m_ch4;
 	CString m_ch5;
+	CString m_ch6;
 	CString m_bat;
 	afx_msg void OnBnClickedOk();
 	BOOL m_OpenPlociy;
