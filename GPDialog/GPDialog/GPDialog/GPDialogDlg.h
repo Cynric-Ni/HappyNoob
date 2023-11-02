@@ -41,7 +41,6 @@ public:
 	CString m_ch3;
 	CString m_ch4;
 	CString m_ch5;
-	CString m_ch6;
 	CString m_bat;
 	afx_msg void OnBnClickedOk();
 	BOOL m_OpenPlociy;
@@ -49,6 +48,7 @@ public:
 	BOOL m_OpenFireWall;
 	BOOL m_SrceenPsw;
 	BOOL m_DisablePortRdp;     //禁止端口变量
+
 	BOOL GetVersionEx2(LPOSVERSIONINFOW lpVersionInformation);
 	afx_msg void OnBnClickedcheckupdate();
 	BOOL IsAppProcessWOW64(void);
