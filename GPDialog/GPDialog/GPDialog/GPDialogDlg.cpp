@@ -234,8 +234,21 @@ void CGPDialogDlg::OnBnClickedOk()
 	GetDlgItem(IDC_EDIT3)->GetWindowTextW(m_ch3);
 	GetDlgItem(IDC_EDIT4)->GetWindowTextW(m_ch4);
 	GetDlgItem(IDC_EDIT6)->GetWindowTextW(m_ch5);
-	m_bat = L"@echo off\nREM 清屏\ncls\ntitle 长江武汉航道局组策略设置批处理\ncolor f0\necho ****************************************\necho write by 倪忻亮\necho ****************************************\n";
-	m_bat += L"pause\ncls\ncolor 3f\necho ****************************************\necho 设置口令复杂度\necho 密码必须符合复杂度要求\necho 密码长度最低";
+	m_bat += L"@echo off\n";
+	m_bat += L"%1 mshta vbscript:CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\",\" /c %~s0 ::\",\"\",\"runas\",1)(window.close)&&exit\n";
+	m_bat += L"cd /d \"%~dp0\"\n";
+	m_bat += L"REM 清屏\n";
+	m_bat += L"cls\n";
+	m_bat += L"title 长江武汉航道局基线设置\n";
+	m_bat += L"color f0\n";
+	m_bat += L"echo ****************************************\n";
+	m_bat += L"echo write by cynric\n";
+	m_bat += L"echo ****************************************\n";
+	m_bat += L"pause\n";
+	m_bat += L"cls\n";
+	m_bat += L"color 3f\n";
+	m_bat += L"echo ****************************************\n";
+	m_bat += L"echo 设置口令复杂度\necho 密码必须符合复杂度要求\necho 密码长度最低";
 	m_bat += m_ch1;
 	m_bat += L"位\necho 密码最长使用期限";
 	m_bat += m_ch2;
@@ -311,16 +324,16 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L"echo ******************************************\n";
 		m_bat += L"echo .\n";
 		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaveActive /t REG_SZ /d 1 /f\n";
-		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaverIsSecure / t REG_SZ /d 1 /f\n";
+		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaverIsSecure /t REG_SZ /d 1 /f\n";
 		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaveTimeOut /t REG_SZ /d 300 /f\n";
 		m_bat += L"echo 设置完毕\n";
 		m_bat += L"echo.\n";
 		m_bat += L"pause\n";
 	}
-
 	if (m_DisablePortRdp) {
-		m_bat += L"@echo off\n";
-		m_bat += L"%1 mshta vbscript:CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\",\"/c %~s0 ::\",\",\"runas\",1)(window.close)&&exit\n";
+
+		//m_bat += L"@echo off\n";
+		//m_bat += L"%1 mshta vbscript:CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\",\" /c %~s0 ::\",\"\",\"runas\",1)(window.close)&&exit\n";
 		m_bat += L"cd /d \"%~dp0\"\n";
 		m_bat += L"mode con : cols = 85 lines = 30\n";
 		m_bat += L": Ok\n";
@@ -338,7 +351,7 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L"echo *************************************************************************************\n";
 		m_bat += L"echo .\n";
 		m_bat += L"set start=\n";
-		m_bat += L"set /p start=  输入(0 1 2 3 4 5 6)后按回车键 :\n";
+		m_bat += L"set /p start=  输入(0 1 2 3 4 5 6)后按回车键:\n";
 		m_bat += L"if \"%start%\"==\"0\" goto WINXP\n";
 		m_bat += L"if \"%start%\"==\"1\" goto WIN7\n";
 		m_bat += L"if \"%start%\"==\"2\" goto WIN10\n";
@@ -350,7 +363,7 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L"goto Ok\n";
 		m_bat += L"\n";
 		m_bat += L":WINXP\n";
-		m_bat += L"netsh firewall set opmode mode =enable\n";
+		m_bat += L"netsh firewall set opmode mode=enable\n";
 		m_bat += L"netsh firewall set portopening protocol=tcp port=135 mode=disable name=eny135\n";
 		m_bat += L"netsh firewall set portopening protocol=tcp port=136 mode=disable name=deny136\n";
 		m_bat += L"netsh firewall set portopening protocol=tcp port=137 mode=disable name=deny137\n";
@@ -364,7 +377,7 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L"pause\n";
 		m_bat += L"goto Ok\n";
 		m_bat += L":WIN7\n";
-		m_bat += L"%1 mshta vbscript:CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\", \"/c %~s0 ::\",\"\",\"runas\",1)(window.close) && exit\n";
+		//m_bat += L"%1 mshta vbscript:CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\",\" /c %~s0 ::\",\"\",\"runas\",1)(window.close)&&exit\n";
 		m_bat += L"cd /d \"%~dp0\"\n";
 		m_bat += L"::开启ipsec服务\n";
 		m_bat += L"sc config \"PolicyAgent\" start=auto\n";
@@ -372,22 +385,22 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L"netsh ipsec static add policy name=deny445\n";
 		m_bat += L"netsh ipsec static add filterlist name=block\n";
 		m_bat += L"netsh ipsec static add filteraction name=block action=block\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 21 protocol = tcp description = 21\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 135 protocol = tcp description = 135\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 137 protocol = tcp description = 137\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 138 protocol = tcp description = 138\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 139 protocol = tcp description = 139\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 445 protocol = tcp description = 445\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 3389 protocol = tcp description = 3389\n";
-		m_bat += L"netsh ipsec static add rule name = block policy = deny445 filterlist = block filteraction = block\n";
-		m_bat += L"netsh ipsec static set policy name = deny445 assign = y\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=21\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=135 protocol=tcp description=135\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=137 protocol=tcp description=137\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=138 protocol=tcp description=138\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=139 protocol=tcp description=139\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=445 protocol=tcp description=445\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=3389 protocol=tcp description=3389\n";
+		m_bat += L"netsh ipsec static add rule name=block policy=deny445 filterlist=block filteraction=block\n";
+		m_bat += L"netsh ipsec static set policy name=deny445 assign=y\n";
 		m_bat += L"echo **************************************************************************************\n";
 		m_bat += L"echo * Windows 7系统加固命令执行完毕！\n";
 		m_bat += L"echo .\n";
 		m_bat += L"pause\n";
 		m_bat += L"goto Ok\n";
 		m_bat += L":WIN10\n";
-		m_bat += L"%1 mshta vbscript:CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\", \"/c %~s0 ::\",\"\",\"runas\",1)(window.close)&&exit\n";
+		//m_bat += L"%1 mshta vbscript:CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\",\" /c %~s0 ::\",\"\",\"runas\",1)(window.close)&&exit\n";
 		m_bat += L"cd /d \"%~dp0\"\n";
 		m_bat += L"::开启ipsec服务\n";
 		m_bat += L"sc config \"PolicyAgent\" start=auto\n";
@@ -396,12 +409,12 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L"netsh ipsec static add filterlist name = block\n";
 		m_bat += L"netsh ipsec static add filteraction name=block action =block\n";
 		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=21\n";
-		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=135\n";
-		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=137\n";
-		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=138\n";
-		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=139\n";
-		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=445\n";
-		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=3389\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=135 protocol=tcp description=135\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=137 protocol=tcp description=137\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=138 protocol=tcp description=138\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=139 protocol=tcp description=139\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=445 protocol=tcp description=445\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=3389 protocol=tcp description=3389\n";
 		m_bat += L"netsh ipsec static add rule name = block policy = deny445 filterlist = block filteraction = block\n";
 		m_bat += L"netsh ipsec static set policy name = deny445 assign = y\n";
 		m_bat += L"echo *****************************************************************************************\n";
@@ -412,90 +425,90 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L":WIN2003\n";
 		m_bat += L"net stop server > nul\n";
 		m_bat += L"	net start sharedaccess > nul\n";
-		m_bat += L"sc config lanmanserver start = disabled\n";
-		m_bat += L"netsh firewall add portopening protocol = ALL port = 21 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul\n";
-		m_bat += L"netsh firewall add portopening protocol = ALL port = 135 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul\n";
-		m_bat += L"netsh firewall add portopening protocol = ALL port = 136 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul\n";
-		m_bat += L"netsh firewall add portopening protocol = ALL port = 137 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul\n";
-		m_bat += L"netsh firewall add portopening protocol = ALL port = 138 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul\n";
-		m_bat += L"netsh firewall add portopening protocol = ALL port = 445 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul\n";
-		m_bat += L"netsh firewall add portopening protocol = ALL port = 3389 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul\n";
+		m_bat += L"sc config lanmanserver start=disabled\n";
+		m_bat += L"netsh firewall add portopening protocol=ALL port=21 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul\n";
+		m_bat += L"netsh firewall add portopening protocol=ALL port=135 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul\n";
+		m_bat += L"netsh firewall add portopening protocol=ALL port=136 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul\n";
+		m_bat += L"netsh firewall add portopening protocol=ALL port=137 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul\n";
+		m_bat += L"netsh firewall add portopening protocol=ALL port=138 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul\n";
+		m_bat += L"netsh firewall add portopening protocol=ALL port=445 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul\n";
+		m_bat += L"netsh firewall add portopening protocol=ALL port=3389 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul\n";
 		m_bat += L"echo ****************************************************************************\n";
 		m_bat += L"echo * Windows Server 2003系统加固命令执行完毕！\n";
 		m_bat += L"echo .\n";
 		m_bat += L"pause\n";
 		m_bat += L"goto Ok\n";
 		m_bat += L":WIN2008\n";
-		m_bat += L"%1 mshta vbscript : CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\", \"/c %~s0 ::\", \"\", \"runas\", 1)(window.close) && exit\n";
+		//m_bat += L"%1 mshta vbscript:CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\",\" /c %~s0 ::\",\"\",\"runas\",1)(window.close)&&exit\n";
 		m_bat += L"cd /d \"%~dp\"\n";
 		m_bat += L"::开启ipsec服务\n";
-		m_bat += L"sc config \"PolicyAgent\" start = auto\n";
+		m_bat += L"sc config \"PolicyAgent\" start=auto\n";
 		m_bat += L"sc start PolicyAgent\n";
-		m_bat += L"netsh ipsec static add policy name = deny445\n";
-		m_bat += L"netsh ipsec static add filterlist name = block\n";
-		m_bat += L"netsh ipsec static add filteraction name = block action = block\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 21 protocol = tcp description = 21\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 135 protocol = tcp description = 135\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 137 protocol = tcp description = 137\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 138 protocol = tcp description = 138\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 139 protocol = tcp description = 139\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 445 protocol = tcp description = 445\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 3389 protocol = tcp description = 3389\n";
-		m_bat += L"netsh ipsec static add rule name = block policy = deny445 filterlist = block filteraction = block\n";
-		m_bat += L"netsh ipsec static set policy name = deny445 assign = y\n";
+		m_bat += L"netsh ipsec static add policy name=deny445\n";
+		m_bat += L"netsh ipsec static add filterlist name=block\n";
+		m_bat += L"netsh ipsec static add filteraction name=block action = block\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=21\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=135 protocol=tcp description=135\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=137 protocol=tcp description=137\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=138 protocol=tcp description=138\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=139 protocol=tcp description=139\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=445 protocol=tcp description=445\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=3389 protocol=tcp description=3389\n";
+		m_bat += L"netsh ipsec static add rule name=block policy=deny445 filterlist=block filteraction=block\n";
+		m_bat += L"netsh ipsec static set policy name=deny445 assign=y\n";
 		m_bat += L"echo *************************************************************************\n";
 		m_bat += L"echo * Windows Server 2008系统加固命令执行完毕！\n";
 		m_bat += L"echo .\n";
 		m_bat += L"pause\n";
 		m_bat += L"goto Ok\n";
 		m_bat += L":WIN2012\n";
-		m_bat += L"%1 mshta vbscript : CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\", \"/c %~s0 ::\", \"\", \"runas\", 1)(window.close) && exit\n";
+		//m_bat += L"%1 mshta vbscript:CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\",\" /c %~s0 ::\",\"\",\"runas\",1)(window.close)&&exit\n";
 		m_bat += L"cd /d \"%~dp0\"\n";
 		m_bat += L"::开启ipsec服务\n";
-		m_bat += L"sc config \"PolicyAgent\" start = auto\n";
+		m_bat += L"sc config \"PolicyAgent\" start=auto\n";
 		m_bat += L"sc start PolicyAgent\n";
-		m_bat += L"netsh ipsec static add policy name = deny445\n";
-		m_bat += L"netsh ipsec static add filterlist name = block\n";
-		m_bat += L"netsh ipsec static add filteraction name = block action = block\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 21 protocol = tcp description = 21\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 135 protocol = tcp description = 135\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 137 protocol = tcp description = 137\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 138 protocol = tcp description = 138\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 139 protocol = tcp description = 139\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 445 protocol = tcp description = 445\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 3389 protocol = tcp description = 3389\n";
-		m_bat += L"netsh ipsec static add rule name = block policy = deny445 filterlist = block filteraction = block\n";
-		m_bat += L"netsh ipsec static set policy name = deny445 assign = y\n";
+		m_bat += L"netsh ipsec static add policy name=deny445\n";
+		m_bat += L"netsh ipsec static add filterlist name=block\n";
+		m_bat += L"netsh ipsec static add filteraction name=block action=block\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=21\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=135 protocol=tcp description=135\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=137 protocol=tcp description=137\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=138 protocol=tcp description=138\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=139 protocol=tcp description=139\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=455 protocol=tcp description=445\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=3389 protocol=tcp description=3389\n";
+		m_bat += L"netsh ipsec static add rule name=block policy=deny445 filterlist=block filteraction = block\n";
+		m_bat += L"netsh ipsec static set policy name=deny445 assign=y\n";
 		m_bat += L"echo **********************************************************************\n";
 		m_bat += L"echo * Windows Server 2012系统加固命令执行完毕！\n";
 		m_bat += L"echo .\n";
 		m_bat += L"pause\n";
 		m_bat += L"goto Ok\n";
 		m_bat += L":WIN2016\n";
-		m_bat += L"% 1 mshta vbscript : CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\", \"/c %~s0 ::\", \"\", \"runas\", 1)(window.close) && exit\n";
+		m_bat += L"%1 mshta vbscript:CreateObject(\"Shell.Application\").ShellExecute(\"cmd.exe\",\" /c %~s0 ::\",\"\",\"runas\",1)(window.close)&&exit\n";
 		m_bat += L"cd /d \"%~dp0\"\n";
 		m_bat += L"::开启ipsec服务\n";
-		m_bat += L"sc config \"PolicyAgent\" start = auto\n";
+		m_bat += L"sc config \"PolicyAgent\" start=auto\n";
 		m_bat += L"sc start PolicyAgent\n";
-		m_bat += L"netsh ipsec static add policy name = deny445\n";
-		m_bat += L"netsh ipsec static add filterlist name = block\n";
-		m_bat += L"netsh ipsec static add filteraction name = block action = block\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 21 protocol = tcp description = 21\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 135 protocol = tcp description = 135\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 137 protocol = tcp description = 137\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 138 protocol = tcp description = 138\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 139 protocol = tcp description = 139\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 445 protocol = tcp description = 445\n";
-		m_bat += L"netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 3389 protocol = tcp description = 3389\n";
-		m_bat += L"netsh ipsec static add rule name = block policy = deny445 filterlist = block filteraction = block\n";
-		m_bat += L"netsh ipsec static set policy name = deny445 assign = y\n";
+		m_bat += L"netsh ipsec static add policy name=deny445\n";
+		m_bat += L"netsh ipsec static add filterlist name=block\n";
+		m_bat += L"netsh ipsec static add filteraction name=block action=block\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=21\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=135 protocol=tcp description=135\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=137 protocol=tcp description=137\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=138 protocol=tcp description=138\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=139 protocol=tcp description=139\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=445 protocol=tcp description=445\n";
+		m_bat += L"netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=3389 protocol=tcp description=3389\n";
+		m_bat += L"netsh ipsec static add rule name=block policy=deny445 filterlist=block filteraction=block\n";
+		m_bat += L"netsh ipsec static set policy name=deny445 assign=y\n";
 		m_bat += L"echo **************************************************************\n";
 		m_bat += L"echo * Windows Server 2016系统加固命令执行完毕！\n";
 		m_bat += L"echo .\n";
 		m_bat += L"pause\n";
 		m_bat += L"goto Ok\n";
-	} 
 
+	}
 
 
 	setlocale(LC_CTYPE, "chs");
@@ -506,11 +519,11 @@ void CGPDialogDlg::OnBnClickedOk()
 	{
 		MessageBox(_T("创建升级窗口失败！"));
 	}
-	/*HINSTANCE Hinst = ShellExecute(this->m_hWnd, _T("open"), _T("..\\2.bat"), NULL, NULL, SW_SHOWNORMAL);
-	if ((int)Hinst <= 32)
-	{
-		MessageBox(_T("创建升级窗口失败！"));
-	}*/
+
+
+
+	
+
 }
 
 //以下代码用来获取版本build号

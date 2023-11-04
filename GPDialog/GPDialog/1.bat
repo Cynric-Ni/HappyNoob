@@ -1,10 +1,12 @@
 @echo off
+%1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe"," /c %~s0 ::","","runas",1)(window.close)&&exit
+cd /d "%~dp0"
 REM 清屏
 cls
-title 长江武汉航道局组策略设置批处理
+title 长江武汉航道局基线设置
 color f0
 echo ****************************************
-echo write by 倪忻亮
+echo write by cynric
 echo ****************************************
 pause
 cls
@@ -79,13 +81,11 @@ echo 屏幕保护口令设置
 echo ******************************************
 echo .
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v ScreenSaveActive /t REG_SZ /d 1 /f
-reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v ScreenSaverIsSecure / t REG_SZ /d 1 /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v ScreenSaverIsSecure /t REG_SZ /d 1 /f
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v ScreenSaveTimeOut /t REG_SZ /d 300 /f
 echo 设置完毕
 echo.
 pause
-@echo off
-%1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe","/c %~s0 ::",","runas",1)(window.close)&&exit
 cd /d "%~dp0"
 mode con : cols = 85 lines = 30
 : Ok
@@ -103,7 +103,7 @@ echo
 echo *************************************************************************************
 echo .
 set start=
-set /p start=  输入(0 1 2 3 4 5 6)后按回车键 :
+set /p start=  输入(0 1 2 3 4 5 6)后按回车键:
 if "%start%"=="0" goto WINXP
 if "%start%"=="1" goto WIN7
 if "%start%"=="2" goto WIN10
@@ -115,7 +115,7 @@ if "%start%"=="7" goto quit
 goto Ok
 
 :WINXP
-netsh firewall set opmode mode =enable
+netsh firewall set opmode mode=enable
 netsh firewall set portopening protocol=tcp port=135 mode=disable name=eny135
 netsh firewall set portopening protocol=tcp port=136 mode=disable name=deny136
 netsh firewall set portopening protocol=tcp port=137 mode=disable name=deny137
@@ -129,7 +129,6 @@ echo .
 pause
 goto Ok
 :WIN7
-%1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe", "/c %~s0 ::","","runas",1)(window.close) && exit
 cd /d "%~dp0"
 ::开启ipsec服务
 sc config "PolicyAgent" start=auto
@@ -137,22 +136,21 @@ sc start PolicyAgent
 netsh ipsec static add policy name=deny445
 netsh ipsec static add filterlist name=block
 netsh ipsec static add filteraction name=block action=block
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 21 protocol = tcp description = 21
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 135 protocol = tcp description = 135
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 137 protocol = tcp description = 137
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 138 protocol = tcp description = 138
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 139 protocol = tcp description = 139
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 445 protocol = tcp description = 445
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 3389 protocol = tcp description = 3389
-netsh ipsec static add rule name = block policy = deny445 filterlist = block filteraction = block
-netsh ipsec static set policy name = deny445 assign = y
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=21
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=135 protocol=tcp description=135
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=137 protocol=tcp description=137
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=138 protocol=tcp description=138
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=139 protocol=tcp description=139
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=445 protocol=tcp description=445
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=3389 protocol=tcp description=3389
+netsh ipsec static add rule name=block policy=deny445 filterlist=block filteraction=block
+netsh ipsec static set policy name=deny445 assign=y
 echo **************************************************************************************
 echo * Windows 7系统加固命令执行完毕！
 echo .
 pause
 goto Ok
 :WIN10
-%1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe", "/c %~s0 ::","","runas",1)(window.close)&&exit
 cd /d "%~dp0"
 ::开启ipsec服务
 sc config "PolicyAgent" start=auto
@@ -161,12 +159,12 @@ netsh ipsec static add policy name=deny445
 netsh ipsec static add filterlist name = block
 netsh ipsec static add filteraction name=block action =block
 netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=21
-netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=135
-netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=137
-netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=138
-netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=139
-netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=445
-netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=3389
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=135 protocol=tcp description=135
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=137 protocol=tcp description=137
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=138 protocol=tcp description=138
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=139 protocol=tcp description=139
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=445 protocol=tcp description=445
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=3389 protocol=tcp description=3389
 netsh ipsec static add rule name = block policy = deny445 filterlist = block filteraction = block
 netsh ipsec static set policy name = deny445 assign = y
 echo *****************************************************************************************
@@ -177,83 +175,81 @@ goto Ok
 :WIN2003
 net stop server > nul
 	net start sharedaccess > nul
-sc config lanmanserver start = disabled
-netsh firewall add portopening protocol = ALL port = 21 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul
-netsh firewall add portopening protocol = ALL port = 135 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul
-netsh firewall add portopening protocol = ALL port = 136 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul
-netsh firewall add portopening protocol = ALL port = 137 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul
-netsh firewall add portopening protocol = ALL port = 138 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul
-netsh firewall add portopening protocol = ALL port = 445 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul
-netsh firewall add portopening protocol = ALL port = 3389 name = DenyEquationTCP mode = DISABLE scope = ALL profile = ALL > nul
+sc config lanmanserver start=disabled
+netsh firewall add portopening protocol=ALL port=21 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul
+netsh firewall add portopening protocol=ALL port=135 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul
+netsh firewall add portopening protocol=ALL port=136 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul
+netsh firewall add portopening protocol=ALL port=137 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul
+netsh firewall add portopening protocol=ALL port=138 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul
+netsh firewall add portopening protocol=ALL port=445 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul
+netsh firewall add portopening protocol=ALL port=3389 name=DenyEquationTCP mode=DISABLE scope=ALL profile=ALL > nul
 echo ****************************************************************************
 echo * Windows Server 2003系统加固命令执行完毕！
 echo .
 pause
 goto Ok
 :WIN2008
-%1 mshta vbscript : CreateObject("Shell.Application").ShellExecute("cmd.exe", "/c %~s0 ::", "", "runas", 1)(window.close) && exit
 cd /d "%~dp"
 ::开启ipsec服务
-sc config "PolicyAgent" start = auto
+sc config "PolicyAgent" start=auto
 sc start PolicyAgent
-netsh ipsec static add policy name = deny445
-netsh ipsec static add filterlist name = block
-netsh ipsec static add filteraction name = block action = block
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 21 protocol = tcp description = 21
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 135 protocol = tcp description = 135
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 137 protocol = tcp description = 137
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 138 protocol = tcp description = 138
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 139 protocol = tcp description = 139
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 445 protocol = tcp description = 445
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 3389 protocol = tcp description = 3389
-netsh ipsec static add rule name = block policy = deny445 filterlist = block filteraction = block
-netsh ipsec static set policy name = deny445 assign = y
+netsh ipsec static add policy name=deny445
+netsh ipsec static add filterlist name=block
+netsh ipsec static add filteraction name=block action = block
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=21
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=135 protocol=tcp description=135
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=137 protocol=tcp description=137
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=138 protocol=tcp description=138
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=139 protocol=tcp description=139
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=445 protocol=tcp description=445
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=3389 protocol=tcp description=3389
+netsh ipsec static add rule name=block policy=deny445 filterlist=block filteraction=block
+netsh ipsec static set policy name=deny445 assign=y
 echo *************************************************************************
 echo * Windows Server 2008系统加固命令执行完毕！
 echo .
 pause
 goto Ok
 :WIN2012
-%1 mshta vbscript : CreateObject("Shell.Application").ShellExecute("cmd.exe", "/c %~s0 ::", "", "runas", 1)(window.close) && exit
 cd /d "%~dp0"
 ::开启ipsec服务
-sc config "PolicyAgent" start = auto
+sc config "PolicyAgent" start=auto
 sc start PolicyAgent
-netsh ipsec static add policy name = deny445
-netsh ipsec static add filterlist name = block
-netsh ipsec static add filteraction name = block action = block
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 21 protocol = tcp description = 21
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 135 protocol = tcp description = 135
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 137 protocol = tcp description = 137
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 138 protocol = tcp description = 138
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 139 protocol = tcp description = 139
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 445 protocol = tcp description = 445
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 3389 protocol = tcp description = 3389
-netsh ipsec static add rule name = block policy = deny445 filterlist = block filteraction = block
-netsh ipsec static set policy name = deny445 assign = y
+netsh ipsec static add policy name=deny445
+netsh ipsec static add filterlist name=block
+netsh ipsec static add filteraction name=block action=block
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=21
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=135 protocol=tcp description=135
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=137 protocol=tcp description=137
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=138 protocol=tcp description=138
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=139 protocol=tcp description=139
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=455 protocol=tcp description=445
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=3389 protocol=tcp description=3389
+netsh ipsec static add rule name=block policy=deny445 filterlist=block filteraction = block
+netsh ipsec static set policy name=deny445 assign=y
 echo **********************************************************************
 echo * Windows Server 2012系统加固命令执行完毕！
 echo .
 pause
 goto Ok
 :WIN2016
-% 1 mshta vbscript : CreateObject("Shell.Application").ShellExecute("cmd.exe", "/c %~s0 ::", "", "runas", 1)(window.close) && exit
+%1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe"," /c %~s0 ::","","runas",1)(window.close)&&exit
 cd /d "%~dp0"
 ::开启ipsec服务
-sc config "PolicyAgent" start = auto
+sc config "PolicyAgent" start=auto
 sc start PolicyAgent
-netsh ipsec static add policy name = deny445
-netsh ipsec static add filterlist name = block
-netsh ipsec static add filteraction name = block action = block
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 21 protocol = tcp description = 21
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 135 protocol = tcp description = 135
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 137 protocol = tcp description = 137
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 138 protocol = tcp description = 138
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 139 protocol = tcp description = 139
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 445 protocol = tcp description = 445
-netsh ipsec static add filter filterlist = block any srcmask = 32 srcport = 0 dstaddr = me dstport = 3389 protocol = tcp description = 3389
-netsh ipsec static add rule name = block policy = deny445 filterlist = block filteraction = block
-netsh ipsec static set policy name = deny445 assign = y
+netsh ipsec static add policy name=deny445
+netsh ipsec static add filterlist name=block
+netsh ipsec static add filteraction name=block action=block
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=21 protocol=tcp description=21
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=135 protocol=tcp description=135
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=137 protocol=tcp description=137
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=138 protocol=tcp description=138
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=139 protocol=tcp description=139
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=445 protocol=tcp description=445
+netsh ipsec static add filter filterlist=block any srcmask=32 srcport=0 dstaddr=me dstport=3389 protocol=tcp description=3389
+netsh ipsec static add rule name=block policy=deny445 filterlist=block filteraction=block
+netsh ipsec static set policy name=deny445 assign=y
 echo **************************************************************
 echo * Windows Server 2016系统加固命令执行完毕！
 echo .
