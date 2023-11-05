@@ -323,9 +323,14 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L"echo 屏幕保护口令设置\n";
 		m_bat += L"echo ******************************************\n";
 		m_bat += L"echo .\n";
+		m_bat += L"set SCREENSAVER_FILE=\"C:\\Windows\\System32\\screensaver.scr\"\n";
+		m_bat += L"set SCREENSAVER_SETTINGS=\"/s\"\n";
+		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v SCRNSAVE.EXE /t REG_SZ /d %SCREENSAVER_FILE% /f\n";
+		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaverStart /t REG_SZ /d %SCREENSAVER_SETTINGS% /f\n";
 		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaveActive /t REG_SZ /d 1 /f\n";
 		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaverIsSecure /t REG_SZ /d 1 /f\n";
-		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaveTimeOut /t REG_SZ /d 300 /f\n";
+		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaveTimeOut /t REG_SZ /d 30 /f\n";
+		m_bat += L"rundll32.exe user32.dll, UpdatePerUserSystemParameters\n";
 		m_bat += L"echo 设置完毕\n";
 		m_bat += L"echo.\n";
 		m_bat += L"pause\n";
