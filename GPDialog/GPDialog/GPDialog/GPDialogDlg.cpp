@@ -329,7 +329,7 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaverStart /t REG_SZ /d %SCREENSAVER_SETTINGS% /f\n";
 		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaveActive /t REG_SZ /d 1 /f\n";
 		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaverIsSecure /t REG_SZ /d 1 /f\n";
-		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaveTimeOut /t REG_SZ /d 30 /f\n";
+		m_bat += L"reg add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v ScreenSaveTimeOut /t REG_SZ /d 900 /f\n";
 		m_bat += L"rundll32.exe user32.dll, UpdatePerUserSystemParameters\n";
 		m_bat += L"echo 设置完毕\n";
 		m_bat += L"echo.\n";
