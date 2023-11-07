@@ -676,7 +676,7 @@ void CGPDialogDlg::strContrast(CString str1, CString str2) {
 
 	if (_tcsstr(str1, str2))
 	{
-		AfxMessageBox(_T("兄弟，你按要求安装补丁~不扣你绩效了"));
+		AfxMessageBox(_T("您的系统已经安装安全补丁"));
 	}
 	else
 		AfxMessageBox(_T("注意！！没有按要求安装安全补丁"));
