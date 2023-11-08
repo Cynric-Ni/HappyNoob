@@ -19,7 +19,8 @@
 #define new DEBUG_NEW
 #endif
 
-//操作系统版本
+//操作系统版本，这里定义成常量数字是对照微软的常量方式。
+//实际只用到WIN7.WIN8.WIN10
 #define WIN7					61
 #define WIN77600				617600
 #define WIN77601				617601
@@ -35,6 +36,7 @@
 #define WIN101607				1001607
 #define WIN1010586				10010586
 #define WIN1014393				10014393
+#define WIN101511               1001511
 
 
 
@@ -220,15 +222,9 @@ HCURSOR CGPDialogDlg::OnQueryDragIcon()
 }
 
 
-
-void CGPDialogDlg::OnBnClickedOk()
-{
-
-	UpdateData();
-	// TODO: 在此添加控件通知处理程序代码
-	//CDialogEx::OnOK();
+void CGPDialogDlg::BatScript() {
 	CStdioFile file;
-	file.Open(L"..\\1.bat", CFile::modeCreate | CFile::modeWrite);
+	file.Open(L".\\1.bat", CFile::modeCreate | CFile::modeWrite);
 	GetDlgItem(IDC_PASSLEN)->GetWindowTextW(m_ch1);
 	GetDlgItem(IDC_EDIT2)->GetWindowTextW(m_ch2);
 	GetDlgItem(IDC_EDIT3)->GetWindowTextW(m_ch3);
@@ -240,7 +236,7 @@ void CGPDialogDlg::OnBnClickedOk()
 	m_bat += L"REM 清屏\n";
 	m_bat += L"cls\n";
 	m_bat += L"title 长江武汉航道局基线设置\n";
-	m_bat += L"color f0\n";
+	m_bat += L"color 3f\n";
 	m_bat += L"echo ****************************************\n";
 	m_bat += L"echo write by cynric\n";
 	m_bat += L"echo ****************************************\n";
@@ -307,11 +303,11 @@ void CGPDialogDlg::OnBnClickedOk()
 
 	if (m_OpenFireWall) {
 		m_bat += L"echo ****************************************\n";
-		m_bat += L"echo 打开防火墙\n";
+		m_bat += L"echo            打开防火墙\n";
 		m_bat += L"echo ****************************************\n";
 		m_bat += L"echo .\n";
 		m_bat += L"netsh advfirewall set allprofiles state on\n";
-        //m_bat += L"sc start MpsSvc\n";
+		//m_bat += L"sc start MpsSvc\n";
 		//m_bat += L"sc config MpsSvc start = auto\n";
 		m_bat += L"echo 设置完毕\n";
 		m_bat += L"pause\n";
@@ -320,7 +316,7 @@ void CGPDialogDlg::OnBnClickedOk()
 
 	if (m_SrceenPsw) {
 		m_bat += L"echo ******************************************\n";
-		m_bat += L"echo 屏幕保护口令设置\n";
+		m_bat += L"echo          屏幕保护口令设置\n";
 		m_bat += L"echo ******************************************\n";
 		m_bat += L"echo .\n";
 		m_bat += L"set SCREENSAVER_FILE=\"C:\\Windows\\System32\\screensaver.scr\"\n";
@@ -343,7 +339,7 @@ void CGPDialogDlg::OnBnClickedOk()
 		m_bat += L"mode con : cols = 85 lines = 30\n";
 		m_bat += L": Ok\n";
 		m_bat += L"title  关闭SMB安全加固工具\n";
-		m_bat += L"color 0A\n";
+		m_bat += L"color 3f\n";
 		m_bat += L"cls\n";
 		m_bat += L"echo **********************************关闭高危端口**************************************\n";
 		m_bat += L"echo * 必须以系统管理员身份运行，以下提供此工具所做的操作的介绍：\n";
@@ -519,12 +515,22 @@ void CGPDialogDlg::OnBnClickedOk()
 	setlocale(LC_CTYPE, "chs");
 	file.WriteString(m_bat);
 	file.Close();
-	HINSTANCE Hinst = ShellExecute(this->m_hWnd, _T("open"), _T("..\\1.bat"), NULL, NULL, SW_SHOWNORMAL);
+	HINSTANCE Hinst = ShellExecute(this->m_hWnd, _T("open"), _T(".\\1.bat"), NULL, NULL, SW_SHOWNORMAL);
 	if ((int)Hinst <= 32)
 	{
 		MessageBox(_T("创建升级窗口失败！"));
 	}
 
+}
+
+
+void CGPDialogDlg::OnBnClickedOk()
+{
+
+	UpdateData();
+	// TODO: 在此添加控件通知处理程序代码
+	//CDialogEx::OnOK();
+	BatScript();
 
 
 	
@@ -672,14 +678,12 @@ ULONG CGPDialogDlg::getBuildNum()
 }
 
 //它的功能把systeminfo信息和pathKB补丁进行对比
-void CGPDialogDlg::strContrast(CString str1, CString str2) {
+BOOL CGPDialogDlg::strContrast(CString str1, CString str2) {
 
 	if (_tcsstr(str1, str2))
-	{
-		AfxMessageBox(_T("您的系统已经安装安全补丁"));
-	}
+		return TRUE;
 	else
-		AfxMessageBox(_T("注意！！没有按要求安装安全补丁"));
+		return FALSE;
 
 }
 
@@ -696,7 +700,7 @@ void CGPDialogDlg::checkMSpack()
 	if (!CreatePipe(&hRead, &hWrite, &sa, 0))  //创建匿名管道
 	{
 		MessageBox(_T("CreatePipe Failed!"), _T("Tip"), MB_OK | MB_ICONWARNING);
-		return;
+		return ;
 	}
 
 	//创建子进程
@@ -706,7 +710,7 @@ void CGPDialogDlg::checkMSpack()
 	si.cb = sizeof(STARTUPINFO);
 	si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
 	GetStartupInfo(&si);
-	//si.hStdInput = hRead;
+	si.hStdInput = hRead;
 	si.hStdOutput = hWrite;	 //新创建进程的标准输出连在写管道一端
 	si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
 	si.wShowWindow = SW_HIDE;  //隐藏窗口	
@@ -723,57 +727,126 @@ void CGPDialogDlg::checkMSpack()
 #else
 	//MessageBox(_T("ANSI!"), _T("提示"), MB_OK | MB_ICONWARNING);
 #endif
-	if (!CreateProcess(0,cmdline, NULL, NULL,TRUE, 0, NULL, NULL, &si, &pi))  //创建子进程
-	{
-		CloseHandle(hRead);
-		CloseHandle(hWrite);
 
-		MessageBox(_T("CreateProcess Failed!"), _T("Tip"), MB_OK | MB_ICONWARNING);
-		return;
+	 CString strOutput;
+	if (CreateProcess(0,cmdline, NULL, NULL,TRUE, 0, NULL, NULL, &si, &pi))  //创建子进程
+	{
+		//关闭不需要的句柄
+		CloseHandle(pi.hThread);
+		//通过管道捕获输出
+		const int bufferSize = 40960;
+		char buffer[bufferSize];
+		DWORD bytesRead;
+
+		while (ReadFile(hRead, buffer, bufferSize, &bytesRead, NULL) && bytesRead > 0)
+		{
+			buffer[bytesRead] = '\0';
+			strOutput += CString(buffer);
+		}
+		
 	} else {
 		CloseHandle(pi.hProcess);//关闭管道句柄   问题出在这里 注销就好了
 		CloseHandle(pi.hThread);
 		CloseHandle(hWrite);
 	}
-	char buffer[4096] = { 0 };
-	CString strOutput;
-	CString PatchKB = {_T("不用装")};
-	DWORD bytesRead;
+
+
+	CString PatchKB1 = {_T("不用装")};
+	CString PatchKB2 = {_T("不用装")};
 	bool is64app;
 	is64app = IsAppProcessWOW64();
-	DWORD i = getOSName();
+	DWORD sysOS = getOSName();
 	ULONG j = getBuildNum();
 
-	while (true) {
-		if (ReadFile(hRead, buffer, 4095, &bytesRead, NULL) == NULL)  //读取管道
-			break;
+//	while (true) {
+//		if (ReadFile(hRead, buffer, 4095, &bytesRead, NULL) == NULL)  //读取管道
 
-		strOutput += buffer;
+//		strOutput += buffer;
 		//SetDlgItemText(IDC_EDIT1, strOutput);  //显示输出信息到编辑框,并刷新窗口
-		AfxMessageBox(strOutput);
+		//AfxMessageBox(strOutput);
 		//UpdateWindow();
 		//Sleep(100);
+//	}
+//	CloseHandle(hRead);
+	//CloseHandle(pi.hProcess);//关闭管道句柄   问题出在这里 注销就好了
+	//CloseHandle(pi.hThread);
+	//getOSName();
+	//下面是补丁结构体
+	struct PatchInfo {
+		CString kb;
+		CString message;
+	};
+
+	PatchInfo patches[] = {
+	{ _T("KB4012212"), _T("KB4012212补丁") },
+	{ _T("KB4012215"), _T("KB4012215补丁") },
+	{ _T("KB4013429"), _T("KB4013429补丁") },
+	{ _T("KB4013198"), _T("KB4013198补丁") },
+	{ _T("KB4499164"), _T("KB4499164补丁") },
+	{ _T("KB4499175"), _T("KB4499175补丁") },
+	{ _T("KB5029709"), _T("KB5029709补丁") },
+	{ _T("KB5007273"), _T("KB5007273补丁") },
+	};
+
+	int patchCount = sizeof(patches) / sizeof(patches[0]);
+
+	int matchedCount = 0;
+	CString matchedPatches;
+
+	for (int i = 0; i < patchCount; i++) {
+		if (strContrast(strOutput, patches[i].kb)) {
+			matchedCount++;
+			matchedPatches += patches[i].message + _T(", ");
+		}
 	}
-	if (i == WIN7 && is64app) {
-		PatchKB = { _T("KB4012212") };
-		strContrast(strOutput, PatchKB);
+
+	if (sysOS == WIN7 || sysOS == WIN101607 || sysOS == WIN101511 || sysOS == WIN10) {
+		if (matchedCount > 0) {
+			AfxMessageBox(_T("您的系统已经安装了以下安全补丁：") + matchedPatches.Left(matchedPatches.GetLength() - 2));
+		}
+		else {
+			AfxMessageBox(_T("您的系统未安装任何安全补丁"));
+		}
 	}
-	else if (i == WIN7 && is64app == 0) {
-		PatchKB = { _T("KB4012215") };
-		strContrast(strOutput, PatchKB);
+	else {
+		   AfxMessageBox(_T("你的系统不涉及,不需要安装补丁"));
+	}
+
+	/*if (i == WIN7) {
+		PatchKB1 = { _T("KB4012212")};
+		PatchKB2 = { _T("KB4012215")};
+		if (strContrast(strOutput, PatchKB1) == 1 && strContrast(strOutput,PatchKB2) == 1) {
+				AfxMessageBox(_T("您的系统已经安装了安全补丁"));
+			}else if (strContrast(strOutput, PatchKB1) == 0 && strContrast(strOutput, PatchKB2) == 1) {
+				AfxMessageBox(_T("您的系统未安装KB4012212补丁"));
+			}else if (strContrast(strOutput, PatchKB1) == 1 && strContrast(strOutput, PatchKB2) == 0) {
+			    AfxMessageBox(_T("你的系统未安装KB4012215补丁"));
+		    }else if (strContrast(strOutput, PatchKB1) == 0 && strContrast(strOutput, PatchKB2) == 0) {
+				AfxMessageBox(_T("你的系统未安装安全补丁"));
+		}
 
 	}else if (i == WIN101607){
-		PatchKB = { _T("KB4013429") };
-		strContrast(strOutput, PatchKB);
-	}else
-		{
-			AfxMessageBox(_T("你的系统不需要安装补丁"));
+		   PatchKB1 = { _T("KB4013429") };
+		  if (strContrast(strOutput, PatchKB1)) {
+			AfxMessageBox(_T("您的系统已经安装了安全补丁"));
+		  }else{
+			AfxMessageBox(_T("您的系统未安装KB4013429补丁"));
+		  }
+	}else if (i == WIN101511) {
+		PatchKB1 = { _T("KB4013198") };
+		if (strContrast(strOutput, PatchKB1)) {
+			AfxMessageBox(_T("您的系统已经安装了安全补丁"));
+		}else{
+			AfxMessageBox(_T("您的系统未安装KB4013198补丁"));
 		}
-			
-	CloseHandle(hRead);
-	//CloseHandle(pi.hProcess);//关闭管道句柄   问题出在这里 注销就好了
-    //CloseHandle(pi.hThread);
-	//getOSName();
+	}else{
+			AfxMessageBox(_T("你的系统不涉及,不需要安装补丁"));
+		}*/
+	
+
+
+
+
 
 	//	CDialog::OnOK();
 
