@@ -54,8 +54,7 @@ public:
 	BOOL IsAppProcessWOW64(void);
 
 private:
-	HANDLE hRead = NULL;
-	HANDLE hWrite = NULL;
+	CString executeCmd();
 	void  BatScript();
 	BOOL strContrast(CString str1,CString str2);
 };

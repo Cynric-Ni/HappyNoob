@@ -95,18 +95,11 @@ CGPDialogDlg::CGPDialogDlg(CWnd* pParent /*=nullptr*/)
 	m_ch4 = L"6";
 	m_ch5 = L"16";
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	hRead = NULL;
-	hWrite = NULL;
 
 }
 
 CGPDialogDlg::~CGPDialogDlg() {
-	if (hRead) {
-		CloseHandle(hRead);
-	}
-	if (hWrite) {
-		CloseHandle(hWrite);
-	}
+
 }
 
 void CGPDialogDlg::DoDataExchange(CDataExchange* pDX)
@@ -688,11 +681,78 @@ BOOL CGPDialogDlg::strContrast(CString str1, CString str2) {
 }
 
 
+CString CGPDialogDlg::executeCmd()
+{
+	HANDLE hReadPipe = NULL;
+	HANDLE hWritePipe = NULL;
+	SECURITY_ATTRIBUTES securityAttributes = { 0 };
+	BOOL bRet = FALSE;
+	STARTUPINFO si = { 0 };
+	PROCESS_INFORMATION pi = { 0 };
+
+	//设定管道的安全属性
+	securityAttributes.bInheritHandle = TRUE;
+	securityAttributes.nLength = sizeof(securityAttributes);
+	securityAttributes.lpSecurityDescriptor = NULL;
+	
+	//创建匿名管道
+	bRet = CreatePipe(&hReadPipe, &hWritePipe, &securityAttributes, 0);//if(CreatePipee(&hReadPipe, &hWritePipe, &securityAttributes, 0))
+		if (FALSE == bRet) {
+			MessageBox(_T("CreatePipe Failed!"), _T("Tip"), MB_OK | MB_ICONWARNING);
+		}
+	
+
+	//设置进程参数
+	TCHAR cmdline[256] = { _T("C:\\WINDOWS\\system32\\cmd.exe /C ipconfig.exe /?\n") };
+	si.cb = sizeof(si);
+	si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+	GetStartupInfo(&si);
+	si.hStdInput = hReadPipe;
+	si.hStdOutput = hWritePipe;	 //新创建进程的标准输出连在写管道一端
+	si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
+	si.wShowWindow = SW_HIDE;  //隐藏窗口	
+	
+	//创建进程
+	if (!CreateProcess(NULL, cmdline, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
+		AfxMessageBox(_T("进程创建错误！"));
+	}
+	WaitForSingleObject(pi.hThread, INFINITE);
+	WaitForSingleObject(pi.hProcess, INFINITE);
+	CloseHandle(hWritePipe);
+	//获取管道信息
+	char buffer[4096];
+	DWORD avaibytes = 0;
+	DWORD ReadBytes = 0;
+	CString output;
+	while (true) {
+		if (!PeekNamedPipe(hReadPipe, NULL, 0,NULL,&avaibytes, NULL)) {
+			break;
+		}
+		if (!avaibytes) {
+			break;
+		}
+		if (!ReadFile(hReadPipe, buffer, min(sizeof(buffer) - 1, avaibytes), &ReadBytes, NULL) || !ReadBytes) {
+			break;
+		}
+		buffer[ReadBytes] = 0;
+		output += buffer;
+		
+	}
+	CloseHandle(hReadPipe);
+	AfxMessageBox(output);
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+	
+	return output;
+}
+
+
+
 void CGPDialogDlg::checkMSpack()
 {
 
 	//调用CreatePipe创建管道
-	SECURITY_ATTRIBUTES sa;
+	/*SECURITY_ATTRIBUTES sa;
 	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
 	sa.lpSecurityDescriptor = NULL;  //使用系统默认的安全描述符	
 	sa.bInheritHandle = TRUE;  //创建的进程继承句柄
@@ -700,7 +760,7 @@ void CGPDialogDlg::checkMSpack()
 	if (!CreatePipe(&hRead, &hWrite, &sa, 0))  //创建匿名管道
 	{
 		MessageBox(_T("CreatePipe Failed!"), _T("Tip"), MB_OK | MB_ICONWARNING);
-		return ;
+		return FALSE;
 	}
 
 	//创建子进程
@@ -734,7 +794,7 @@ void CGPDialogDlg::checkMSpack()
 		//关闭不需要的句柄
 		CloseHandle(pi.hThread);
 		//通过管道捕获输出
-		const int bufferSize = 40960;
+		const int bufferSize = 4096;
 		char buffer[bufferSize];
 		DWORD bytesRead;
 
@@ -748,9 +808,9 @@ void CGPDialogDlg::checkMSpack()
 		CloseHandle(pi.hProcess);//关闭管道句柄   问题出在这里 注销就好了
 		CloseHandle(pi.hThread);
 		CloseHandle(hWrite);
-	}
+	}*/
 
-
+	CString strOutput;
 	CString PatchKB1 = {_T("不用装")};
 	CString PatchKB2 = {_T("不用装")};
 	bool is64app;
@@ -787,7 +847,7 @@ void CGPDialogDlg::checkMSpack()
 	{ _T("KB5029709"), _T("KB5029709补丁") },
 	{ _T("KB5007273"), _T("KB5007273补丁") },
 	};
-
+	strOutput = executeCmd();
 	int patchCount = sizeof(patches) / sizeof(patches[0]);
 
 	int matchedCount = 0;
