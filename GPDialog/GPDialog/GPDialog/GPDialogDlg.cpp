@@ -689,7 +689,7 @@ CString CGPDialogDlg::executeCmd()
 	BOOL bRet = FALSE;
 	STARTUPINFO si = { 0 };
 	PROCESS_INFORMATION pi = { 0 };
-
+	
 	//设定管道的安全属性
 	securityAttributes.bInheritHandle = TRUE;
 	securityAttributes.nLength = sizeof(securityAttributes);
@@ -703,13 +703,14 @@ CString CGPDialogDlg::executeCmd()
 	
 
 	//设置进程参数
-	TCHAR cmdline[256] = { _T("C:\\WINDOWS\\system32\\cmd.exe /C ipconfig.exe /?\n") };
+	TCHAR cmdline[256] = { _T("C:\\WINDOWS\\system32\\cmd.exe /C systeminfo\n") };
 	si.cb = sizeof(si);
+	GetStartupInfo(&si);//这个函数是用来获取父进程创建自己时使用的STARTUPINFO结构。相当于把si恢复默认值。
 	si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
-	GetStartupInfo(&si);
-	si.hStdInput = hReadPipe;
+	//GetStartupInfo(&si);**如果放这里就会出错**
+	si.hStdInput =  hReadPipe;
 	si.hStdOutput = hWritePipe;	 //新创建进程的标准输出连在写管道一端
-	si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
+	si.hStdError = hWritePipe;
 	si.wShowWindow = SW_HIDE;  //隐藏窗口	
 	
 	//创建进程
@@ -718,7 +719,7 @@ CString CGPDialogDlg::executeCmd()
 	}
 	WaitForSingleObject(pi.hThread, INFINITE);
 	WaitForSingleObject(pi.hProcess, INFINITE);
-	CloseHandle(hWritePipe);
+	
 	//获取管道信息
 	char buffer[4096];
 	DWORD avaibytes = 0;
@@ -738,99 +739,97 @@ CString CGPDialogDlg::executeCmd()
 		output += buffer;
 		
 	}
+	CloseHandle(hWritePipe);
 	CloseHandle(hReadPipe);
-	AfxMessageBox(output);
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
+
+	//AfxMessageBox(output);
+
 	
 	return output;
 }
 
 
 
+BOOL CGPDialogDlg::executeCmdC(TCHAR* cmd_str, CString& outbuf) {
+	BOOL bRet = FALSE;
+
+	HANDLE hReadPipe = NULL;
+	HANDLE hWritePipe = NULL;
+	SECURITY_ATTRIBUTES securityAttributes = { 0 };
+	STARTUPINFO si = { 0 };
+	PROCESS_INFORMATION pi = { 0 };
+
+	// 设定管道的安全属性
+	securityAttributes.bInheritHandle = TRUE;
+	securityAttributes.nLength = sizeof(securityAttributes);
+	securityAttributes.lpSecurityDescriptor = NULL;
+	// 创建匿名管道
+	bRet = ::CreatePipe(&hReadPipe, &hWritePipe, &securityAttributes, 0);
+	if (FALSE == bRet)
+	{
+		printf("CreatePipe");
+		return false;
+	}
+	// 设置新进程参数
+	si.cb = sizeof(si);
+	si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+	si.wShowWindow = SW_HIDE;
+	si.hStdError = hWritePipe;
+	si.hStdOutput = hWritePipe;
+	// 创建新进程执行命令, 将执行结果写入匿名管道中
+	bRet = ::CreateProcess(NULL, cmd_str, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi);
+	if (FALSE == bRet)
+	{
+		printf("CreateProcess");
+		return false;
+	}
+
+	// 等待命令执行结束
+	::WaitForSingleObject(pi.hThread, INFINITE);
+	::WaitForSingleObject(pi.hProcess, INFINITE);
+
+	// 不断从匿名管道中读取结果到输出缓冲区
+	while (true)
+	{
+		char buf[2048]{};
+		DWORD readbytes = 0;
+		DWORD availbytes = 0;
+
+		if (!PeekNamedPipe(hReadPipe, NULL, 0, NULL, &availbytes, NULL)) break;
+		if (!availbytes) break;
+		if (!ReadFile(hReadPipe, buf, min(sizeof(buf) - 1, availbytes), &readbytes, NULL) || !readbytes) break;
+
+		buf[readbytes] = 0;
+		outbuf += buf;
+	}
+
+	// 关闭句柄, 释放内存
+	::CloseHandle(pi.hThread);
+	::CloseHandle(pi.hProcess);
+	::CloseHandle(hWritePipe);
+	::CloseHandle(hReadPipe);
+
+	return true;
+}
+
 void CGPDialogDlg::checkMSpack()
 {
 
-	//调用CreatePipe创建管道
-	/*SECURITY_ATTRIBUTES sa;
-	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-	sa.lpSecurityDescriptor = NULL;  //使用系统默认的安全描述符	
-	sa.bInheritHandle = TRUE;  //创建的进程继承句柄
-
-	if (!CreatePipe(&hRead, &hWrite, &sa, 0))  //创建匿名管道
-	{
-		MessageBox(_T("CreatePipe Failed!"), _T("Tip"), MB_OK | MB_ICONWARNING);
-		return FALSE;
-	}
-
-	//创建子进程
-	STARTUPINFO si;
-	PROCESS_INFORMATION pi;
-    ZeroMemory(&si, sizeof(STARTUPINFO));
-	si.cb = sizeof(STARTUPINFO);
-	si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
-	GetStartupInfo(&si);
-	si.hStdInput = hRead;
-	si.hStdOutput = hWrite;	 //新创建进程的标准输出连在写管道一端
-	si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
-	si.wShowWindow = SW_HIDE;  //隐藏窗口	
 	
-
-
-	TCHAR cmdline[256] = { _T("C:\\WINDOWS\\system32\\cmd.exe /C systeminfo") };
-	//CString tmp,stredit2;
-//	GetDlgItemText(IDC_EDIT2,stredit2);  //获取编辑框中输入的命令行
-//	tmp.Format(_T("cmd /C %s"),stredit2);
-//	_stprintf(cmdline,_T("%s"),tmp);
-#ifdef _UNICODE
-	//MessageBox(_T("UNICODE!"), _T("提示"), MB_OK | MB_ICONWARNING);
-#else
-	//MessageBox(_T("ANSI!"), _T("提示"), MB_OK | MB_ICONWARNING);
-#endif
-
-	 CString strOutput;
-	if (CreateProcess(0,cmdline, NULL, NULL,TRUE, 0, NULL, NULL, &si, &pi))  //创建子进程
-	{
-		//关闭不需要的句柄
-		CloseHandle(pi.hThread);
-		//通过管道捕获输出
-		const int bufferSize = 4096;
-		char buffer[bufferSize];
-		DWORD bytesRead;
-
-		while (ReadFile(hRead, buffer, bufferSize, &bytesRead, NULL) && bytesRead > 0)
-		{
-			buffer[bytesRead] = '\0';
-			strOutput += CString(buffer);
-		}
-		
-	} else {
-		CloseHandle(pi.hProcess);//关闭管道句柄   问题出在这里 注销就好了
-		CloseHandle(pi.hThread);
-		CloseHandle(hWrite);
-	}*/
-
 	CString strOutput;
 	CString PatchKB1 = {_T("不用装")};
 	CString PatchKB2 = {_T("不用装")};
-	bool is64app;
+	BOOL is64app;
 	is64app = IsAppProcessWOW64();
 	DWORD sysOS = getOSName();
 	ULONG j = getBuildNum();
 
-//	while (true) {
-//		if (ReadFile(hRead, buffer, 4095, &bytesRead, NULL) == NULL)  //读取管道
 
-//		strOutput += buffer;
-		//SetDlgItemText(IDC_EDIT1, strOutput);  //显示输出信息到编辑框,并刷新窗口
-		//AfxMessageBox(strOutput);
-		//UpdateWindow();
-		//Sleep(100);
-//	}
-//	CloseHandle(hRead);
-	//CloseHandle(pi.hProcess);//关闭管道句柄   问题出在这里 注销就好了
-	//CloseHandle(pi.hThread);
 	//getOSName();
+
+
 	//下面是补丁结构体
 	struct PatchInfo {
 		CString kb;
@@ -847,7 +846,27 @@ void CGPDialogDlg::checkMSpack()
 	{ _T("KB5029709"), _T("KB5029709补丁") },
 	{ _T("KB5007273"), _T("KB5007273补丁") },
 	};
+	
+	
+	
+	//TCHAR cmd_str[] = L"C:\\WINDOWS\\system32\\cmd.exe /C ipconfig.exe /?\n";
+
+	// 执行 cmd 命令, 并获取执行结果数据
+	//CString outbuf;
+	//if (false == executeCmdC(cmd_str, outbuf))
+	//{
+	//	AfxMessageBox(_T("pipe cmd error."));
+	//}
+	//else
+	//{
+	//	AfxMessageBox(outbuf);
+	//}
+
+	
+
+
 	strOutput = executeCmd();
+	//AfxMessageBox(strOutput);
 	int patchCount = sizeof(patches) / sizeof(patches[0]);
 
 	int matchedCount = 0;
@@ -910,12 +929,6 @@ void CGPDialogDlg::checkMSpack()
 
 	//	CDialog::OnOK();
 
-	/*以下使用IsWindows10OrGreater判断是否是WIN10 但是无效
-	if (IsWindows7OrGreater()){
-		AfxMessageBox(_T("确认过眼神是WIN10"));
-	}else{
-		AfxMessageBox(_T("你不是WIN10"));
-	}*/
 
 
 
