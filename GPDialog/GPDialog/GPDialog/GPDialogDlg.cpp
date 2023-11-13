@@ -15,6 +15,7 @@
 #include <winnt.h>
 #include <stdio.h>
 #include <atlbase.h>
+#include <LM.h>
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -116,10 +117,6 @@ BEGIN_MESSAGE_MAP(CGPDialogDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	//ON_EN_CHANGE(IDC_PASSLEN, &CGPDialogDlg::OnEnChangeEdit1)
-	//ON_STN_CLICKED(IDC_PasssLen, &CGPDialogDlg::OnStnClickedPassslen)
-	//ON_EN_CHANGE(IDC_EDIT2, &CGPDialogDlg::OnEnChangeEdit2)
-	//ON_EN_CHANGE(IDC_EDIT3, &CGPDialogDlg::OnEnChangeEdit3)
 	ON_BN_CLICKED(IDOK, &CGPDialogDlg::OnBnClickedOk)
 	ON_BN_CLICKED(checkUpdate, &CGPDialogDlg::OnBnClickedcheckupdate)
 END_MESSAGE_MAP()
@@ -214,6 +211,34 @@ HCURSOR CGPDialogDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+void CGPDialogDlg::PasswordPolicy() {
+	USER_INFO_1 ui;
+	DWORD dwLevel = 1;
+	DWORD dwError = 0;
+	CString username;
+	DWORD size = UNLEN + 1;
+	TCHAR userNameBuffer[UNLEN + 1];
+	//获取用户名
+	if (GetUserName(userNameBuffer, &size)) {
+		username = userNameBuffer;
+	}
+	else {
+		// 获取失败
+		AfxMessageBox(_T("获取用户名失败"));
+		return;
+	}
+
+	//获取用户信息
+	dwError = NetUserGetInfo(NULL, username, dwLevel, (LPBYTE*)&ui);
+	if (dwError == NERR_Success) {
+		if (ui.usri1_flags & UF_PASSWD_CANT_CHANGE) {
+			AfxMessageBox(L"注意！你未设置开机密码！！");
+		}
+	}else{
+		AfxMessageBox(L"获取用户信息失败！");
+	}
+
+}
 
 void CGPDialogDlg::BatScript() {
 	CStdioFile file;
@@ -504,7 +529,7 @@ void CGPDialogDlg::BatScript() {
 
 	}
 
-
+	PasswordPolicy();
 	setlocale(LC_CTYPE, "chs");
 	file.WriteString(m_bat);
 	file.Close();
@@ -513,7 +538,6 @@ void CGPDialogDlg::BatScript() {
 	{
 		MessageBox(_T("创建升级窗口失败！"));
 	}
-
 }
 
 
@@ -843,8 +867,8 @@ void CGPDialogDlg::checkMSpack()
 	{ _T("KB4013198"), _T("KB4013198补丁") },
 	{ _T("KB4499164"), _T("KB4499164补丁") },
 	{ _T("KB4499175"), _T("KB4499175补丁") },
-	{ _T("KB5029709"), _T("KB5029709补丁") },
-	{ _T("KB5007273"), _T("KB5007273补丁") },
+	//{ _T("KB5029709"), _T("KB5029709补丁") }, @test
+	//{ _T("KB5007273"), _T("KB5007273补丁") }, @test
 	};
 	
 	

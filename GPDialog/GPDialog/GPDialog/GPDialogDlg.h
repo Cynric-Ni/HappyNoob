@@ -55,8 +55,8 @@ public:
 
 private:
 	CString executeCmd();
-	CString executeCmdB();
 	BOOL executeCmdC(TCHAR* cmd_str, CString& outbuf);
 	void  BatScript();
 	BOOL strContrast(CString str1,CString str2);
+	void PasswordPolicy();
 };
