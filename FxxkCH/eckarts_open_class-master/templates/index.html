@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>数据可视化</title>
+    <link rel="stylesheet" href="static/css/index.css" />
+  </head>
+  <body>
+    <!-- 头部的盒子 -->
+    <header>
+      <h1>数据可视化-ECharts</h1>
+      <div class="showTime"></div>
+      <script>
+        var t = null;
+        t = setTimeout(time, 1000); //開始运行
+        function time() {
+          clearTimeout(t); //清除定时器
+          dt = new Date();
+          var y = dt.getFullYear();
+          var mt = dt.getMonth() + 1;
+          var day = dt.getDate();
+          var h = dt.getHours(); //获取时
+          var m = dt.getMinutes(); //获取分
+          var s = dt.getSeconds(); //获取秒
+          document.querySelector(".showTime").innerHTML =
+            "当前时间：" +
+            y +
+            "年" +
+            mt +
+            "月" +
+            day +
+            "-" +
+            h +
+            "时" +
+            m +
+            "分" +
+            s +
+            "秒";
+          t = setTimeout(time, 1000); //设定定时器，循环运行
+        }
+      </script>
+      &
+    </header>
+
+    <!-- 页面主体部分 -->
+    <section class="mainbox">
+      <div class="column">
+        <div class="panel bar">
+          <h2>柱形图-就业行业</h2>
+          <div class="chart"></div>
+          <div class="panel-footer"></div>
+        </div>
+        <div class="panel line">
+          <h2>
+            折线图-人员变化 <a href="javacript:;">2020</a
+            ><a href="javascript:;">2021</a>
+          </h2>
+          <div class="chart">图表</div>
+          <div class="panel-footer"></div>
+        </div>
+        <div class="panel pie">
+          <h2>饼形图-年龄分布</h2>
+          <div class="chart">图表</div>
+          <div class="panel-footer"></div>
+        </div>
+      </div>
+      <div class="column">
+        <!-- no模块制作 -->
+        <div class="no">
+          <div class="no-hd">
+            <ul>
+              <li>125811</li>
+              <li>100000</li>
+            </ul>
+          </div>
+          <div class="no-bd">
+            <ul>
+              <li>前端需求人数</li>
+              <li>市场供应人数</li>
+            </ul>
+          </div>
+        </div>
+        <!-- 地图模块 -->
+        <div class="panel bar1">
+          <h2>测绘效率完成情况</h2>
+          <div class="chart">图表</div>
+          <div class="panel-footer"></div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="panel bar2">
+          <h2>柱形图-就业行业</h2>
+          <div class="chart">图表</div>
+          <div class="panel-footer"></div>
+        </div>
+        <div class="panel line2">
+          <h2>折线图-播放量</h2>
+          <div class="chart">图表</div>
+          <div class="panel-footer"></div>
+        </div>
+        <div class="panel pie2">
+          <h2>饼形图-地区分布</h2>
+          <div class="chart">图表</div>
+          <div class="panel-footer"></div>
+        </div>
+      </div>
+    </section>
+    <script src="static/js/flexible.js"></script>
+    <script src="static/js/echarts.min.js"></script>
+    <!-- 先引入jquery -->
+    <script src="static/js/jquery.js"></script>
+    <!-- 必须先引入china.js 这个文件 因为中国地图需要 -->
+    <script src="static/js/china.js"></script>
+    <script src="static/js/index.js"></script>
+    <script>
+      (function () {
+        var chdata = {{chdata}};
+        // 1实例化对象
+        var myChart = echarts.init(document.querySelector(".bar1 .chart"));
+        // 2. 指定配置项和数据
+        var option = {
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              // Use axis to trigger tooltip
+              type: "shadow", // 'shadow' as default; can also be 'line' or 'shadow'
+            },
+          },
+          //麻痹的这个是类别
+          legend: {
+            date: ["优", "良", "中", "差"],
+            textStyle: {
+              color: "rgba(255,255,255,.6)",
+            },
+          },
+          grid: {
+            left: "0%",
+            right: "0%",
+            bottom: "3%",
+            containLabel: true,
+          },
+          textStyle: {
+            color: "rgba(255,255,255,.6)",
+            fontSize: "15",
+          },
+          xAxis: {
+            type: "category",
+            /* axisLabel: {
+          textStyle: {
+            color: "rgba(255,255,255,.6)", // 更改x轴文字颜色为红色
+            fontSize: "15",
+          },
+        }, */
+            data: [
+              "大沙",
+              "金口",
+              "簰洲",
+              "武汉",
+              "阳逻",
+              "黄冈",
+              "黄石",
+              "蕲州",
+            ],
+          },
+          yAxis: {
+            type: "value",
+          },
+          series: [
+            {
+              name: "优",
+              type: "bar",
+              stack: "total",
+              label: {
+                show: true,
+              },
+              emphasis: {
+                focus: "series",
+              },
+              data: chdata,
+            },
+            {
+              name: "良",
+              type: "bar",
+              stack: "total",
+              label: {
+                show: true,
+              },
+              emphasis: {
+                label: {
+                  color: "rgba(255,255,255,.6)",
+                },
+                focus: "series",
+              },
+              data: chdata,
+            },
+            {
+              name: "中",
+              type: "bar",
+              stack: "total",
+              label: {
+                show: true,
+              },
+              emphasis: {
+                focus: "series",
+              },
+              data: chdata,
+            },
+            {
+              name: "差",
+              type: "bar",
+              stack: "total",
+              label: {
+                show: true,
+              },
+              emphasis: {
+                focus: "series",
+              },
+              data: chdata,
+            },
+          ],
+        };
+        // 3. 把配置项给实例对象
+        myChart.setOption(option);
+        // 4. 让图表跟随屏幕自动的去适应
+        window.addEventListener("resize", function () {
+          myChart.resize();
+        });
+      })();
+    </script>
+  </body>
+</html>
