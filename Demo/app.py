@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,jsonify
 import webbrowser
 import os
 from threading import Timer,Thread,Event
@@ -32,11 +32,10 @@ def index():
     f_good_data = [0,0,0,0,0,0,0,0]
     f_average_data = [0,0,0,0,0,0,0,0]
     f_poor_data = [0,0,0,0,0,0,0,0]
-
-    i_excellent_data = []
-    i_good_data = []
-    
-
+    i_excellent_data = [1,0,0,0,1,0,1,1]
+    i_good_data = [3,1,2,1,1,0,0,1]
+    i_average_data = [1,1,0,1,1,1,0,0]
+    i_poor_data = [0,0,1,1,0,0,2,1]
     return render_template("index.html",
                            f_excellent_data = f_excellent_data,
                            f_good_data = f_good_data,
@@ -44,6 +43,8 @@ def index():
                            f_poor_data = f_poor_data,
                            i_excellent_data = i_excellent_data,
                            i_good_data = i_good_data,
+                           i_average_data = i_average_data,
+                           i_poor_data = i_poor_data
                            )
 
 if __name__ == '__main__':

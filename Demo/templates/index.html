@@ -120,6 +120,7 @@
     <script src="static/js/index.js"></script>
     <script>
       (function () {
+
         let f_excellent_data = {{f_excellent_data}};
         let f_good_data = {{f_good_data}};
         let f_average_data = {{f_average_data}};
@@ -209,7 +210,7 @@
               emphasis: {
                 focus: "series",
               },
-              data: f_average_data,
+              data: f_average_data
             },
             {
               name: "差",
@@ -221,7 +222,7 @@
               emphasis: {
                 focus: "series",
               },
-              data: f_poor_data,
+              data: f_poor_data
             },
           ],
         };
@@ -235,7 +236,10 @@
     </script>
     <script>
       (function () {
-        var chdata = {{chdata}};
+        let i_excellent_data = {{i_excellent_data}};
+        let i_good_data = {{i_good_data}};
+        let i_average_data = {{i_average_data}};
+        let i_poor_data = {{i_poor_data}};
         // 1实例化对象
         var myChart = echarts.init(document.querySelector(".bar3 .chart"));
         // 2. 指定配置项和数据
@@ -266,12 +270,9 @@
           },
           xAxis: {
             type: "category",
-            /* axisLabel: {
-          textStyle: {
-            color: "rgba(255,255,255,.6)", // 更改x轴文字颜色为红色
-            fontSize: "15",
-          },
-        }, */
+            axisLabel: {
+            fontSize: 15 //设置坐标轴文本标签的字体大小
+             },
             data: [
               "大沙",
               "金口",
@@ -297,7 +298,7 @@
               emphasis: {
                 focus: "series",
               },
-              data: chdata,
+              data: i_excellent_data,
             },
             {
               name: "良",
@@ -312,7 +313,7 @@
                 },
                 focus: "series",
               },
-              data: chdata,
+              data: i_good_data,
             },
             {
               name: "中",
@@ -324,7 +325,7 @@
               emphasis: {
                 focus: "series",
               },
-              data: chdata,
+              data: i_average_data
             },
             {
               name: "差",
@@ -336,7 +337,7 @@
               emphasis: {
                 focus: "series",
               },
-              data: chdata,
+              data: i_poor_data,
             },
           ],
         };
