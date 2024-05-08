@@ -10,6 +10,7 @@ import json
 from datetime import datetime,timedelta
 from itertools import groupby
 from datetime import datetime
+
 app = Flask(__name__)
 
 app_title = "数字航道质量分析"
@@ -66,7 +67,7 @@ def index():
     api_workload_data={
         'cfgName': '数字航道武汉测绘工作量数据to武汉局'
     }
-
+    #############################将数据写入json保存##############################
     # res1 = requests.post(url=login_url, headers=headers, json=base_info_data)
     # res2 = requests.post(url=login_url, headers=headers, json=base_workload_data)
     # result1 = json.loads(res1.text)
@@ -85,6 +86,7 @@ def index():
     # with open("4.json", "w", encoding="utf-8") as json_file:
     #     json.dump(rep2, json_file, ensure_ascii=False, indent=4)
     #     print("API响应已保存到 4.json 文件中。")
+    #############################################################################
     def api_res(login_url,url,headers,api_data,base_data): ##可以添加file_str参数
         res = requests.post(login_url, headers=headers, json=base_data)
         print(res.text)
@@ -124,11 +126,11 @@ def index():
         if isinstance(row, dict) and row.get('XDDW_ID') == '0105' and row.get('CGTJSJ') is not None:
             filtered_data.append(row)
 
-    # 使用字典分类
+    
     classified_data = {'010512': [],'010513': [],'010514': [],'010511': [],'010515': [],
-                       '010516': [],'010517': [],'010518': [],'01051107':[],'01051607':[]}
+                       '010517': [],'010516': [],'010518': [],'01051107':[],'01051607':[]}
 
-    # 根据ZXDW_ID分类，大沙，簰洲，金口....
+    
     for row in filtered_data:
         ZXDW_ID = row.get('ZXDW_ID')
         if ZXDW_ID in classified_data:
@@ -173,17 +175,17 @@ def index():
                     row['HSMJ'].extend(hsmj_values)
                 else:
                     row['HSMJ'] = hsmj_values
-
+    #字符串转日期
     for area_rows in classified_data.values():
         for row in area_rows:
-            # 将字符串日期转换为日期对象
+           
             date_fields = ["CJSJ", "GXSJ", "KGRQ", "CGTJRQ", "XDSJ", "CGTJSJ", "CGWYKS", "CGWYJS"]
             for field in date_fields:
                 if field in row and row[field] is not None:
                     # 截取日期部分并转换为日期对象
                     row[field] = datetime.strptime(row[field][:10], "%Y-%m-%d").date()
 
-            # 将 HSMJ 字段转换为浮点数数组
+            # 转浮点
             if "HSMJ" in row and row["HSMJ"] is not None:
                 hsmj_values = row["HSMJ"]
                 if isinstance(hsmj_values, list):
@@ -194,7 +196,7 @@ def index():
                     # 如果是单个字符串，则直接转换为浮点数
                     row["HSMJ"] = float(hsmj_values)
     filtered_data_by_area = {'010512': [], '010513': [], '010514': [], '010511': [], '010515': [],
-                             '010516': [], '010517': [], '010518': [], '01051107': [], '01051607': []}
+                             '010517': [], '010516': [], '010518': [], '01051107': [], '01051607': []}
 
     for area_rows in classified_data.values():
         for row in area_rows:
@@ -227,50 +229,52 @@ def index():
                 row["WY-analysis"] = row["HSMJZJ"] / row["WY-DAYS"]
             if "HSMJZJ" in row and row["HSMJZJ"] is not None and "NY-DAYS" in row and row["NY-DAYS"] is not None:
                 row["NY-analysis"] = row["HSMJZJ"] / row["NY-DAYS"]
+    #@test
     # 分类数据的新字典
-    classified_data_with_analysis = {
-        '010512': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
-        '010513': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
-        '010514': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
-        '010511': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
-        '010515': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
-        '010516': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
-        '010517': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
-        '010518': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
-        '01051107': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
-        '01051607': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}}}
+    # classified_data_with_analysis = {
+    #     '010512': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
+    #     '010513': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
+    #     '010514': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
+    #     '010511': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
+    #     '010515': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
+    #     '010516': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
+    #     '010517': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
+    #     '010518': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
+    #     '01051107': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}},
+    #     '01051607': {'WY': {'优': [], '良': [], '中': [], '差': []}, 'NY': {'优': [], '良': [], '中': [], '差': []}}}
 
+    #@test
     # 将数据根据分类加入新的字典
-    for area, rows in filtered_data_by_area.items():
-        for row in rows:
-            wy_quality = "优" if row["WY-analysis"] >= 8 else "良" if row["WY-analysis"] >= 4 else "中" if row["WY-analysis"] >= 2 else "差"
-            ny_quality = "优" if row["NY-analysis"] >= 4 else "良" if row["NY-analysis"] >= 2.6 else "中" if row["NY-analysis"] >= 1.6 else "差"
-            classified_data_with_analysis[area]['WY'][wy_quality].append(row)
-            classified_data_with_analysis[area]['NY'][ny_quality].append(row)
+    # for area, rows in filtered_data_by_area.items():
+    #     for row in rows:
+    #         wy_quality = "优" if row["WY-analysis"] >= 8 else "良" if row["WY-analysis"] >= 4 else "中" if row["WY-analysis"] >= 2 else "差"
+    #         ny_quality = "优" if row["NY-analysis"] >= 4 else "良" if row["NY-analysis"] >= 2.6 else "中" if row["NY-analysis"] >= 1.6 else "差"
+    #         classified_data_with_analysis[area]['WY'][wy_quality].append(row)
+    #         classified_data_with_analysis[area]['NY'][ny_quality].append(row)
+    #@test
+    # # 打印分类后的数据
+    # print("Classified data with analysis:")
+    # for area, data in classified_data_with_analysis.items():
+    #     print("Area:", area)
+    #     print("WY:")
+    #     for quality, rows in data['WY'].items():
+    #         print("  ", quality, ":", len(rows))
+    #     print("NY:")
+    #     for quality, rows in data['NY'].items():
+    #         print("  ", quality, ":", len(rows))
 
-    # 打印分类后的数据
-    print("Classified data with analysis:")
-    for area, data in classified_data_with_analysis.items():
-        print("Area:", area)
-        print("WY:")
-        for quality, rows in data['WY'].items():
-            print("  ", quality, ":", len(rows))
-        print("NY:")
-        for quality, rows in data['NY'].items():
-            print("  ", quality, ":", len(rows))
-
-    # 打印分类后的数据
-    print("Filtered data by area:")
-    for area, rows in filtered_data_by_area.items():
-        print("Area:", area)
-        for row in rows:
-            print(row)
+    # # 打印分类后的数据
+    # print("Filtered data by area:")
+    # for area, rows in filtered_data_by_area.items():
+    #     print("Area:", area)
+    #     for row in rows:
+    #         print(row)
 
     # 初始化存储优质数据数量的数组
-    f_excellent_data = []
-    f_good_data = []
-    f_average_data = []
-    f_poor_data = []
+    i_excellent_data = []
+    i_good_data = []
+    i_average_data = []
+    i_poor_data = []
 
     # 修改部分
     # 遍历 filtered_data_by_area 字典的键值对
@@ -291,18 +295,18 @@ def index():
             else:
                 poor_count += 1
         # 将每个地区的数据数量添加到相应的数组中
-        f_excellent_data.append(excellent_count)
-        f_good_data.append(good_count)
-        f_average_data.append(average_count)
-        f_poor_data.append(poor_count)
+        i_excellent_data.append(excellent_count)
+        i_good_data.append(good_count)
+        i_average_data.append(average_count)
+        i_poor_data.append(poor_count)
 
     # 初始化存储优质数据数量的数组
-    i_excellent_data = []
-    i_good_data = []
-    i_average_data = []
-    i_poor_data = []
+    f_excellent_data = []
+    f_good_data = []
+    f_average_data = []
+    f_poor_data = []
 
-    # 修改部分
+    
     # 遍历 filtered_data_by_area 字典的键值对
     for area, rows in filtered_data_by_area.items():
         excellent_count = 0
@@ -321,16 +325,21 @@ def index():
             else:
                 poor_count += 1
         # 将每个地区的数据数量添加到相应的数组中
-        i_excellent_data.append(excellent_count)
-        i_good_data.append(good_count)
-        i_average_data.append(average_count)
-        i_poor_data.append(poor_count)
+        f_excellent_data.append(excellent_count)
+        f_good_data.append(good_count)
+        f_average_data.append(average_count)
+        f_poor_data.append(poor_count)
 
+    #@test
     # 打印 f_excellent_data 数组
-    print("f_excellent_data 数组:", i_excellent_data)
-    print("f_good_data 数组:", i_good_data)
-    print("f_average_data 数组:", i_average_data)
-    print("f_poor_data 数组:", i_poor_data)
+    # print("f_excellent_data 数组:", f_excellent_data)
+    # print("f_good_data 数组:", f_good_data)
+    # print("f_average_data 数组:", f_average_data)
+    # print("f_poor_data 数组:", f_poor_data)
+    # print("f_excellent_data 数组:", i_excellent_data)
+    # print("f_good_data 数组:", i_good_data)
+    # print("f_average_data 数组:", i_average_data)
+    # print("f_poor_data 数组:", i_poor_data)
 
     return render_template("index.html",
                            f_excellent_data = f_excellent_data,
