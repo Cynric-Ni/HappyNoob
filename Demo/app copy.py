@@ -10,6 +10,22 @@ from itertools import groupby
 import pymysql
 
 def data_logic_proccs():
+    
+
+app = Flask(__name__)
+
+app_title = "数字航道质量分析"
+host = "http://127.0.0.1"
+port = 5000
+
+stop_event = Event()
+
+def run():
+    while not stop_event.is_set():
+        app.run(port=port)
+
+@app.route("/")
+def index():
     login_url = 'http://172.18.100.216/api/blade-auth/ext/api/api/oauth/token/'
     url = 'http://172.18.100.216/api/datacenter/dataapiCfg/dc/getDataByConfigApi'
 
@@ -253,8 +269,6 @@ def data_logic_proccs():
         VALUES (%s, %s, %s, %s, %s, %s)
         """
         cursor.execute(sql, (area, excellent_count, good_count, average_count, poor_count, current_time))
-    connection.commit()
-
     # 使用INFORMATION_SCHEMA.TABLES来检查表是否存在  
     sql_check = """  
     SELECT TABLE_NAME   
@@ -323,9 +337,6 @@ def data_logic_proccs():
         VALUES (%s, %s, %s, %s, %s, %s)
         """
         cursor.execute(sql, (area, excellent_count, good_count, average_count, poor_count, current_time))
-    connection.commit()
-    cursor.close()
-    connection.close()
 
     #@test
     # 打印 f_excellent_data 数组
@@ -338,92 +349,47 @@ def data_logic_proccs():
     print("f_average_data 数组:", i_average_data)
     print("f_poor_data 数组:", i_poor_data)
 
+    # 提交事务
+    connection.commit()
 
-app = Flask(__name__)
+    # 从数据库中读取数据并填充到数组中
+    sql_select = "SELECT area, excellent_count, good_count, average_count, poor_count FROM data_analysis"
+    cursor.execute(sql_select)
+    results = cursor.fetchall()
 
-app_title = "数字航道质量分析"
-host = "http://127.0.0.1"
-port = 5000
-
-stop_event = Event()
-
-def run():
-    while not stop_event.is_set():
-        app.run(port=port)
-
-@app.route("/")
-def index():
-    # 数据库连接配置
-    db_config = {
-        'host': 'localhost',
-        'user': 'root',
-        'password': '123456',
-        'database': '数字航道质量评估结果',
-        'port': 3306
-    }
-
-    # 连接到数据库
-    connection = pymysql.connect(**db_config)
-    
-    # 初始化数据数组
-    i_excellent_data = []
-    i_good_data = []
-    i_average_data = []
-    i_poor_data = []
-    
+    # 重置数组
     f_excellent_data = []
     f_good_data = []
     f_average_data = []
     f_poor_data = []
 
-    try:
-        with connection.cursor() as cursor:
-            # 从数据库中读取数据并填充到 i_* 数据数组中
-            sql_select_wy = "SELECT excellent_count, good_count, average_count, poor_count FROM wy_analysis"
-            cursor.execute(sql_select_wy)
-            results = cursor.fetchall()
-
-            for row in results:
-                excellent_count, good_count, average_count, poor_count = row
-                i_excellent_data.append(excellent_count)
-                i_good_data.append(good_count)
-                i_average_data.append(average_count)
-                i_poor_data.append(poor_count)
-
-            # 从数据库中读取数据并填充到 f_* 数据数组中
-            sql_select_ny = "SELECT area, excellent_count, good_count, average_count, poor_count FROM ny_analysis"
-            cursor.execute(sql_select_ny)
-            results = cursor.fetchall()
-
-            for row in results:
-                area, excellent_count, good_count, average_count, poor_count = row
-                f_excellent_data.append(excellent_count)
-                f_good_data.append(good_count)
-                f_average_data.append(average_count)
-                f_poor_data.append(poor_count)
-
-    finally:
-        connection.close()
+    # 填充数组
+    for row in results:
+        area, excellent_count, good_count, average_count, poor_count = row
+        f_excellent_data.append(excellent_count)
+        f_good_data.append(good_count)
+        f_average_data.append(average_count)
+        f_poor_data.append(poor_count)
 
     # 打印从数据库中读取的数据
-    print("从数据库中读取的 i_excellent_data 数组:", i_excellent_data)
-    print("从数据库中读取的 i_good_data 数组:", i_good_data)
-    print("从数据库中读取的 i_average_data 数组:", i_average_data)
-    print("从数据库中读取的 i_poor_data 数组:", i_poor_data)
     print("从数据库中读取的 f_excellent_data 数组:", f_excellent_data)
     print("从数据库中读取的 f_good_data 数组:", f_good_data)
     print("从数据库中读取的 f_average_data 数组:", f_average_data)
     print("从数据库中读取的 f_poor_data 数组:", f_poor_data)
+        # 关闭数据库连接
+    cursor.close()
+    connection.close()
 
     return render_template("index.html",
-                           f_excellent_data=f_excellent_data,
-                           f_good_data=f_good_data,
-                           f_average_data=f_average_data,
-                           f_poor_data=f_poor_data,
-                           i_excellent_data=i_excellent_data,
-                           i_good_data=i_good_data,
-                           i_average_data=i_average_data,
-                           i_poor_data=i_poor_data)
+                           f_excellent_data = f_excellent_data,
+                           f_good_data = f_good_data,
+                           f_average_data = f_average_data,
+                           f_poor_data = f_poor_data,
+                           i_excellent_data = i_excellent_data,
+                           i_good_data = i_good_data,
+                           i_average_data = i_average_data,
+                           i_poor_data = i_poor_data
+                           )
 
 if __name__ == '__main__':
     t = Thread(target=run)
